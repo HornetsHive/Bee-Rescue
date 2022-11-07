@@ -10,6 +10,7 @@ function App() {
   const [location, setLocation] = useState("");
   const [height, setHeight] = useState("");
   const [size, setSize] = useState("");
+  const [image, setImage] = useState("");
 
   const submitReport = () => {
     Axios.post("http://localhost:3001/api/insert", {
@@ -18,7 +19,8 @@ function App() {
       duration: duration,
       location: location,
       height: height,
-      size: size
+      size: size,
+      image: image
     }).then(() => {
       alert('successful insert');
     });
@@ -74,6 +76,14 @@ function App() {
         name="size"
         onChange={(e)=> {
           setSize(e.target.value);
+        }} />
+
+        <label>image:</label>
+        <input 
+        type="file"
+        name="image"
+        onChange={(e)=> {
+          setImage(e.target.value);
         }} />
 
         <button onClick={submitReport}> Submit</button>
