@@ -1,5 +1,5 @@
-import React from "react";
-import * as Font from "expo-font";
+import * as React from "react";
+import { useFonts } from "expo-font";
 import {
   StyleSheet,
   Dimensions,
@@ -14,64 +14,47 @@ import {
   TextInput,
 } from "react-native";
 
-export default class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fontsLoaded: false,
-    };
+export default function Settings() {
+  const [loaded] = useFonts({
+    Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
+    RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
   }
 
-  async loadFonts() {
-    await Font.loadAsync({
-      "rounded-sans-serif": require("../assets/fonts/rounded-sans-serif.ttf"),
-      "San-seriff-ic": require("../assets/fonts/San-seriff-ic.otf"),
-      Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
-    });
-    this.setState({ fontsLoaded: true });
-  }
+  return (
+    <SafeAreaView style={styles.container}>
+      <ImageBackground
+        style={styles.background}
+        source={require("../assets/gradient1.png")}
+        resizeMode="cover"
+      >
+        <Image
+          style={styles.image}
+          source={require("../assets/LoginBeePicture.png")}
+        />
 
-  componentDidMount() {
-    this.loadFonts();
-  }
+        <Text style={styles.titleText}>Bee Rescue</Text>
 
-  render() {
-    if (this.state.fontsLoaded) {
-      return (
-        <SafeAreaView style={styles.container}>
-          <ImageBackground
-            style={styles.background}
-            source={require("../assets/gradient1.png")}
-            resizeMode="cover"
-          >
-            <Image
-              style={styles.image}
-              source={require("../assets/LoginBeePicture.png")}
+        <View style={{ height: "55%", width: "100%", marginLeft: "15%" }}>
+          <Text style={styles.textRegular}>email</Text>
+          <TextInput style={styles.input} placeholder="email" />
+          <Text style={styles.textRegular}>password</Text>
+          <TextInput style={styles.input} placeholder="password" />
+
+          <View style={styles.button}>
+            <Button
+              color="#d92978"
+              title="Login"
+              onPress={() => console.log("Simple Button pressed")}
             />
-
-            <Text style={styles.titleText}>Bee Rescue</Text>
-
-            <View style={{ height: "55%", width: "100%", marginLeft: "15%" }}>
-              <Text style={styles.textRegular}>email</Text>
-              <TextInput style={styles.input} placeholder="email" />
-              <Text style={styles.textRegular}>password</Text>
-              <TextInput style={styles.input} placeholder="password" />
-
-              <View style={styles.button}>
-                <Button
-                  color="#d92978"
-                  title="Login"
-                  onPress={() => console.log("Simple Button pressed")}
-                />
-              </View>
-            </View>
-          </ImageBackground>
-        </SafeAreaView>
-      );
-    } else {
-      return null;
-    }
-  }
+          </View>
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -97,7 +80,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: "69%",
     fontSize: 50,
-    fontFamily: "rounded-sans-serif",
+    fontFamily: "RoundSerif",
   },
   text: {
     position: "absolute",

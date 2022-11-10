@@ -1,3 +1,5 @@
+import * as React from "react";
+import { useFonts } from "expo-font";
 import { useState } from "react";
 import {
   StyleSheet,
@@ -30,6 +32,14 @@ export default function AccountScreen() {
   const [fri, setFri] = useState();
   const [sat, setSat] = useState();
   const [sun, setSun] = useState();
+  const [loaded] = useFonts({
+    Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
+    RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
+  });
+
+  if (!loaded) {
+    return null;
+  }
 
   function saveChanges() {
     console.log("name: ", name);
