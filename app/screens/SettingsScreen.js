@@ -7,10 +7,11 @@ import {
   SafeAreaView,
   TextInput,
   Pressable,
+  Button,
 } from "react-native";
 
 export default function Settings() {
-  const [setTimesPressed] = useState(0);
+  const [shouldShow, setShouldShow] = useState(true);
   const [text, onChangeText] = React.useState("example@gmail.com");
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
@@ -47,14 +48,32 @@ export default function Settings() {
             fontFamily: "Comfortaa",
             fontSize: 15,
           }}
-        >
-          password:
-        </Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeText}
-          value={".........."}
-        />
+        ></Text>
+        {shouldShow ? (
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeText}
+              placeholder={"current password"}
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeText}
+              placeholder={"new password"}
+            />
+            <Button
+              style={{ width: "20%" }}
+              title="Save"
+              onPress={() => setShouldShow(!shouldShow)}
+            />
+          </View>
+        ) : (
+          <Button
+            color="#d92978"
+            title="Reset Password"
+            onPress={() => setShouldShow(!shouldShow)}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -81,7 +100,12 @@ const styles = StyleSheet.create({
     height: 50,
     width: "80%",
     padding: 10,
+    margin: 5,
     backgroundColor: "#d9d9d9",
     borderColor: "black",
+  },
+  passwordContainer: {
+    justifyContent: "center",
+    width: "100%",
   },
 });
