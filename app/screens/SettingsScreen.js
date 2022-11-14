@@ -10,7 +10,7 @@ import {
   Button,
 } from "react-native";
 
-export default function Settings() {
+export default function SettingsScreen() {
   const [shouldShow, setShouldShow] = useState(true);
   const [text, onChangeText] = React.useState("example@gmail.com");
   const [loaded] = useFonts({

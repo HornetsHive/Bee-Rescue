@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useFonts } from "expo-font";
+import HomeScreen from "./HomeScreen";
 import {
   StyleSheet,
   Dimensions,
@@ -14,7 +15,7 @@ import {
   TextInput,
 } from "react-native";
 
-export default function Settings() {
+export default function LoginScreen({ navigation }) {
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -48,7 +49,9 @@ export default function Settings() {
             <Button
               color="#d92978"
               title="Login"
-              onPress={() => console.log("Simple Button pressed")}
+              onPress={() =>
+                navigation.navigate("HomeScreen", { screen: "HomeScreen" })
+              }
             />
           </View>
         </View>

@@ -14,7 +14,7 @@ import {
   TextInput,
 } from "react-native";
 
-export default function SignUp() {
+export default function SignUpScreen() {
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
