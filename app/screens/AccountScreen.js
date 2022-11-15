@@ -16,7 +16,7 @@ import {
   Switch,
 } from "react-native";
 
-export default function AccountScreen() {
+export default function AccountScreen({ navigation }) {
   const [profilePic, setProfilePic] = useState();
   const [name, setName] = useState();
   const [location, setLocation] = useState();

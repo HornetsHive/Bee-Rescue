@@ -2,19 +2,16 @@ import * as React from "react";
 import { useFonts } from "expo-font";
 import {
   StyleSheet,
-  Dimensions,
   Text,
   View,
   ImageBackground,
-  TouchableHighlight,
-  Alert,
   Button,
   Image,
   SafeAreaView,
   TextInput,
 } from "react-native";
 
-export default function SignUpScreen() {
+export default function SignUpScreen({ navigation }) {
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -49,7 +46,11 @@ export default function SignUpScreen() {
             <Button
               color="#d92978"
               title="Sign Up"
-              onPress={() => console.log("Simple Button pressed")}
+              onPress={() =>
+                navigation.navigate("PreferencesScreen", {
+                  screen: "PreferencesScreen",
+                })
+              }
             />
           </View>
         </View>

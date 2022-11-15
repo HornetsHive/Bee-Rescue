@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useFonts } from "expo-font";
-import HomeScreen from "./HomeScreen";
 import {
   StyleSheet,
   Dimensions,
@@ -38,6 +37,7 @@ export default function LoginScreen({ navigation }) {
         />
 
         <Text style={styles.titleText}>Bee Rescue</Text>
+        <Text style={styles.text}>Login</Text>
 
         <View style={{ height: "55%", width: "100%", marginLeft: "15%" }}>
           <Text style={styles.textRegular}>email</Text>
