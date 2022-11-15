@@ -50,6 +50,14 @@ export default function SettingsScreen({ navigation }) {
           }}
         ></Text>
         {shouldShow ? (
+          <View>
+            <Button
+              color="#d92978"
+              title="Reset Password"
+              onPress={() => setShouldShow(!shouldShow)}
+            />
+          </View>
+        ) : (
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.input}
@@ -61,18 +69,8 @@ export default function SettingsScreen({ navigation }) {
               onChangeText={onChangeText}
               placeholder={"new password"}
             />
-            <Button
-              style={{ width: "20%" }}
-              title="Save"
-              onPress={() => setShouldShow(!shouldShow)}
-            />
+            <Button title="Save" onPress={() => setShouldShow(!shouldShow)} />
           </View>
-        ) : (
-          <Button
-            color="#d92978"
-            title="Reset Password"
-            onPress={() => setShouldShow(!shouldShow)}
-          />
         )}
       </View>
     </SafeAreaView>
@@ -105,7 +103,9 @@ const styles = StyleSheet.create({
     borderColor: "black",
   },
   passwordContainer: {
+    flex: 1,
     justifyContent: "center",
     width: "100%",
+    marginLeft: 60,
   },
 });
