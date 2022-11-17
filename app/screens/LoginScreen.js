@@ -6,12 +6,12 @@ import {
   Text,
   View,
   ImageBackground,
-  TouchableHighlight,
-  Alert,
   Button,
   Image,
   SafeAreaView,
   TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 
 export default function LoginScreen({ navigation }) {
@@ -43,7 +43,11 @@ export default function LoginScreen({ navigation }) {
           <Text style={styles.textRegular}>email</Text>
           <TextInput style={styles.input} placeholder="email" />
           <Text style={styles.textRegular}>password</Text>
-          <TextInput style={styles.input} placeholder="password" />
+          <TextInput
+            style={styles.input}
+            placeholder="password"
+            secureTextEntry={true}
+          />
 
           <View style={styles.button}>
             <Button
@@ -55,6 +59,21 @@ export default function LoginScreen({ navigation }) {
             />
           </View>
         </View>
+        <TouchableOpacity
+          style={{ bottom: 20 }}
+          onPress={() =>
+            navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
+          }
+        >
+          <Text
+            style={{
+              fontFamily: "Comfortaa",
+              color: "#d92978",
+            }}
+          >
+            New? Sign up here
+          </Text>
+        </TouchableOpacity>
       </ImageBackground>
     </SafeAreaView>
   );

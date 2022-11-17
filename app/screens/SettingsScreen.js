@@ -1,5 +1,6 @@
 import { useFonts } from "expo-font";
 import React, { useState } from "react";
+
 import {
   StyleSheet,
   Text,
@@ -10,6 +11,7 @@ import {
   Switch,
   Button,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 
 export default function SettingsScreen({ navigation }) {
@@ -110,10 +112,16 @@ export default function SettingsScreen({ navigation }) {
         source={require("../assets/gradient1.png")}
         style={styles.footer}
       />
-      <Image
-        source={require("../assets/home.png")}
-        style={{ flex: 0, bottom: 15, resizeMode: "contain", height: 40 }}
-      />
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("HomeScreen", { screen: "HomeScreen" })
+        }
+      >
+        <Image
+          source={require("../assets/home.png")}
+          style={{ flex: 0, bottom: 15, resizeMode: "contain", height: 40 }}
+        />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }

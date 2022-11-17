@@ -24,11 +24,7 @@ export default function PreferencesScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        style={styles.background}
-        source={require("../assets/gradient1.png")}
-        resizeMode="cover"
-      ></ImageBackground>
+      <Text style={{ top: 60, fontSize: 20 }}>Preferences Screen</Text>
     </SafeAreaView>
   );
 }
@@ -37,6 +33,11 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  background: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   title: {
     height: "90%",

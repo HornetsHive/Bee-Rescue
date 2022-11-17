@@ -40,7 +40,11 @@ export default function SignUpScreen({ navigation }) {
           <Text style={styles.textRegular}>email</Text>
           <TextInput style={styles.input} placeholder="email" />
           <Text style={styles.textRegular}>password</Text>
-          <TextInput style={styles.input} placeholder="password" />
+          <TextInput
+            style={styles.input}
+            placeholder="password"
+            secureTextEntry={true}
+          />
 
           <View style={styles.button}>
             <Button
