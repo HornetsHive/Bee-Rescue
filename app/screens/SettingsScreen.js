@@ -4,19 +4,25 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   SafeAreaView,
   TextInput,
-  Pressable,
+  Switch,
   Button,
+  ScrollView,
 } from "react-native";
 
 export default function SettingsScreen({ navigation }) {
+  const [isEnabled1, setIsEnabled1] = useState(true);
+  const [isEnabled2, setIsEnabled2] = useState(true);
   const [shouldShow, setShouldShow] = useState(true);
   const [text, onChangeText] = React.useState("example@gmail.com");
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
+  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
+  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
 
   if (!loaded) {
     return null;
@@ -25,70 +31,113 @@ export default function SettingsScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Settings</Text>
-      <Text style={{ fontFamily: "Comfortaa", fontSize: 20 }}>Security</Text>
 
-      <View style={{ width: "90%", alignItems: "center", height: "50%" }}>
-        <Text
-          style={{
-            marginRight: "70%",
-            fontFamily: "Comfortaa",
-            fontSize: 15,
-          }}
-        >
-          email:
-        </Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeText}
-          value={text}
-        />
-        <Text
-          style={{
-            marginRight: "70%",
-            fontFamily: "Comfortaa",
-            fontSize: 15,
-          }}
-        ></Text>
+      <ScrollView style={{ top: 60 }}>
+        <Text style={styles.subTitle}>Security</Text>
+        <View style={{ alignItems: "center" }}>
+          <Text
+            style={{
+              fontFamily: "Comfortaa",
+              fontSize: 15,
+            }}
+          >
+            email:
+          </Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeText}
+            value={text}
+          />
+        </View>
+        {/* password block */}
         {shouldShow ? (
-          <View>
+          <View style={{ marginTop: 10 }}>
             <Button
-              color="#d92978"
               title="Reset Password"
+              color="#d92978"
               onPress={() => setShouldShow(!shouldShow)}
             />
           </View>
         ) : (
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeText}
-              placeholder={"current password"}
+          <View>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeText}
+                placeholder={"current password"}
+              />
+              <Text style={{ fontFamily: "Comfortaa", fontSize: 12 }}>
+                * at least 8 chars, one number and a special character
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeText}
+                placeholder={"new password"}
+              />
+            </View>
+            <Button
+              title="Save"
+              color="#d92978"
+              onPress={() => setShouldShow(!shouldShow)}
             />
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeText}
-              placeholder={"new password"}
-            />
-            <Button title="Save" onPress={() => setShouldShow(!shouldShow)} />
           </View>
         )}
-      </View>
+
+        <Text style={styles.subTitle}>Notifications</Text>
+        <View>
+          <Text style={styles.notificationText}>Swarm Reports</Text>
+          <Switch
+            style={styles.switch}
+            name="swarmReport"
+            trackColor={{ false: "#767577", true: "#d92978" }}
+            thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
+            onValueChange={toggleSwitch1}
+            value={isEnabled1}
+          />
+          <Text style={styles.notificationText}>Report Dropped</Text>
+          <Switch
+            style={styles.switch}
+            name="reportDropped"
+            trackColor={{ false: "#767577", true: "#d92978" }}
+            thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
+            onValueChange={toggleSwitch2}
+            value={isEnabled2}
+          />
+        </View>
+      </ScrollView>
+
+      <Image
+        source={require("../assets/gradient1.png")}
+        style={styles.footer}
+      />
+      <Image
+        source={require("../assets/home.png")}
+        style={{ flex: 0, bottom: 15, resizeMode: "contain", height: 40 }}
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    textAlign: "center",
     alignItems: "center",
     justifyContent: "center",
   },
   title: {
-    height: "90%",
+    top: 0,
     fontSize: 40,
     position: "absolute",
     fontFamily: "Comfortaa",
     alignItems: "center",
     justifyContent: "center",
+  },
+  subTitle: {
+    textAlign: "center",
+    fontFamily: "Comfortaa",
+    fontSize: 20,
+    margin: 15,
   },
   text: {
     fontSize: 20,
@@ -96,7 +145,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    width: "80%",
+    width: "90%",
     padding: 10,
     margin: 5,
     backgroundColor: "#d9d9d9",
@@ -104,8 +153,23 @@ const styles = StyleSheet.create({
   },
   passwordContainer: {
     flex: 1,
-    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  notificationText: {
+    marginRight: "45%",
+    fontFamily: "Comfortaa",
+    fontSize: 15,
+  },
+  switch: {
+    bottom: 35,
+  },
+  footer: {
+    flex: 0,
+    bottom: -40,
+    alignItems: "center",
+    resizeMode: "cover",
+    height: 70,
     width: "100%",
-    marginLeft: 60,
   },
 });
