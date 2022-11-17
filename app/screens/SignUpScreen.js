@@ -33,7 +33,7 @@ export default function SignUpScreen({ navigation }) {
           source={require("../assets/LoginBeePicture.png")}
         />
 
-        <Text style={styles.titleText}>Bee Rescue</Text>
+        <Text style={styles.titleText}>Honey Bee Rescue</Text>
         <Text style={styles.text}>Sign Up</Text>
 
         <View style={{ height: "50%", width: "100%", marginLeft: "15%" }}>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignItems: "center",
     height: "69%",
-    fontSize: 50,
+    fontSize: 40,
     fontFamily: "RoundSerif",
   },
   text: {
