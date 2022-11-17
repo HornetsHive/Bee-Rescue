@@ -24,7 +24,7 @@ export default function PreferencesScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={{ top: 60, fontSize: 20 }}>Preferences Screen</Text>
+      <Text style={styles.title}>Preferences</Text>
     </SafeAreaView>
   );
 }
@@ -34,13 +34,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  background: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
   title: {
-    height: "90%",
+    top: 0,
     fontSize: 40,
     position: "absolute",
     fontFamily: "Comfortaa",
