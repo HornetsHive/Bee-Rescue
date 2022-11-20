@@ -36,7 +36,7 @@ export default function LoginScreen({ navigation }) {
           source={require("../assets/LoginBeePicture.png")}
         />
 
-        <Text style={styles.titleText}>Honey Bee Rescue</Text>
+        <Text style={styles.titleText}>Bee Rescue</Text>
         <Text style={styles.text}>Login</Text>
 
         <View style={{ height: "55%", width: "100%", marginLeft: "15%" }}>
@@ -69,6 +69,7 @@ export default function LoginScreen({ navigation }) {
             style={{
               fontFamily: "Comfortaa",
               color: "#d92978",
+              fontWeight: "bold",
             }}
           >
             New? Sign up here
