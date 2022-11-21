@@ -14,3 +14,9 @@
   height: 35px;
   margin: 10px;
 }
+
+.form select {
+  width: 300px;
+  height: 35px;
+  margin: 10px;
+}

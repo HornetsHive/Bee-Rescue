@@ -2,40 +2,62 @@ import React, { useState } from 'react';
 import './App.css';
 import Axios from 'axios';
 
-function App() {
+function App(){
 
-  const [address, setAddress] = useState("");
-  const [email, setEmail] = useState("");
-  const [duration, setDuration] = useState("");
-  const [location, setLocation] = useState("");
-  const [height, setHeight] = useState("");
-  const [size, setSize] = useState("");
-  const [image, setImage] = useState("");
+  const [form, setForm] = useState({
+    address: "",
+    email: "",
+    duration: "NULL",
+    location: "NULL",
+    height: "NULL",
+    size: "NULL",
+    image: "NULL"
+  });
 
   const submitReport = () => {
     Axios.post("http://localhost:3001/api/insert", {
-      address: address,
-      email: email,
-      duration: duration,
-      location: location,
-      height: height,
-      size: size,
-      image: image
+      address: form.address,
+      email: form.email,
+      duration: form.duration,
+      location: form.location,
+      height: form.height,
+      size: form.size,
+      image: form.image
     }).then(() => {
       alert('successful insert');
     });
   }
+
   return (
     <div className="App">
       <h1>Bee Rescue - Hive Reporting</h1>
 
       <div className = "form">
+
+        <label>How high up is the hive?</label>
+        <select 
+          value={"height"} 
+          onChange={ (e)=> {
+            setForm(prevState => ({
+              ...prevState,
+              height: e.target.value
+            }));
+          }}>
+          <option value="low">Less than 10'</option>
+          <option value="med">10' to 20'</option>
+          <option value="high">Greater than 20'</option>
+        </select>
+
+
         <label>Address:</label>
         <input 
           type="text" 
           name="address" 
           onChange={(e)=> {
-          setAddress(e.target.value);
+            setForm(prevState => ({
+                  ...prevState,
+                  address: e.target.value
+            }));
         }} />
 
         <label>email:</label>
@@ -43,39 +65,54 @@ function App() {
         type="text"
         name="email"
         onChange={(e)=> {
-          setEmail(e.target.value);
+          setForm(prevState => ({
+            ...prevState,
+            email: e.target.value
+        }));
         }} />
 
-        <label>duration:</label>
+        <label>To your best knowledge, How long as the swarm been present?</label>
         <input 
         type="text"
         name="duration"
         onChange={(e)=> {
-          setDuration(e.target.value);
+          setForm(prevState => ({
+            ...prevState,
+            duration: e.target.value
+        }));
         }} />
 
-        <label>location:</label>
+        <label>Type of property</label>
         <input 
         type="text"
         name="location"
         onChange={(e)=> {
-          setLocation(e.target.value);
+          setForm(prevState => ({
+            ...prevState,
+            location: e.target.value
+        }));
         }} />
 
-        <label>height:</label>
+        <label>How high is the hive?</label>
         <input 
         type="text"
         name="height"
         onChange={(e)=> {
-          setHeight(e.target.value);
+          setForm(prevState => ({
+                ...prevState,
+                height: e.target.value
+            }));
         }} />
 
-        <label>size:</label>
+        <label>How large is the hive?</label>
         <input 
         type="text"
         name="size"
         onChange={(e)=> {
-          setSize(e.target.value);
+          setForm(prevState => ({
+            ...prevState,
+            size: e.target.value
+        }));
         }} />
 
         <label>image:</label>
@@ -83,7 +120,10 @@ function App() {
         type="file"
         name="image"
         onChange={(e)=> {
-          setImage(e.target.value);
+          setForm(prevState => ({
+            ...prevState,
+            image: e.target.value
+        }));
         }} />
 
         <button onClick={submitReport}> Submit</button>
