@@ -9,7 +9,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "password",
-    database: "brdb"
+    database: "beeDB"
 });
 
 app.use(cors());
@@ -19,16 +19,29 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.post("/api/insert", (req, res)=> {
 
     const address = req.body.address;
+    const city = req.body.city;
+    const zip = req.body.zip;
+
+    const fname = req.body.fname;
+    const lname = req.body.lname;
     const email = req.body.email;
+
+    const propertyType = req.body.propertyType;
+    const propertyLocation = req.body.propertyLoc;
     const duration = req.body.duration;
-    const location = req.body.location;
     const height = req.body.height;
     const size = req.body.size;
     const image = req.body.image;
 
-    const sqlINSERT = "INSERT INTO reports (address, email, duration, location, height, size, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    db.query(sqlINSERT, [address, email, duration, location, height, size, image], (err, result)=> {
-        console.log(result);
+    const sqlINSERT = "INSERT INTO reports (address, city, fname, lname, email, duration, p_type, location, height, size, category, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(sqlINSERT, [address, city, fname, lname, email, duration, propertyType, propertyLocation, height, size, "normal", image], (err, result)=> {
+        if(err){
+            console.log(err);
+        }
+        else{
+            console.log("Successfully inserted record");
+            console.log(result);
+        }
     })
 });
 
