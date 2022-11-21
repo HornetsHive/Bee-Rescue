@@ -88,6 +88,22 @@ export default function LoginScreen({ navigation }) {
               fontWeight: "bold",
             }}
           >
+            Forgot Password?
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ bottom: 20 }}
+          onPress={() =>
+            navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
+          }
+        >
+          <Text
+            style={{
+              fontFamily: "Comfortaa",
+              color: "#d92978",
+              fontWeight: "bold",
+            }}
+          >
             Privacy
           </Text>
         </TouchableOpacity>
