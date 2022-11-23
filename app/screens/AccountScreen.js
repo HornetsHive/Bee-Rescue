@@ -1,5 +1,6 @@
 import { useFonts } from "expo-font";
 import { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
 import {
   StyleSheet,
   Text,
@@ -16,6 +17,7 @@ import {
 } from "react-native";
 
 export default function AccountScreen({ navigation }) {
+  const [image, setImage] = useState("default");
   const [name, setName] = useState();
   const [loc, setLocation] = useState();
   const [maxHeight, setMaxHeight] = useState();
@@ -52,18 +54,23 @@ export default function AccountScreen({ navigation }) {
     return null;
   }
 
-  function uploadImage() {
-    // React Image picker
-    console.log("upload image somehow");
-  }
-
   function saveChanges() {
     // Send new data to the database from here?
     console.log("changes saved");
-    console.log(name, loc, maxHeight, cooperative);
-    console.log(ability1, ability2, ability3, ability4);
-    console.log(mon, tue, wed, thu, fri, sat, sun);
   }
+
+  const uploadImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      base64: true,
+    });
+
+    if (!result.cancelled) setImage(result.base64);
+    else setImage("default");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -81,13 +88,29 @@ export default function AccountScreen({ navigation }) {
           />
         </TouchableOpacity>
         <Text style={styles.titleText}>Account</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("LoginScreen", {
+              screen: "LoginScreen",
+            });
+          }}
+        >
+          <Image
+            source={require("../assets/bell.png")}
+            style={styles.menuButton}
+          />
+        </TouchableOpacity>
         <View />
       </View>
 
       <ScrollView style={styles.body}>
         <Image
+          source={
+            image == "default"
+              ? require("../assets/LoginBeePicture.png")
+              : { uri: "data:image/jpeg;base64," + image }
+          }
           style={styles.pfp}
-          source={require("../assets/LoginBeePicture.png")}
         />
         <TouchableOpacity onPress={uploadImage}>
           <Text style={styles.smallText}>Edit Profile Picture</Text>
@@ -386,8 +409,8 @@ export default function AccountScreen({ navigation }) {
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("LoginScreen", {
-                screen: "LoginScreen",
+              navigation.navigate("HomeScreen", {
+                screen: "HomeScreen",
               });
             }}
           >
@@ -417,7 +440,7 @@ const styles = StyleSheet.create({
     height: 150,
   },
   titleText: {
-    right: "20%",
+    marginHorizontal: 40,
     fontSize: 50,
     fontFamily: "RoundSerif",
   },
@@ -431,7 +454,7 @@ const styles = StyleSheet.create({
   smallText: {
     margin: "1%",
     alignSelf: "center",
-    color: "#D92978",
+    color: "#d92978",
     fontSize: 14,
     fontFamily: "Comfortaa",
   },
@@ -481,9 +504,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   menuButton: {
-    left: "20%",
-    width: 50,
-    height: 50,
+    resizeMode: "contain",
+    width: 40,
+    height: 40,
   },
   homeButton: {
     width: 50,
@@ -491,13 +514,13 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 0.1,
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     flexDirection: "row",
     alignItems: "center",
     borderBottomWidth: 1,
   },
   body: {
-    flex: 2,
+    flex: 1,
   },
   footer: {
     flex: 0.1,
