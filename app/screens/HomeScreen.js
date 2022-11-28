@@ -24,7 +24,11 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("AccountScreen", { screen: "AccountScreen" })
+          }
+        >
           <Image
             source={require("../assets/menuButton.png")}
             style={{
@@ -37,7 +41,11 @@ export default function HomeScreen({ navigation }) {
         <Text style={{ fontFamily: "Comfortaa", fontSize: 15, width: 180 }}>
           Location: Orangevale
         </Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
+          }
+        >
           <Image
             source={require("../assets/bell.png")}
             style={{

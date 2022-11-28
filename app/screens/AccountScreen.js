@@ -84,20 +84,18 @@ export default function AccountScreen({ navigation }) {
         >
           <Image
             source={require("../assets/menuButton.png")}
-            style={styles.menuButton}
+            style={styles.iconButton}
           />
         </TouchableOpacity>
         <Text style={styles.titleText}>Account</Text>
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("LoginScreen", {
-              screen: "LoginScreen",
-            });
-          }}
+          onPress={() =>
+            navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
+          }
         >
           <Image
             source={require("../assets/bell.png")}
-            style={styles.menuButton}
+            style={styles.iconButton}
           />
         </TouchableOpacity>
         <View />
@@ -159,12 +157,7 @@ export default function AccountScreen({ navigation }) {
         </View>
         <Text style={styles.bigText}>Self-Qualifications</Text>
         <Text style={styles.smallText}>
-          As a swarm relocator we are committed to relocate bees with minimal
-          impact to the property where the swarm cluster is located. More
-          importantly, we are indicating that we will be using appropriate
-          equipment and techniques to protect others as we safely relocate the
-          bees. Please indicate the locations you are skilled at gathering swarm
-          clusters:
+          Locations that you are skilled at gathering swarm clusters:
         </Text>
         <View style={styles.aligned}>
           <Text style={styles.switchLabel}>Ground Swarms</Text>
@@ -435,21 +428,22 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderRadius: 75,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "grey",
     width: 150,
     height: 150,
   },
   titleText: {
     marginHorizontal: 40,
-    fontSize: 50,
-    fontFamily: "RoundSerif",
+    fontSize: 40,
+    fontFamily: "Comfortaa",
   },
   bigText: {
     marginTop: "1%",
     borderTopWidth: 1,
+    borderTopColor: "grey",
     textAlign: "center",
-    fontSize: 35,
-    fontFamily: "RoundSerif",
+    fontSize: 25,
+    fontFamily: "Comfortaa",
   },
   smallText: {
     margin: "1%",
@@ -457,10 +451,12 @@ const styles = StyleSheet.create({
     color: "#d92978",
     fontSize: 14,
     fontFamily: "Comfortaa",
+    textAlign: "center",
   },
   input: {
     flex: 0.7,
     borderWidth: 1,
+    borderColor: "grey",
     borderRadius: 10,
     marginHorizontal: "1%",
     paddingHorizontal: "2%",
@@ -503,14 +499,14 @@ const styles = StyleSheet.create({
   aligned: {
     flexDirection: "row",
   },
-  menuButton: {
+  iconButton: {
     resizeMode: "contain",
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
   },
   homeButton: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
   },
   header: {
     flex: 0.1,
@@ -518,13 +514,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderBottomWidth: 1,
+    borderBottomColor: "grey",
   },
   body: {
     flex: 1,
   },
   footer: {
     flex: 0.1,
-    borderWidth: 1,
+    top: 715,
+    width: "100%",
+    height: 70,
+    position: "absolute",
   },
   background: {
     flex: 1,
