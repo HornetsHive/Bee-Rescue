@@ -27,86 +27,96 @@ export default function LoginScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
-        style={styles.background}
+        style={styles.container}
         source={require("../assets/gradient1.png")}
         resizeMode="cover"
       >
-        <Image
-          style={styles.image}
-          source={require("../assets/LoginBeePicture.png")}
-        />
-
-        <Text style={styles.titleText}>Bee Rescue</Text>
-        <Text style={styles.text}>Login</Text>
-
-        <View style={{ height: "55%", width: "100%", marginLeft: "15%" }}>
-          <Text style={styles.textRegular}>email</Text>
-          <TextInput style={styles.input} placeholder="email" />
-          <Text style={styles.textRegular}>password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="password"
-            secureTextEntry={true}
+        <View style={styles.header}>
+          <Image
+            style={{
+              alignSelf: "center",
+              resizeMode: "contain",
+              height: 145,
+              width: 500,
+            }}
+            source={require("../assets/LoginBeePicture.png")}
+            resizeMode="contain"
           />
+        </View>
 
-          <View style={styles.button}>
-            <Button
-              color="#d92978"
-              title="Login"
-              onPress={() =>
-                navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-              }
+        <View style={styles.middle}>
+          <Text style={styles.titleText}>Bee Rescue</Text>
+          <Text style={styles.text}>Login</Text>
+
+          <View style={{ width: 300 }}>
+            <Text style={styles.textRegular}>email</Text>
+            <TextInput style={styles.input} placeholder="email" />
+            <Text style={styles.textRegular}>password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="password"
+              secureTextEntry={true}
             />
+
+            <View style={styles.button}>
+              <Button
+                color="#d92978"
+                title="Login"
+                onPress={() =>
+                  navigation.navigate("HomeScreen", { screen: "HomeScreen" })
+                }
+              />
+            </View>
           </View>
         </View>
-        <TouchableOpacity
-          style={{ bottom: 20 }}
-          onPress={() =>
-            navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
-          }
-        >
-          <Text
-            style={{
-              fontFamily: "Comfortaa",
-              color: "#d92978",
-              fontWeight: "bold",
-            }}
+
+        <View style={styles.footer}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
+            }
           >
-            New? Sign up here
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ bottom: 20 }}
-          onPress={() =>
-            navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
-          }
-        >
-          <Text
-            style={{
-              fontFamily: "Comfortaa",
-              color: "#d92978",
-              fontWeight: "bold",
-            }}
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                color: "#d92978",
+                fontWeight: "bold",
+              }}
+            >
+              New? Sign up here
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
+            }
           >
-            Forgot Password?
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{ bottom: 20 }}
-          onPress={() =>
-            navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
-          }
-        >
-          <Text
-            style={{
-              fontFamily: "Comfortaa",
-              color: "#d92978",
-              fontWeight: "bold",
-            }}
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                color: "#d92978",
+                fontWeight: "bold",
+              }}
+            >
+              Forgot Password?
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
+            }
           >
-            Privacy
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                color: "#d92978",
+                fontWeight: "bold",
+              }}
+            >
+              Privacy
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -115,32 +125,34 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    top: 10,
+    flexDirection: "column",
+    alignSelf: "center",
   },
-  background: {
-    flex: 1,
-    justifyContent: "flex-end",
+  header: {
+    flex: 0.2,
+  },
+  middle: {
+    top: 150,
+    flex: 0.6,
     alignItems: "center",
-  },
-  image: {
-    justifyContent: "center",
+    alignSelf: "center",
     position: "absolute",
-    height: "25%",
-    width: "100%",
-    top: "2%",
-    margin: 10,
+  },
+  footer: {
+    flex: 0.2,
+    alignSelf: "flex-start",
+    position: "absolute",
+    marginLeft: 110,
+    top: 560,
   },
   titleText: {
-    position: "absolute",
     alignItems: "center",
-    height: "69%",
     fontSize: 40,
     fontFamily: "RoundSerif",
   },
   text: {
-    position: "absolute",
     alignItems: "center",
-    height: "63%",
     paddingTop: "5%",
     fontSize: 20,
     fontFamily: "Comfortaa",
@@ -152,7 +164,6 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    width: "80%",
     margin: 10,
     padding: 10,
     backgroundColor: "white",
@@ -160,7 +171,6 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 50,
-    width: "80%",
     margin: 10,
   },
 });

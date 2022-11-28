@@ -8,8 +8,6 @@ import {
   Image,
   SafeAreaView,
   TouchableOpacity,
-  TextInput,
-  TouchableWithoutFeedback,
 } from "react-native";
 
 export default function HomeScreen({ navigation }) {
