@@ -154,11 +154,11 @@ const styles = StyleSheet.create({
   text: {
     alignItems: "center",
     paddingTop: "5%",
-    fontSize: 20,
+    fontSize: 22,
     fontFamily: "Comfortaa",
   },
   textRegular: {
-    fontSize: 15,
+    fontSize: 18,
     paddingLeft: 10,
     fontFamily: "Comfortaa",
   },

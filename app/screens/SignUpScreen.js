@@ -9,6 +9,8 @@ import {
   Image,
   SafeAreaView,
   TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 
 export default function SignUpScreen({ navigation }) {
@@ -24,38 +26,58 @@ export default function SignUpScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
-        style={styles.background}
+        style={styles.container}
         source={require("../assets/gradient1.png")}
         resizeMode="cover"
       >
-        <Image
-          style={styles.image}
-          source={require("../assets/LoginBeePicture.png")}
-        />
-
-        <Text style={styles.titleText}>Bee Rescue</Text>
-        <Text style={styles.text}>Sign Up</Text>
-
-        <View style={{ height: "50%", width: "100%", marginLeft: "15%" }}>
-          <Text style={styles.textRegular}>email</Text>
-          <TextInput style={styles.input} placeholder="email" />
-          <Text style={styles.textRegular}>password</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="password"
-            secureTextEntry={true}
+        <View style={styles.header}>
+          <Image
+            style={{
+              alignSelf: "center",
+              resizeMode: "contain",
+              height: 145,
+              width: 500,
+            }}
+            source={require("../assets/LoginBeePicture.png")}
+            resizeMode="contain"
           />
+        </View>
 
-          <View style={styles.button}>
-            <Button
-              color="#d92978"
-              title="Sign Up"
-              onPress={() =>
-                navigation.navigate("PreferencesScreen", {
-                  screen: "PreferencesScreen",
-                })
-              }
+        <View style={styles.middle}>
+          <Text style={styles.titleText}>Bee Rescue</Text>
+          <Text style={styles.text}>Sign Up</Text>
+
+          <View style={{ width: 300 }}>
+            <Text style={styles.textRegular}>email</Text>
+            <TextInput style={styles.input} placeholder="email" />
+            <Text style={styles.textRegular}>password</Text>
+            <Text style={styles.textSmall}>
+              * must have a minimum of 8 chars
+            </Text>
+            <Text style={styles.textSmall}>
+              * must have at least one special character
+            </Text>
+            <Text style={styles.textSmall}>
+              * must have at least one number
+            </Text>
+
+            <TextInput
+              style={styles.input}
+              placeholder="password"
+              secureTextEntry={true}
             />
+
+            <View style={styles.button}>
+              <Button
+                color="#d92978"
+                title="Sign Up"
+                onPress={() =>
+                  navigation.navigate("PreferencesScreen", {
+                    screen: "PreferencesScreen",
+                  })
+                }
+              />
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -66,44 +88,43 @@ export default function SignUpScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    top: 10,
+    flexDirection: "column",
+    alignSelf: "center",
   },
-  background: {
-    flex: 1,
-    justifyContent: "flex-end",
+  header: {
+    flex: 0.2,
+  },
+  middle: {
+    top: 150,
+    flex: 0.6,
     alignItems: "center",
-  },
-  image: {
-    justifyContent: "center",
+    alignSelf: "center",
     position: "absolute",
-    height: "25%",
-    width: "100%",
-    top: "2%",
-    margin: 10,
   },
   titleText: {
-    position: "absolute",
     alignItems: "center",
-    height: "69%",
     fontSize: 40,
     fontFamily: "RoundSerif",
   },
   text: {
-    position: "absolute",
     alignItems: "center",
-    height: "63%",
     paddingTop: "5%",
-    fontSize: 20,
+    fontSize: 22,
     fontFamily: "Comfortaa",
   },
   textRegular: {
-    fontSize: 15,
+    fontSize: 18,
+    paddingLeft: 10,
+    fontFamily: "Comfortaa",
+  },
+  textSmall: {
+    fontSize: 12,
     paddingLeft: 10,
     fontFamily: "Comfortaa",
   },
   input: {
     height: 50,
-    width: "80%",
     margin: 10,
     padding: 10,
     backgroundColor: "white",
@@ -111,7 +132,6 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 50,
-    width: "80%",
     margin: 10,
   },
 });
