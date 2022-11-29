@@ -423,6 +423,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
+  header: {
+    flex: 0.1,
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "grey",
+  },
   pfp: {
     margin: "1%",
     alignSelf: "center",
@@ -507,14 +515,6 @@ const styles = StyleSheet.create({
   homeButton: {
     width: 40,
     height: 40,
-  },
-  header: {
-    flex: 0.1,
-    justifyContent: "space-evenly",
-    flexDirection: "row",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "grey",
   },
   body: {
     flex: 1,

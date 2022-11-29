@@ -12,6 +12,7 @@ import {
   Button,
   ScrollView,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 
 export default function SettingsScreen({ navigation }) {
@@ -32,96 +33,134 @@ export default function SettingsScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
-
-      <ScrollView style={{ top: 60 }}>
-        <Text style={styles.subTitle}>Security</Text>
-        <View style={{ alignItems: "center" }}>
-          <Text
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("AccountScreen", { screen: "AccountScreen" })
+          }
+        >
+          <Image
+            source={require("../assets/menuButton.png")}
             style={{
-              fontFamily: "Comfortaa",
-              fontSize: 15,
+              resizeMode: "contain",
+              height: 30,
+              width: 30,
             }}
-          >
-            email:
-          </Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeText}
-            value={text}
           />
-        </View>
-        {/* password block */}
-        {shouldShow ? (
-          <View style={{ marginTop: 10 }}>
-            <Button
-              title="Reset Password"
-              color="#d92978"
-              onPress={() => setShouldShow(!shouldShow)}
+        </TouchableOpacity>
+        <Text style={styles.titleText}>Settings</Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
+          }
+        >
+          <Image
+            source={require("../assets/bell.png")}
+            style={{
+              resizeMode: "contain",
+              height: 30,
+              width: 30,
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView>
+        <View style={styles.middle}>
+          <Text style={styles.subTitle}>Security</Text>
+          <View style={{ alignItems: "center" }}>
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                fontSize: 15,
+              }}
+            >
+              email:
+            </Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeText}
+              value={text}
             />
           </View>
-        ) : (
-          <View>
-            <View style={styles.passwordContainer}>
-              <TextInput
-                style={styles.input}
-                onChangeText={onChangeText}
-                placeholder={"current password"}
-              />
-              <Text style={{ fontFamily: "Comfortaa", fontSize: 12 }}>
-                * at least 8 chars, one number and a special character
-              </Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={onChangeText}
-                placeholder={"new password"}
+          {/* password block */}
+          {shouldShow ? (
+            <View style={{ marginTop: 10 }}>
+              <Button
+                title="Reset Password"
+                color="#d92978"
+                onPress={() => setShouldShow(!shouldShow)}
               />
             </View>
-            <Button
-              title="Save"
-              color="#d92978"
-              onPress={() => setShouldShow(!shouldShow)}
+          ) : (
+            <View>
+              <View style={styles.passwordContainer}>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={onChangeText}
+                  placeholder={"current password"}
+                />
+                <Text style={{ fontFamily: "Comfortaa", fontSize: 12 }}>
+                  * at least 8 chars, one number and a special character
+                </Text>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={onChangeText}
+                  placeholder={"new password"}
+                />
+              </View>
+              <Button
+                title="Save"
+                color="#d92978"
+                onPress={() => setShouldShow(!shouldShow)}
+              />
+            </View>
+          )}
+
+          <Text style={styles.subTitle}>Notifications</Text>
+          <View>
+            <Text style={styles.notificationText}>Swarm Reports</Text>
+            <Switch
+              style={styles.switch}
+              name="swarmReport"
+              trackColor={{ false: "#767577", true: "#d92978" }}
+              thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
+              onValueChange={toggleSwitch1}
+              value={isEnabled1}
+            />
+            <Text style={styles.notificationText}>Report Dropped</Text>
+            <Switch
+              style={styles.switch}
+              name="reportDropped"
+              trackColor={{ false: "#767577", true: "#d92978" }}
+              thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
+              onValueChange={toggleSwitch2}
+              value={isEnabled2}
             />
           </View>
-        )}
-
-        <Text style={styles.subTitle}>Notifications</Text>
-        <View>
-          <Text style={styles.notificationText}>Swarm Reports</Text>
-          <Switch
-            style={styles.switch}
-            name="swarmReport"
-            trackColor={{ false: "#767577", true: "#d92978" }}
-            thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
-            onValueChange={toggleSwitch1}
-            value={isEnabled1}
-          />
-          <Text style={styles.notificationText}>Report Dropped</Text>
-          <Switch
-            style={styles.switch}
-            name="reportDropped"
-            trackColor={{ false: "#767577", true: "#d92978" }}
-            thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
-            onValueChange={toggleSwitch2}
-            value={isEnabled2}
-          />
         </View>
       </ScrollView>
 
-      <Image
-        source={require("../assets/gradient1.png")}
-        style={styles.footer}
-      />
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-        }
-      >
-        <Image
-          source={require("../assets/home.png")}
-          style={{ flex: 0, bottom: 15, resizeMode: "contain", height: 40 }}
-        />
-      </TouchableOpacity>
+      <View style={styles.footer}>
+        <ImageBackground
+          style={styles.background}
+          source={require("../assets/gradient1.png")}
+          resizeMode="cover"
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("HomeScreen", {
+                screen: "HomeScreen",
+              });
+            }}
+          >
+            <Image
+              source={require("../assets/home.png")}
+              style={styles.homeButton}
+            />
+          </TouchableOpacity>
+        </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 }
@@ -129,17 +168,25 @@ export default function SettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    textAlign: "center",
-    alignItems: "center",
-    justifyContent: "center",
+    top: 10,
   },
-  title: {
-    top: 0,
-    fontSize: 40,
-    position: "absolute",
-    fontFamily: "Comfortaa",
+  header: {
+    flex: 0.2,
+    justifyContent: "space-evenly",
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "grey",
+  },
+  middle: {
+    flex: 1,
+    width: "100%",
+    paddingHorizontal: 20,
+    alignSelf: "center",
+  },
+  titleText: {
+    fontSize: 40,
+    fontFamily: "Comfortaa",
   },
   subTitle: {
     textAlign: "center",
@@ -172,12 +219,21 @@ const styles = StyleSheet.create({
   switch: {
     bottom: 35,
   },
-  footer: {
-    flex: 0,
-    bottom: -40,
+  homeButton: {
+    width: 40,
+    height: 40,
+  },
+  background: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    resizeMode: "cover",
-    height: 70,
+  },
+  footer: {
+    flex: 0.1,
+    top: 715,
     width: "100%",
+    height: 70,
+    position: "absolute",
   },
 });
