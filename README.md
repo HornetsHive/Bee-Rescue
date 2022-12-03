@@ -35,9 +35,37 @@ If specific versions of other software are required, or known not to work, call 
 
 ## Installation
 
-*Detailed instructions on how to install, configure, and get the project running.
-This should be frequently tested to ensure reliability. Alternatively, link to
-a separate [INSTALL](INSTALL.md) document.*
+1. install nodejs libraries https://nodejs.org/en/download/
+   - download for your OS and install
+
+2. install chocolately windows package manager (if you're on windows) https://chocolatey.org/install
+   - open powershell as admin 
+   - then run `Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))` (this step may take a minute or two)
+   - open command prompt and confirm installation with `choco --version`
+
+3. install nodejs
+   - open command prompt as admin and type `choco install nodejs`
+
+4. restart VSCode
+5. navigate to or create an empty folder in your file explorer
+6. open that folder in VSCode
+7. in the VSCode terminal, run `npx create-react-app new_app` (this may take a few minutes)
+   - *new_app* is the name of your react app
+   - this will install a bunch of packages and dependencies.
+8. You can delete the folder when you're done
+   - (for the next steps continue to use the VScode terminal, instalation may take a few minutes)
+9. `npm install express`
+10. `npm install body-parser`
+11. `npm install mysql`
+12. `npm i axios`
+13. `npm install cors`
+14. `npm install react`
+
+15. install mySQL workbench https://dev.mysql.com/downloads/file/?id=514051 <br>
+    - when the webpage opens, click "no thanks, just start my download"
+16. install mysql
+    - open command prompt as admin and run `choco install mysql`
+    - select yes to all by typing `A` (this will take a while) 
 
 ## Configuration
 
