@@ -33,6 +33,8 @@
    -React Native components and UI framework
 -Axios - https://github.com/axios/axios
    -Easy API calls with NodeJS backend
+-Expo - https://www.npmjs.com/package/expo/v/42.0.0-alpha.1
+   -adds functionality for contacts, camera, and location
 
 -MySQL - https://www.mysql.com/
    -SQL database implementation
