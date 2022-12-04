@@ -104,10 +104,17 @@
 1. navigate terminal to `app`
 2. run 
 
+## How to test the software
+WIP, To be updated
+
 ## Known issues
+WIP, To be updated
 
-*Document any known significant shortcomings with the software.*
+## Deplyment
+WIP, To be updated
 
+## Developer Instructions
+WIP, To be updated
 
 ## Timeline
 September 2022 - December 2022
