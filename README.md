@@ -25,31 +25,31 @@
 ![image](https://user-images.githubusercontent.com/31836580/205385884-2baf3d41-4c18-4427-a699-b50b5ec59f98.png)
 
 ## Dependencies
+**Dependencies**:
 
-*Describe any dependencies that must be installed for this software to work.
-**React** - https://github.com/facebook/react
+- **React** - https://github.com/facebook/react
    -Javascript framework for developing web applications
-**Evergreen UI** - https://evergreen.segment.com/
+- **Evergreen UI** - https://evergreen.segment.com/
    -React Native components and UI framework
-**Axios** - https://github.com/axios/axios
+- **Axios** - https://github.com/axios/axios
    -Easy API calls with NodeJS backend
-**Exp** - https://www.npmjs.com/package/expo/v/42.0.0-alpha.1
+- **Exp** - https://www.npmjs.com/package/expo/v/42.0.0-alpha.1
    -adds functionality for contacts, camera, and location
 
-**MySQL** - https://www.mysql.com/
+- **MySQL** - https://www.mysql.com/
    -SQL database implementation
 
-**NodeJS**- https://nodejs.org/en/
+- **NodeJS**- https://nodejs.org/en/
    -Asynchronous event-driven JavaScript runtime, Node.js is designed to build scalable network applications
--**body-parser** https://www.npmjs.com/package/body-parser
+- **body-parser** https://www.npmjs.com/package/body-parser
    -Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
--**cors** - https://www.npmjs.com/package/cors
+- **cors** - https://www.npmjs.com/package/cors
    -CORS is a node.js package for providing a Connect/Express middleware
--**express** - https://www.npmjs.com/package/express
+- **express** - https://www.npmjs.com/package/express
    -provide small, robust tooling for HTTP servers, making it a great solution for single page applications, websites, hybrids, or public HTTP APIs.
--**install** - https://www.npmjs.com/package/install
+- **install** - https://www.npmjs.com/package/install
    -JS module installer and loader
--**nodemon** - https://www.npmjs.com/package/nodemon
+- **nodemon** - https://www.npmjs.com/package/nodemon
    -tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected.
 
 ## Installation
