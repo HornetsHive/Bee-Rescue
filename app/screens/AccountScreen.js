@@ -1,5 +1,6 @@
 import { useFonts } from "expo-font";
 import { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
 import {
   StyleSheet,
   Text,
@@ -16,6 +17,7 @@ import {
 } from "react-native";
 
 export default function AccountScreen({ navigation }) {
+  const [image, setImage] = useState("default");
   const [name, setName] = useState();
   const [loc, setLocation] = useState();
   const [maxHeight, setMaxHeight] = useState();
@@ -52,18 +54,23 @@ export default function AccountScreen({ navigation }) {
     return null;
   }
 
-  function uploadImage() {
-    // React Image picker
-    console.log("upload image somehow");
-  }
-
   function saveChanges() {
     // Send new data to the database from here?
     console.log("changes saved");
-    console.log(name, loc, maxHeight, cooperative);
-    console.log(ability1, ability2, ability3, ability4);
-    console.log(mon, tue, wed, thu, fri, sat, sun);
   }
+
+  const uploadImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+      base64: true,
+    });
+
+    if (!result.cancelled) setImage(result.base64);
+    else setImage("default");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,17 +84,31 @@ export default function AccountScreen({ navigation }) {
         >
           <Image
             source={require("../assets/menuButton.png")}
-            style={styles.menuButton}
+            style={styles.iconButton}
           />
         </TouchableOpacity>
         <Text style={styles.titleText}>Account</Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
+          }
+        >
+          <Image
+            source={require("../assets/bell.png")}
+            style={styles.iconButton}
+          />
+        </TouchableOpacity>
         <View />
       </View>
 
       <ScrollView style={styles.body}>
         <Image
+          source={
+            image == "default"
+              ? require("../assets/LoginBeePicture.png")
+              : { uri: "data:image/jpeg;base64," + image }
+          }
           style={styles.pfp}
-          source={require("../assets/LoginBeePicture.png")}
         />
         <TouchableOpacity onPress={uploadImage}>
           <Text style={styles.smallText}>Edit Profile Picture</Text>
@@ -136,12 +157,7 @@ export default function AccountScreen({ navigation }) {
         </View>
         <Text style={styles.bigText}>Self-Qualifications</Text>
         <Text style={styles.smallText}>
-          As a swarm relocator we are committed to relocate bees with minimal
-          impact to the property where the swarm cluster is located. More
-          importantly, we are indicating that we will be using appropriate
-          equipment and techniques to protect others as we safely relocate the
-          bees. Please indicate the locations you are skilled at gathering swarm
-          clusters:
+          Locations that you are skilled at gathering swarm clusters:
         </Text>
         <View style={styles.aligned}>
           <Text style={styles.switchLabel}>Ground Swarms</Text>
@@ -386,8 +402,8 @@ export default function AccountScreen({ navigation }) {
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("LoginScreen", {
-                screen: "LoginScreen",
+              navigation.navigate("HomeScreen", {
+                screen: "HomeScreen",
               });
             }}
           >
@@ -407,37 +423,48 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
+  header: {
+    flex: 0.1,
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "grey",
+  },
   pfp: {
     margin: "1%",
     alignSelf: "center",
     borderRadius: 75,
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "grey",
     width: 150,
     height: 150,
   },
   titleText: {
-    right: "20%",
-    fontSize: 50,
-    fontFamily: "RoundSerif",
+    marginHorizontal: 40,
+    fontSize: 40,
+    fontFamily: "Comfortaa",
   },
   bigText: {
     marginTop: "1%",
     borderTopWidth: 1,
+    borderTopColor: "grey",
     textAlign: "center",
-    fontSize: 35,
-    fontFamily: "RoundSerif",
+    fontSize: 25,
+    fontFamily: "Comfortaa",
   },
   smallText: {
     margin: "1%",
     alignSelf: "center",
-    color: "#D92978",
+    color: "#d92978",
     fontSize: 14,
     fontFamily: "Comfortaa",
+    textAlign: "center",
   },
   input: {
     flex: 0.7,
     borderWidth: 1,
+    borderColor: "grey",
     borderRadius: 10,
     marginHorizontal: "1%",
     paddingHorizontal: "2%",
@@ -480,28 +507,24 @@ const styles = StyleSheet.create({
   aligned: {
     flexDirection: "row",
   },
-  menuButton: {
-    left: "20%",
-    width: 50,
-    height: 50,
+  iconButton: {
+    resizeMode: "contain",
+    width: 30,
+    height: 30,
   },
   homeButton: {
-    width: 50,
-    height: 50,
-  },
-  header: {
-    flex: 0.1,
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "center",
-    borderBottomWidth: 1,
+    width: 40,
+    height: 40,
   },
   body: {
-    flex: 2,
+    flex: 1,
   },
   footer: {
     flex: 0.1,
-    borderWidth: 1,
+    top: 715,
+    width: "100%",
+    height: 70,
+    position: "absolute",
   },
   background: {
     flex: 1,
