@@ -8,8 +8,7 @@
   - **Backend**: MySQL - relational, NodeJS
   - **API**: Google Maps static map *(not yet implemented)*
   - **Server**: Testing: Local/Linode, Official product: AWS *(not finalized)*
-  - **Status**: Working Beta [CHANGELOG](CHANGELOG.md).
-  - **Links to production or demo instances**
+  - **Status**: Working Beta
 
 **Website Screenshot**:
 
@@ -89,18 +88,18 @@
     - select yes to all by typing `A` (this will take a while) 
 
 ## Configuration
---There is currently no configuration settings
+   - There are currently no configuration settings
 
 ## Usage
---start webpage
+   - start webpage
 1. navigate terminal to `client_webpage`
 2. run `npm run start`
 
---start server
+   - start server
 1. navigate terminal to `server`
 2. run `npm run devStart`
 
---start mobile app
+   - start mobile app
 1. navigate terminal to `app`
 2. run 
 
@@ -118,29 +117,24 @@ WIP, To be updated
 
 ## Timeline
 September 2022 - December 2022
--Make contact with client and finalize desired project
--Finish planning, outlines, wireframes, ERD diagrams, etc.
--Create functional UI for public webpage and beekeeper mobile app
--Finalize alpha version by coupling all components and having a beekeeper
-   able to respond to a request then confirm the completion
+ 1. Make contact with client and finalize desired project
+ 2. Finish planning, outlines, wireframes, ERD diagrams, etc.
+ 3. Create functional UI for public webpage and beekeeper mobile app
+ 4. Finalize alpha version by coupling all components and having a beekeeper able to respond to a request then confirm the completion
 
 February 2023 - May 2023
--Finalze UI design and implementation
--Implement detailed email updates for reporters and beekeepers
--Google maps (or other map API) integration with live updates of report locations
--misc. bugfixing
--Final release
+ 1. Finalze UI design and implementation
+ 2. Implement detailed email updates for reporters and beekeepers
+ 3. Google maps (or other map API) integration with live updates of report locations
+ 4. misc. bugfixing
+ 5. Final release
 
 ## Getting help
 If there is a bug report please file at https://github.com/HornetsHive/Bee_Project/issues
 
 To get in contact with the developers please send an email to mrsmith@csus.edu
-
-
 ----
 
 ## Credits and references
 **Hornet's Hive Team**
 > Matthew Smith, Jarod Cavagnaro, Steven Maggs, John Wishek, Kiana Bruberg, Dane Leineke, Lawrence Matias, Sean Hackett
-
-
