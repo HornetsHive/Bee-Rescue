@@ -1,10 +1,7 @@
 # Bee Rescue
 > Developed by team Hornet's Hive
 
-**Description**:  Bee Rescue has two components, a mobile application and a website. The website is for people to be able to quickly report swarms of bees on their property by submiting a short form. The application is for beekeepers to be notified about swarms that are nearby so that they can collect them. This is to aid the current process the beekeepers of Sacramento have for collecting swarms by minimizing the amount of phone calls back and forth as well as ensuring that only available and nearby beekeepers are contacted.
-
-> Bee Rescue aims to help beekeepers whithin and outside of Sacramento efficiently collect swarms of bees so those affected by bee swarms can trust their report will be taken care of quickly.
-
+**Description**:  Bee Rescue has two components, a mobile application and a website. The website is for the general public to be able to quickly report swarms of bees on their property by submiting a short form. The application is for beekeepers to be notified about swarms that are nearby so that they can collect them. The combined application is designed to expedite the process of property owners finding beekeepers to remove hives from their property. Redundant phone calls and wasted time are minimized, as only beekeepers who have specified they they are available at that time and area are notified. The app is being developed for the Sacramento Area Beekeepers Association (SABA).
 
  **Technology stack**: Standalone application and website
   - **Frontend**: Javascript/HTML/CSS, Visual Studio (IDE), React Native and React Native add ons (SDK)
@@ -30,8 +27,28 @@
 ## Dependencies
 
 *Describe any dependencies that must be installed for this software to work.
-This includes programming languages, databases or other storage mechanisms, build tools, frameworks, and so forth.
-If specific versions of other software are required, or known not to work, call that out.*
+-React - https://github.com/facebook/react
+   -Javascript framework for developing web applications
+-Evergreen UI - https://evergreen.segment.com/
+   -React Native components and UI framework
+-Axios - https://github.com/axios/axios
+   -Easy API calls with NodeJS backend
+
+-MySQL - https://www.mysql.com/
+   -SQL database implementation
+
+-NodeJS - https://nodejs.org/en/
+   -Asynchronous event-driven JavaScript runtime, Node.js is designed to build scalable network applications
+-body-parser https://www.npmjs.com/package/body-parser
+   -Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
+-cors - https://www.npmjs.com/package/cors
+   -CORS is a node.js package for providing a Connect/Express middleware
+-express - https://www.npmjs.com/package/express
+   -provide small, robust tooling for HTTP servers, making it a great solution for single page applications, websites, hybrids, or public HTTP APIs.
+-install - https://www.npmjs.com/package/install
+   -JS module installer and loader
+-nodemon - https://www.npmjs.com/package/nodemon
+   -tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected.
 
 ## Installation
 
@@ -57,56 +74,63 @@ If specific versions of other software are required, or known not to work, call 
 9. `npm install express`
 10. `npm install body-parser`
 11. `npm install mysql`
-12. `npm i axios`
+12. `npm install axios`
 13. `npm install cors`
 14. `npm install react`
+15. `npm install nodemon`
+16. `npm install evergreen-ui`
 
-15. install mySQL workbench https://dev.mysql.com/downloads/file/?id=514051 <br>
+17. install mySQL workbench https://dev.mysql.com/downloads/file/?id=514051
     - when the webpage opens, click "no thanks, just start my download"
-16. install mysql
+18. install mysql
     - open command prompt as admin and run `choco install mysql`
     - select yes to all by typing `A` (this will take a while) 
 
 ## Configuration
-
-*If the software is configurable, describe it in detail, either here or in other documentation to which you link.*
+--There is currently no configuration settings
 
 ## Usage
+--start webpage
+1. navigate terminal to `client_webpage`
+2. run `npm run start`
 
-*Show users how to use the software.
-Be specific.
-Use appropriate formatting when showing code snippets.*
+--start server
+1. navigate terminal to `server`
+2. run `npm run devStart`
 
-## How to test the software
-
-*If the software includes automated tests, detail how to run those tests.*
+--start mobile app
+1. navigate terminal to `app`
+2. run 
 
 ## Known issues
 
 *Document any known significant shortcomings with the software.*
 
-## Deplyment
-
-...
-
-## Developer Instructions
-
-...
 
 ## Timeline
+September 2022 - December 2022
+-Make contact with client and finalize desired project
+-Finish planning, outlines, wireframes, ERD diagrams, etc.
+-Create functional UI for public webpage and beekeeper mobile app
+-Finalize alpha version by coupling all components and having a beekeeper
+   able to respond to a request then confirm the completion
 
-*Use your JIRA to create a timeline section with key milestones for your project
-(When coming up with the timeline this is the timeline for what you expect to get done in 191 based on the user stories you created in the backlog for all the key features with estimates.)*
+February 2023 - May 2023
+-Finalze UI design and implementation
+-Implement detailed email updates for reporters and beekeepers
+-Google maps (or other map API) integration with live updates of report locations
+-misc. bugfixing
+-Final release
 
 ## Getting help
+If there is a bug report please file at https://github.com/HornetsHive/Bee_Project/issues
 
-*Instruct users how to get help with this software; this might include links to an issue tracker, wiki, mailing list, etc.
-If you have questions, concerns, bug reports, etc, please file an issue in this repository's Issue Tracker.*
+To get in contact with the developers please send an email to mrsmith@csus.edu
+
 
 ----
 
 ## Credits and references
-
 **Hornet's Hive Team**
 > Matthew Smith, Jarod Cavagnaro, Steven Maggs, John Wishek, Kiana Bruberg, Dane Leineke, Lawrence Matias, Sean Hackett
 

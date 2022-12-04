@@ -332,11 +332,9 @@ function App(){
                   }} 
                 />
               </Pane>
-
               <Button appearance="primary" margin={majorScale(1)} marginBottom={majorScale(2)} onClick={submitReport}>Submit</Button>
             </div>
           </Pane>
-
         </Pane>
     </div>
   );
