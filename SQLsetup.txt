@@ -99,7 +99,7 @@ CREATE TABLE report_archive (
 -- Triggers
 DELIMITER //
 create trigger QUALIFICATIONS_INSERT
-after insert on Beekeepers
+after insert on BEEKEEPERS
 for each row
 begin
 	insert into QUALIFICATIONS(bk_id, groud_swarms, valve_or_water_main, shrubs, low_tree, mid_tree, tall_tree, fences, low_structure, mid_structure, chimney, interior, cut_or_trap_out, traffic_accidents, bucket_w_pole, ladder, mechanical_lift)
