@@ -77,8 +77,8 @@ export default function AccountScreen({ navigation }) {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("LoginScreen", {
-              screen: "LoginScreen",
+            navigation.navigate("AccountScreen", {
+              screen: "AccountScreen",
             });
           }}
         >

@@ -88,9 +88,9 @@ export default function LoginScreen({ navigation }) {
 
         <View style={styles.footer}>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
-            }
+          //onPress={() =>
+          //navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
+          //}
           >
             <Text
               style={{
@@ -103,9 +103,9 @@ export default function LoginScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
-            }
+          //onPress={() =>
+          //navigation.navigate("SignUpScreen", { screen: "SignUpScreen" })
+          //}
           >
             <Text
               style={{
