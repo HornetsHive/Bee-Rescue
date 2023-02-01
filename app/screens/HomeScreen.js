@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useFonts } from "expo-font";
+import Axios from "axios";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -20,6 +21,13 @@ export default function HomeScreen({ navigation }) {
   if (!loaded) {
     return null;
   }
+
+  //fetching info from database to display
+  const showReports = () => {
+    Axios.get("http://localhost:3001/api/bk_appReports", {}).then(() => {
+      alert("successful insert");
+    });
+  };
 
   return (
     <View style={styles.container}>
