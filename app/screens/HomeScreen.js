@@ -23,10 +23,18 @@ export default function HomeScreen({ navigation }) {
   }
 
   //fetching info from database to display
-  const showReports = () => {
-    Axios.get("http://localhost:3001/api/bk_appReports", {}).then(() => {
-      alert("successful insert");
-    });
+  showReports = () => {
+    Axios.get("http://localhost:3001/api/bk_appReports")
+      .then((res) => {
+        const data = res.data;
+        console.log("db data:");
+        console.log(data);
+      })
+      .catch(function (error) {
+        //promise eror with Axios
+        console.log("There has been a problem with your fetch operation");
+        throw error;
+      });
   };
 
   return (
@@ -66,7 +74,10 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       <View style={styles.middle}>
-        <TouchableOpacity style={styles.textContainer}>
+        <TouchableOpacity
+          style={styles.textContainer}
+          onPress={() => showReports()}
+        >
           <Text style={styles.textBox}>Change location</Text>
         </TouchableOpacity>
 

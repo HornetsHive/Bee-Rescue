@@ -202,10 +202,15 @@ app.get("/api/bk_appReports", (req, res) => {
       reportDate,
       active,
     ],
-    (err, result) => {
-      console.log(result);
+    (err, results) => {
+      console.log(res);
+      res.send(results);
     }
-  );
+  ).catch(function (error) {
+    console.log("catch from index");
+
+    throw error;
+  });
 });
 
 app.get("/", (req, res) => {
