@@ -5,17 +5,20 @@ const app = express();
 const mysql = require("mysql");
 
 const db = mysql.createConnection({
-  //to be changed later
+  //to be changed later //someone changed the database name from brdb to beedb and it really messed me up
   host: "localhost",
   user: "root",
   password: "password",
-  database: "beeDB",
+  database: "brdb",
 });
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//POST REALMS//
+
+//reports database insert
 app.post("/api/insert", (req, res) => {
   const address = req.body.address;
   const city = req.body.city;
@@ -108,6 +111,21 @@ app.post("/api/bk_qualif_update", (req, res) => {
   // TODO: Update query, consider refactoring tables to remove bk_id and only include email/pass as primary key
   //const sqlINSERT = "UPDATE QUALIFICATIONS SET "
 });
+
+//Posts update to mark report as complete TRIGGER WARNING this will delete this report from reports, if you want to find it again it will be in report_archive
+app.post("/api/complete_report", (req, res) => {
+  const r_id = req.body.r_id;
+  //const active = req.body.active;
+
+  const sqlUpdate = "UPDATE reports SET active = false WHERE r_id = ?;";
+
+  db.query(sqlUpdate, [r_id], (err, result) => {
+    console.log(result);
+    }
+  );
+});
+
+//GET REALMS//
 
 // Fetches a user email from the Beekeepers table
 app.get("/api/bk_user", (req, res) => {
