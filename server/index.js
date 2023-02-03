@@ -1,4 +1,5 @@
 const express = require('express');
+const nodemailer = require('nodemailer')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
@@ -12,9 +13,33 @@ const db = mysql.createConnection({
     database: "beeDB"
 });
 
+const transporter = nodemailer.createTransport({
+    service: 'hotmail',
+    auth: {
+      user: "BeeRescuePostmaster@outlook.com",
+      pass: "CSC191testpass",
+    }
+  });
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+app.get("/api/mailtest", (req, res)=> {
+    const mailoptionstest = {
+        from: "BeeRescuePostmaster@outlook.com",
+        to: "BeeRescuePostmaster@outlook.com",
+        subject: "Sending email with nodemailer",
+        text: "Hello world"
+    }
+    transporter.sendMail(mailoptionstest, function(err, info) {
+        if(err){
+            console.log(err);
+            return;
+        }
+        console.log("Sent: " + info.response);
+    })
+} )
 
 app.post("/api/insert", (req, res)=> {
 
@@ -41,6 +66,23 @@ app.post("/api/insert", (req, res)=> {
         else{
             console.log("Successfully inserted record");
             console.log(result);
+
+            //send confirmation email
+            const messagebody = "Hi " + fname + "!\n" + "Thank you for submitting your report! We have notified the beekeepers in your area, you will recieve a follow-up email when an available beekeeper claims your report. Please keep a close eye on your inbox."
+            const confirmReportOptions = {
+                from: "BeeRescuePostmaster@outlook.com",
+                to: email,
+                subject: "Your Bee Rescue report is confirmed!",
+                text: messagebody
+            }
+
+            transporter.sendMail(confirmReportOptions, function(err, info) {
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                console.log("Sent: " + info.response);
+            })
         }
     })
 });
