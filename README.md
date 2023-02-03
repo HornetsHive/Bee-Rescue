@@ -109,7 +109,7 @@ WIP, To be updated
 ## Known issues
 WIP, To be updated
 
-## Deplyment
+## Deployment
 WIP, To be updated
 
 ## Developer Instructions
