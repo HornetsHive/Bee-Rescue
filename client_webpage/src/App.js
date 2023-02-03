@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { Button, Pane, Text, Paragraph, Heading, Select, SelectField, TextInputField, majorScale } from 'evergreen-ui';
+import { Button, Pane, Paragraph, Heading, SelectField, TextInputField, majorScale, toaster } from 'evergreen-ui';
 import './App.css';
 import Axios from 'axios';
+
+function isValidEmail(email) {
+  var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return regex.test(email);
+}
 
 function App(){
 
@@ -20,7 +25,16 @@ function App(){
     image: ""
   });
 
-  const submitReport = () => {
+  const submitReport = e => {
+    e.preventDefault();
+
+    //validate form
+    const err = validate();
+    if(err) {
+      toaster.danger('Please input all required fields');
+      return;
+    }
+
     Axios.post("http://localhost:3001/api/insert", {
       address: form.address,
       fname: form.fname,
@@ -38,7 +52,66 @@ function App(){
     }).then(() => {
       alert('successful insert');
     });
+    toaster.success("Your form has been submitted!");
   }
+
+  const [errors, setErrors] = useState({
+    address: "",
+    fname: "",
+    lname: "",
+    city: "",
+    zip: "",
+    email: "",
+    propertyType: "",
+    propertyLoc: "",
+    duration: "",
+    height: "",
+    size: "",
+    image: ""
+  });
+
+  const validate = () => {
+    const newErrors = {...errors};
+    if(!form.address){
+      newErrors.address = "This field is required"
+    }
+    if(!form.fname){
+      newErrors.fname = "This field is required"
+    }
+    if(!form.lname){
+      newErrors.lname = "This field is required"
+    }
+    if(!form.city){
+      newErrors.city = "This field is required"
+    }
+    if(!form.zip){
+      newErrors.zip = "This field is required"
+    }
+    if(isNaN(form.zip) || form.zip.length < 3 || form.zip.length > 5){
+      newErrors.zip = "Please enter a valid zip"
+    }
+    if(!isValidEmail(form.email)){
+      newErrors.email = "Please enter a valid email"
+    }
+    if(!form.email){
+      newErrors.email = "This field is required"
+    }
+    if(!form.propertyType){
+      newErrors.propertyType = "This field is required"
+    }
+    if(!form.propertyLoc){
+      newErrors.propertyLoc = "This field is required"
+    }
+    if(!form.height){
+      newErrors.height = "This field is required"
+    }
+    if(isNaN(form.duration)){
+      newErrors.duration = "Please enter a numeric value"
+    }
+    
+    setErrors(newErrors)
+    return !Object.values(newErrors).every(error => error === '');
+  };
 
   return (
     <div className="App">
@@ -100,6 +173,8 @@ function App(){
                 <TextInputField
                   label="First name:"
                   margin={majorScale(1)}
+                  isInvalid={Boolean(errors.fname)}
+                  validationMessage={errors.fname ? errors.fname : null}
                   required 
                   type="text" 
                   name="fname" 
@@ -108,13 +183,17 @@ function App(){
                           ...prevState,
                           fname: e.target.value
                     }));
-                  }} 
+                    setErrors({...errors, fname: ''});
+                  }}
+                  error="test" 
                 />
 
                 {/*last name*/}
                 <TextInputField
                   label="Last name:"
                   margin={majorScale(1)}
+                  isInvalid={Boolean(errors.lname)}
+                  validationMessage={errors.lname ? errors.lname : null}
                   required
                   type="text" 
                   name="lname" 
@@ -123,6 +202,7 @@ function App(){
                           ...prevState,
                           lname: e.target.value
                     }));
+                    setErrors({...errors, lname: ''});
                   }} 
                 />
 
@@ -131,13 +211,16 @@ function App(){
                   label="email"
                   margin={majorScale(1)}
                   required
+                  isInvalid={Boolean(errors.email)}
+                  validationMessage={errors.email ? errors.email : null}
                   type="text"
                   name="email"
                   onChange={(e)=> {
                     setForm(prevState => ({
                       ...prevState,
                       email: e.target.value
-                  }));
+                    }));
+                    setErrors({...errors, email: ''});
                   }} 
                 />
               </Pane>
@@ -159,6 +242,8 @@ function App(){
                   label="Address:"
                   margin={majorScale(1)}
                   required
+                  isInvalid={Boolean(errors.address)}
+                  validationMessage={errors.address ? errors.address : null}
                   type="text" 
                   name="address"
                   onChange={(e)=> {
@@ -166,6 +251,7 @@ function App(){
                           ...prevState,
                           address: e.target.value
                     }));
+                    setErrors({...errors, address: ''});
                   }} 
                 />
 
@@ -173,7 +259,9 @@ function App(){
                 <TextInputField
                   label="City:"
                   margin={majorScale(1)}
-                  required 
+                  required
+                  isInvalid={Boolean(errors.city)}
+                  validationMessage={errors.city ? errors.city : null}
                   type="text" 
                   name="city" 
                   onChange={(e)=> {
@@ -181,6 +269,7 @@ function App(){
                           ...prevState,
                           city: e.target.value
                     }));
+                    setErrors({...errors, city: ''});
                   }} 
                 />
 
@@ -188,7 +277,9 @@ function App(){
                 <TextInputField
                   label="zip"
                   margin={majorScale(1)}
-                  required 
+                  required
+                  isInvalid={Boolean(errors.zip)}
+                  validationMessage={errors.zip ? errors.zip : null}
                   type="text" 
                   name="zip" 
                   onChange={(e)=> {
@@ -196,6 +287,7 @@ function App(){
                           ...prevState,
                           zip: e.target.value
                     }));
+                    setErrors({...errors, zip: ''});
                   }} 
                 />
               </Pane>
@@ -215,6 +307,8 @@ function App(){
                 {/*type of property*/}  
                 <SelectField
                   required
+                  isInvalid={Boolean(errors.propertyType)}
+                  validationMessage={errors.propertyType ? errors.propertyType : null}
                   label="Type of Property"
                   margin={majorScale(1)}
                   width="65%"
@@ -225,6 +319,7 @@ function App(){
                       ...prevState,
                       propertyType: e.target.value
                     }));
+                    setErrors({...errors, propertyType: ''});
                   }}
                 >
                   <option disabled={true} value="">Select a property type</option>
@@ -240,6 +335,8 @@ function App(){
                   margin={majorScale(1)}
                   width="65%"
                   required
+                  isInvalid={Boolean(errors.propertyLoc)}
+                  validationMessage={errors.propertyLoc ? errors.propertyLoc : null}
                   defaultValue=""
                   value={form.propertyLoc} 
                   onChange={ (e)=> {
@@ -247,6 +344,7 @@ function App(){
                       ...prevState,
                       propertyLoc: e.target.value
                     }));
+                    setErrors({...errors, propertyLoc: ''});
                   }}
                 >
                   <option disabled={true} value="">Select a location</option>
@@ -267,6 +365,8 @@ function App(){
                   margin={majorScale(1)}
                   width="65%"
                   required
+                  isInvalid={Boolean(errors.height)}
+                  validationMessage={errors.height ? errors.height : null}
                   defaultValue="" 
                   value={form.height} 
                   onChange={ (e)=> {
@@ -274,6 +374,7 @@ function App(){
                       ...prevState,
                       height: e.target.value
                     }));
+                    setErrors({...errors, height: ''});
                   }}
                 >
                   <option disabled={true} value="">Select a height</option>
@@ -308,6 +409,8 @@ function App(){
                   placeholder="Numeric only, ie. '4'"
                   margin={majorScale(2)}
                   width="65%"
+                  isInvalid={Boolean(errors.duration)}
+                  validationMessage={errors.duration ? errors.duration : null}
                   type="text" 
                   name="duration" 
                   onChange={(e)=> {
@@ -315,6 +418,7 @@ function App(){
                           ...prevState,
                           duration: e.target.value
                     }));
+                    setErrors({...errors, duration: ''});
                   }} 
                 />
 
