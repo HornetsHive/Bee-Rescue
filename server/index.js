@@ -41,6 +41,8 @@ app.get("/api/mailtest", (req, res)=> {
     })
 } )
 
+//SERVER POSTS//
+
 //reports database insert
 app.post("/api/insert", (req, res) => {
   const address = req.body.address;
