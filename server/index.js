@@ -1,45 +1,56 @@
-const express = require('express');
-const nodemailer = require('nodemailer')
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const express = require("express");
+const nodemailer = require("nodemailer");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 const app = express();
 const mysql = require("mysql");
 
 const db = mysql.createConnection({
-    //to be changed later
-    host: "localhost",
-    user: "root",
-    password: "password",
-    database: "beeDB"
+  //to be changed later
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "beeDB",
 });
 
 const transporter = nodemailer.createTransport({
-    service: 'hotmail',
-    auth: {
-      user: "BeeRescuePostmaster@outlook.com",
-      pass: "CSC191testpass",
-    }
-  });
+  service: "hotmail",
+  auth: {
+    user: "BeeRescuePostmaster@outlook.com",
+    pass: "CSC191testpass",
+  },
+});
 
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/api/mailtest", (req, res)=> {
-    const mailoptionstest = {
-        from: "BeeRescuePostmaster@outlook.com",
-        to: "BeeRescuePostmaster@outlook.com",
-        subject: "Sending email with nodemailer",
-        text: "Hello world"
+//test
+app.use(function (req, res, next) {
+  res.header(
+    "Access-Control-Allow-Origin",
+    "http://localhost:3001/api/bk_appReports"
+  );
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+});
+///
+
+app.get("/api/mailtest", (req, res) => {
+  const mailoptionstest = {
+    from: "BeeRescuePostmaster@outlook.com",
+    to: "BeeRescuePostmaster@outlook.com",
+    subject: "Sending email with nodemailer",
+    text: "Hello world",
+  };
+  transporter.sendMail(mailoptionstest, function (err, info) {
+    if (err) {
+      console.log(err);
+      return;
     }
-    transporter.sendMail(mailoptionstest, function(err, info) {
-        if(err){
-            console.log(err);
-            return;
-        }
-        console.log("Sent: " + info.response);
-    })
-} )
+    console.log("Sent: " + info.response);
+  });
+});
 
 //SERVER POSTS//
 
@@ -60,33 +71,54 @@ app.post("/api/insert", (req, res) => {
   const size = req.body.size;
   const image = req.body.image;
 
-    const sqlINSERT = "INSERT INTO reports (address, city, fname, lname, email, duration, p_type, location, height, size, category, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    db.query(sqlINSERT, [address, city, fname, lname, email, duration, propertyType, propertyLocation, height, size, "normal", image], (err, result)=> {
-        if(err){
+  const sqlINSERT =
+    "INSERT INTO reports (address, city, fname, lname, email, duration, p_type, location, height, size, category, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  db.query(
+    sqlINSERT,
+    [
+      address,
+      city,
+      fname,
+      lname,
+      email,
+      duration,
+      propertyType,
+      propertyLocation,
+      height,
+      size,
+      "normal",
+      image,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Successfully inserted record");
+        console.log(result);
+
+        //send confirmation email
+        const messagebody =
+          "Hi " +
+          fname +
+          "!\n" +
+          "Thank you for submitting your report! We have notified the beekeepers in your area, you will recieve a follow-up email when an available beekeeper claims your report. Please keep a close eye on your inbox.";
+        const confirmReportOptions = {
+          from: "BeeRescuePostmaster@outlook.com",
+          to: email,
+          subject: "Your Bee Rescue report is confirmed!",
+          text: messagebody,
+        };
+
+        transporter.sendMail(confirmReportOptions, function (err, info) {
+          if (err) {
             console.log(err);
-        }
-        else{
-            console.log("Successfully inserted record");
-            console.log(result);
-
-            //send confirmation email
-            const messagebody = "Hi " + fname + "!\n" + "Thank you for submitting your report! We have notified the beekeepers in your area, you will recieve a follow-up email when an available beekeeper claims your report. Please keep a close eye on your inbox."
-            const confirmReportOptions = {
-                from: "BeeRescuePostmaster@outlook.com",
-                to: email,
-                subject: "Your Bee Rescue report is confirmed!",
-                text: messagebody
-            }
-
-            transporter.sendMail(confirmReportOptions, function(err, info) {
-                if(err){
-                    console.log(err);
-                    return;
-                }
-                console.log("Sent: " + info.response);
-            })
-        }
-    })
+            return;
+          }
+          console.log("Sent: " + info.response);
+        });
+      }
+    }
+  );
 });
 
 // Inserts a Beekeeper user
@@ -146,8 +178,7 @@ app.post("/api/complete_report", (req, res) => {
 
   db.query(sqlUpdate, [r_id], (err, result) => {
     console.log(result);
-    }
-  );
+  });
 });
 
 //GET REALMS//
@@ -185,6 +216,7 @@ app.get("/api/bk_get", (req, res) => {
     console.log(result);
   });
 });
+
 // Fetch bee reports to display on the app
 app.get("/api/bk_appReports", (req, res) => {
   const r_id = req.body.r_id;
@@ -227,15 +259,12 @@ app.get("/api/bk_appReports", (req, res) => {
       reportDate,
       active,
     ],
-    (err, results) => {
+    (err, result) => {
+      if (err) return res.status(500).send(err.message);
       console.log(res);
-      res.send(results);
+      res.send(result);
     }
-  ).catch(function (error) {
-    console.log("catch from index");
-
-    throw error;
-  });
+  );
 });
 
 app.get("/", (req, res) => {
