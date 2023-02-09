@@ -25,7 +25,9 @@ export default function HomeScreen({ navigation }) {
   //test
   const test2 = () => {
     axios
-      .get("http://localhost:3001/api/bk_appReports")
+      .get("http://localhost:3001/api/bk_appReports", {
+        params: { fname: "Kiana" },
+      })
       .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   };
@@ -44,7 +46,8 @@ export default function HomeScreen({ navigation }) {
         console.log("data: ");
         console.log(res.data);
       })
-      .catch(function (error) {
+      .catch((err) => console.error("Fetch problem: ${err.message}"));
+    /*.catch(function (error) {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
@@ -67,7 +70,7 @@ export default function HomeScreen({ navigation }) {
       .then(function () {
         // always executed
         console.log("-----------------------");
-      });
+      });*/
   };
 
   return (
@@ -140,7 +143,7 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.textContainer}>
             <Text style={styles.textBox}>Recent Activity</Text>
           </View>
-          <TouchableOpacity onPress={() => test2()}>
+          <TouchableOpacity onPress={() => showReports()}>
             <Image
               source={require("../assets/refresh.png")}
               style={{
