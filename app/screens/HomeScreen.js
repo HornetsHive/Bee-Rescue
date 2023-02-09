@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }) {
   }
 
   //test
-  const test2 = () => {
+  const test = () => {
     axios
       .get("http://localhost:3001/api/bk_appReports", {
         params: { fname: "Kiana" },
@@ -32,22 +32,25 @@ export default function HomeScreen({ navigation }) {
       .catch((err) => console.log(err));
   };
 
-  const test = () => {
-    fetch("http://10.254.0.107:3001/api/bk_appReports")
-      .then((res) => res.json())
-      .then((users) => console.warn(users));
+  const test2 = () => {
+    fetch("http://localhost:3001/api/bk_appReports")
+      .then((res) => res.text())
+      .then((text) => console.log(text))
+      .then((users) => console.warn(users))
+      .catch((err) => console.log(err));
   };
 
   //fetching info from database to display
   const showReports = async () => {
     const res = await axios
-      .get("http://localhost:3001/api/bk_appReports")
+      .get("http://localhost:3001/api/bk_appReports", {
+        proxy: false,
+        json: true,
+      })
       .then((res) => {
-        console.log("data: ");
         console.log(res.data);
       })
-      .catch((err) => console.error("Fetch problem: ${err.message}"));
-    /*.catch(function (error) {
+      .catch(function (error) {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
@@ -69,8 +72,8 @@ export default function HomeScreen({ navigation }) {
       })
       .then(function () {
         // always executed
-        console.log("-----------------------");
-      });*/
+        console.log("------------------");
+      });
   };
 
   return (
