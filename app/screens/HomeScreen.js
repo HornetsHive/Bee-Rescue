@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useFonts } from "expo-font";
-import Axios from "axios";
+import axios from "axios";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -22,18 +22,57 @@ export default function HomeScreen({ navigation }) {
     return null;
   }
 
+  //test
+  const test = () => {
+    axios
+      .get("http://localhost:3001/api/bk_appReports", {
+        params: { fname: "Kiana" },
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  };
+
+  const test2 = () => {
+    fetch("http://localhost:3001/api/bk_appReports")
+      .then((res) => res.text())
+      .then((text) => console.log(text))
+      .then((users) => console.warn(users))
+      .catch((err) => console.log(err));
+  };
+
   //fetching info from database to display
-  showReports = () => {
-    Axios.get("http://localhost:3001/api/bk_appReports")
+  const showReports = async () => {
+    const res = await axios
+      .get("http://localhost:3001/api/bk_appReports", {
+        proxy: false,
+        json: true,
+      })
       .then((res) => {
-        const data = res.data;
-        console.log("db data:");
-        console.log(data);
+        console.log(res.data);
       })
       .catch(function (error) {
-        //promise eror with Axios
-        console.log("There has been a problem with your fetch operation");
-        throw error;
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          //console.log(error.response.data);
+          //console.log(error.response.status);
+          //console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log("error1: ");
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          //console.log("Error", error.message);
+        }
+        console.log("error2: ");
+        console.log(error.config);
+      })
+      .then(function () {
+        // always executed
+        console.log("------------------");
       });
   };
 
@@ -74,10 +113,7 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       <View style={styles.middle}>
-        <TouchableOpacity
-          style={styles.textContainer}
-          onPress={() => showReports()}
-        >
+        <TouchableOpacity style={styles.textContainer}>
           <Text style={styles.textBox}>Change location</Text>
         </TouchableOpacity>
 
@@ -110,7 +146,7 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.textContainer}>
             <Text style={styles.textBox}>Recent Activity</Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => showReports()}>
             <Image
               source={require("../assets/refresh.png")}
               style={{
@@ -125,9 +161,7 @@ export default function HomeScreen({ navigation }) {
 
         <View style={styles.task}>
           <View style={styles.taskText}>
-            <Text style={{ fontSize: 16 }}>
-              A swarm has been reported in Orangevale
-            </Text>
+            <Text value={{}} style={{ fontSize: 16 }}></Text>
             <TouchableOpacity>
               <Image
                 source={require("../assets/x.png")}
@@ -135,7 +169,7 @@ export default function HomeScreen({ navigation }) {
               ></Image>
             </TouchableOpacity>
           </View>
-          <Text>Todat at 10:41am</Text>
+          <Text>Today at 10:41am</Text>
         </View>
 
         <View style={styles.task}>
