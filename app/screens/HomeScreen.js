@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useFonts } from "expo-font";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -12,7 +13,7 @@ import {
 } from "react-native";
 
 export default function HomeScreen({ navigation }) {
-  const onPress = () => {};
+  const [reports, setReports] = useState([]);
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -22,57 +23,32 @@ export default function HomeScreen({ navigation }) {
     return null;
   }
 
-  //test
-  const test = () => {
-    axios
-      .get("http://localhost:3001/api/bk_appReports", {
-        params: { fname: "Kiana" },
-      })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
-  };
-
-  const test2 = () => {
-    fetch("http://localhost:3001/api/bk_appReports")
-      .then((res) => res.text())
-      .then((text) => console.log(text))
-      .then((users) => console.warn(users))
-      .catch((err) => console.log(err));
-  };
-
   //fetching info from database to display
   const showReports = async () => {
     const res = await axios
-      .get("http://localhost:3001/api/bk_appReports", {
-        proxy: false,
-        json: true,
-      })
+      //replace localhost with user's local IP address for reports to show display
+      .get("http://localhost:3001/api/bk_appReports")
       .then((res) => {
-        console.log(res.data);
+        setReports(res.data);
       })
+      .then((res) => console.log(res.data))
       .catch(function (error) {
         if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          //console.log(error.response.data);
-          //console.log(error.response.status);
+          //The request was made and the server responded with a status code
+          //that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
           //console.log(error.response.headers);
         } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
           // http.ClientRequest in node.js
-          console.log("error1: ");
           console.log(error.request);
         } else {
-          // Something happened in setting up the request that triggered an Error
-          //console.log("Error", error.message);
+          //Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
         }
-        console.log("error2: ");
         console.log(error.config);
-      })
-      .then(function () {
-        // always executed
-        console.log("------------------");
       });
   };
 
@@ -162,6 +138,13 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.task}>
           <View style={styles.taskText}>
             <Text value={{}} style={{ fontSize: 16 }}></Text>
+            <View>
+              {reports.map((reports, index) => (
+                <Text key={index}>
+                  {reports.address} {reports.city}; {reports.location}
+                </Text>
+              ))}
+            </View>
             <TouchableOpacity>
               <Image
                 source={require("../assets/x.png")}
@@ -169,7 +152,11 @@ export default function HomeScreen({ navigation }) {
               ></Image>
             </TouchableOpacity>
           </View>
-          <Text>Today at 10:41am</Text>
+          <Text>
+            {reports.map((reports, index) => (
+              <Text key={index}>{reports.rdate}, </Text>
+            ))}
+          </Text>
         </View>
 
         <View style={styles.task}>
