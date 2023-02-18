@@ -181,6 +181,27 @@ app.post("/api/complete_report", (req, res) => {
   });
 });
 
+// Delete the report from active_reports table, and set report.active to FALSE
+// WIP
+app.post("/api/abandon_report", (req, res) => {
+  const bk_id = req.body.bk_id;
+  const r_id = req.body.r_id;
+
+  const sqlUpdate = "UPDATE reports SET active = FALSE WHERE r_id = ?;";
+  db.query(sqlUpdate, [r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(res);
+    res.send(result);
+  });
+
+  const sqlDelete = "DELETE FROM active_reports WHERE bk_id = ? AND r_id = ?;";
+  db.query(sqlDelete, [bk_id, r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(res);
+    res.send(result);
+  });
+})
+
 //GET REALMS//
 
 // Fetches a user email from the Beekeepers table
