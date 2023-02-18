@@ -4,6 +4,10 @@
     "slug": "BeeRescue",
     "version": "1.0.0",
     "orientation": "default",
+    "packagerOpts": {
+      "sourceExts": [ "js", "json", "ts", "tsx", "jsx", "vue"],
+      "config": "metro.config.js"
+    },
     
     "userInterfaceStyle": "light",
     "splash": {

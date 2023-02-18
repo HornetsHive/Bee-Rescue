@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Pane, Paragraph, Heading, SelectField, TextInputField, majorScale, toaster } from 'evergreen-ui';
+import { Button, Pane, Text, Paragraph, Heading, SelectField, TextInputField, majorScale, toaster } from 'evergreen-ui';
 import './App.css';
 import Axios from 'axios';
 
@@ -116,7 +116,7 @@ function App(){
   return (
     <div className="App">
         <Pane elevation={1} flexDirection="row">
-          <Pane float="left" marginLeft={majorScale(4)} width="55%" flexDirection="column">
+          <Pane float="left" marginLeft={majorScale(4)} width="45%" flexDirection="column">
 
             {/*Heading*/}
             <Pane
@@ -129,17 +129,11 @@ function App(){
 
             {/*Text*/}
             <Pane margin={majorScale(2)} marginTop={majorScale(6)}>
-              <Paragraph margin={majorScale(1)}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tempor id eu nisl nunc mi ipsum faucibus. Condimentum vitae sapien pellentesque habitant morbi tristique senectus et. Rutrum quisque non tellus orci. In metus vulputate eu scelerisque felis imperdiet. Velit egestas dui id ornare arcu odio ut sem nulla. Euismod elementum nisi quis eleifend quam adipiscing vitae proin. Facilisi nullam vehicula ipsum a arcu cursus vitae. Nisl rhoncus mattis rhoncus urna neque viverra justo. Nibh ipsum consequat nisl vel pretium lectus quam. Nisl nunc mi ipsum faucibus vitae aliquet nec. Vel turpis nunc eget lorem dolor sed. Fusce id velit ut tortor pretium. Adipiscing vitae proin sagittis nisl. Ornare arcu odio ut sem nulla pharetra diam sit.{"\n"}{"\n"}
-              </Paragraph>
-              
-              <Paragraph margin={majorScale(1)}>
-                Velit euismod in pellentesque massa placerat duis. Pellentesque elit ullamcorper dignissim cras tincidunt lobortis. Cursus vitae congue mauris rhoncus aenean vel. Nec ultrices dui sapien eget mi proin. Sed ullamcorper morbi tincidunt ornare massa eget egestas purus viverra. Est ultricies integer quis auctor elit sed. Felis bibendum ut tristique et egestas quis ipsum. A arcu cursus vitae congue mauris rhoncus aenean. Risus viverra adipiscing at in tellus integer feugiat scelerisque. Elementum tempus egestas sed sed. Porta lorem mollis aliquam ut porttitor leo a diam. Sed elementum tempus egestas sed sed risus. Urna cursus eget nunc scelerisque viverra mauris. Tincidunt praesent semper feugiat nibh sed pulvinar. Sed id semper risus in hendrerit gravida rutrum quisque non. Sapien nec sagittis aliquam malesuada bibendum arcu. Tincidunt augue interdum velit euismod. Leo duis ut diam quam.{"\n"}{"\n"}
+              <Text>Why do bees swarm?</Text>
+              <Paragraph margin={majorScale(1)} size={500} textAlign="left">
+              When bees are swarming they are generally docile. They will merely find a suitable spot to gather, as a temporary measure, while they send out scout bees to find a more permanent location as a new home. They are not too choosy about where this temporary spot will be, it could be in a tree/bush, on a clothesline, a fence, a bicycle, anywhere that they can land to form a cluster to protect their queen.  If the honey bees seem to have made a home already, such as, in a tree or inside a structure (wall, roof, etc) they are an established colony. Removing an established colony is a Trap Out (TO) or Cut Out (CO) situation.{"\n"}{"\n"}
               </Paragraph>
 
-              <Paragraph margin={majorScale(1)}>
-                Sagittis vitae et leo duis ut diam quam nulla porttitor. Nunc id cursus metus aliquam eleifend mi in. Tempus egestas sed sed risus pretium quam. Aliquam faucibus purus in massa. Tortor dignissim convallis aenean et. At ultrices mi tempus imperdiet nulla malesuada. Turpis in eu mi bibendum neque egestas congue quisque. Vel eros donec ac odio. Sit amet consectetur adipiscing elit pellentesque habitant. Consequat semper viverra nam libero justo laoreet. Nunc id cursus metus aliquam. Praesent tristique magna sit amet purus gravida quis. At auctor urna nunc id cursus metus. Feugiat sed lectus vestibulum mattis ullamcorper velit. Sapien et ligula ullamcorper malesuada proin libero nunc consequat. Turpis cursus in hac habitasse platea dictumst quisque sagittis. Sed tempus urna et pharetra pharetra massa.{"\n"}{"\n"}
-              </Paragraph>
             </Pane>
           </Pane>
 
@@ -154,6 +148,7 @@ function App(){
             align="center"
             backgroundColor="white"
             flexDirection="row"
+            style={{position:"Fixed", top:0, right:0}}
           >
             <Heading margin={majorScale(1)} size="600">Submit a new Bee Rescue report</Heading>
             <div className = "form">
@@ -398,7 +393,7 @@ function App(){
                   }}
                 >
                   <option disabled={true} value="">Select a size</option>
-                  <option value="small">Small (Size of apple or smaller)</option>
+                  <option value="small">Small (Size of grapefruit or smaller)</option>
                   <option value="med">Medium (Size of basketball or smaller)</option>
                   <option value="large">Large (Larger than a basketball)</option>
                 </SelectField>

@@ -33,7 +33,7 @@ export default function HomeScreen({ navigation }) {
   };
 
   const test = () => {
-    fetch("http://10.254.0.107:3001/api/bk_appReports")
+    fetch("http://localhost:3001/api/bk_appReports")
       .then((res) => res.json())
       .then((users) => console.warn(users));
   };
@@ -41,19 +41,19 @@ export default function HomeScreen({ navigation }) {
   //fetching info from database to display
   const showReports = async () => {
     const res = await axios
-      .get("http://localhost:3001/api/bk_appReports")
+      .get("http://192.168.1.54:3001/api/bk_appReports")
       .then((res) => {
         console.log("data: ");
         console.log(res.data);
       })
-      .catch((err) => console.error("Fetch problem: ${err.message}"));
-    /*.catch(function (error) {
+      //.catch((err) => console.error("Fetch problem:" + err.message));
+      .catch(function (error) {
         if (error.response) {
           // The request was made and the server responded with a status code
           // that falls out of the range of 2xx
-          //console.log(error.response.data);
-          //console.log(error.response.status);
-          //console.log(error.response.headers);
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
         } else if (error.request) {
           // The request was made but no response was received
           // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
@@ -62,7 +62,7 @@ export default function HomeScreen({ navigation }) {
           console.log(error.request);
         } else {
           // Something happened in setting up the request that triggered an Error
-          //console.log("Error", error.message);
+          console.log("Error", error.message);
         }
         console.log("error2: ");
         console.log(error.config);
@@ -70,7 +70,7 @@ export default function HomeScreen({ navigation }) {
       .then(function () {
         // always executed
         console.log("-----------------------");
-      });*/
+      });
   };
 
   return (
