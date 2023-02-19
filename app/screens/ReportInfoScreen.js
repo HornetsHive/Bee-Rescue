@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import axios from "axios";
 
-export default function HomeScreen({ navigation }) {
+export default function ReportInfoScreen({ navigation }) {
   const onPress = () => {};
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
@@ -42,17 +42,17 @@ export default function HomeScreen({ navigation }) {
   */
 
   // Claims a dummy report. Just passes 0 for the r_id and 0 for the bk_id for now.
-  claimReport = () => {
+  const claimReport = () => {
     Axios.post("http://localhost:3001/api/claim_report", {
       r_id: 0,
-      bk_id: 0
+      bk_id: 0,
     })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -78,30 +78,50 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
-          }>
-        </TouchableOpacity>
+          }
+        ></TouchableOpacity>
       </View>
-      
+
       <ScrollView style={styles.middle}>
-        <View style={{ height: 57, top: 10, bottom: 100, }}>
+        <View style={{ height: 57, top: 10, bottom: 100 }}>
           <TouchableOpacity
-            style={{ padding: 8, margin: 10, borderRadius: 10, backgroundColor: "#d3e954", }}
+            style={{
+              padding: 8,
+              margin: 10,
+              borderRadius: 10,
+              backgroundColor: "#d3e954",
+            }}
             onPress={() => claimReport()} // change this to actually claim a report
           >
-            <Text style={{ textAlign: "center", fontFamily: "Comfortaa", }}>Claim Report</Text>
+            <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
+              Claim Report
+            </Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.itemTall}>
           <View style={styles.label}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 17, fontWeight: "bold", bottom: 7, }}>
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                fontSize: 17,
+                fontWeight: "bold",
+                bottom: 7,
+              }}
+            >
               Address
             </Text>
           </View>
-          <View style={styles.divider}>
-          </View>
+          <View style={styles.divider}></View>
           <View style={styles.content}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 15, width: "80%", top: 7, }}>
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                fontSize: 15,
+                width: "80%",
+                top: 7,
+              }}
+            >
               123 Maple Street, Sacramento, CA 12345
             </Text>
           </View>
@@ -109,13 +129,18 @@ export default function HomeScreen({ navigation }) {
 
         <View style={styles.item}>
           <View style={styles.label}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 17, fontWeight: "bold" }}>
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                fontSize: 17,
+                fontWeight: "bold",
+              }}
+            >
               Duration
             </Text>
           </View>
-          
-          <View style={styles.divider}>
-          </View>
+
+          <View style={styles.divider}></View>
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
@@ -126,13 +151,18 @@ export default function HomeScreen({ navigation }) {
 
         <View style={styles.item}>
           <View style={styles.label}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 17, fontWeight: "bold" }}>
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                fontSize: 17,
+                fontWeight: "bold",
+              }}
+            >
               Location
             </Text>
           </View>
-          
-          <View style={styles.divider}>
-          </View>
+
+          <View style={styles.divider}></View>
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
@@ -143,13 +173,18 @@ export default function HomeScreen({ navigation }) {
 
         <View style={styles.item}>
           <View style={styles.label}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 17, fontWeight: "bold" }}>
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                fontSize: 17,
+                fontWeight: "bold",
+              }}
+            >
               Height
             </Text>
           </View>
-          
-          <View style={styles.divider}>
-          </View>
+
+          <View style={styles.divider}></View>
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
@@ -160,13 +195,18 @@ export default function HomeScreen({ navigation }) {
 
         <View style={styles.item}>
           <View style={styles.label}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 17, fontWeight: "bold" }}>
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                fontSize: 17,
+                fontWeight: "bold",
+              }}
+            >
               Size
             </Text>
           </View>
-          
-          <View style={styles.divider}>
-          </View>
+
+          <View style={styles.divider}></View>
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
@@ -177,13 +217,18 @@ export default function HomeScreen({ navigation }) {
 
         <View style={styles.item}>
           <View style={styles.label}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 17, fontWeight: "bold" }}>
+            <Text
+              style={{
+                fontFamily: "Comfortaa",
+                fontSize: 17,
+                fontWeight: "bold",
+              }}
+            >
               Category
             </Text>
           </View>
-          
-          <View style={styles.divider}>
-          </View>
+
+          <View style={styles.divider}></View>
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>

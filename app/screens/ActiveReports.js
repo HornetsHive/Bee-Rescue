@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default function HomeScreen({ navigation }) {
+export default function ActiveReportsScreen({ navigation }) {
   const onPress = () => {};
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),

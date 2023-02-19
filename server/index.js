@@ -200,7 +200,7 @@ app.post("/api/abandon_report", (req, res) => {
     console.log(res);
     res.send(result);
   });
-})
+});
 
 //GET REALMS//
 
@@ -243,31 +243,23 @@ app.get("/api/bk_appReports", (req, res) => {
   const active = req.body.active;
 
   const sqlQuery = "SELECT * FROM reports WHERE active = false;";
-  db.query(
-    sqlQuery,
-    [active],
-    (err, result) => {
-      if (err) return res.status(500).send(err.message);
-      console.log(res);
-      res.send(result);
-    }
-  );
+  db.query(sqlQuery, [active], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(res);
+    res.send(result);
+  });
 });
 
-app.post("/api/claim+report", (req, res) => {
+app.post("/api/claim_report", (req, res) => {
   const r_id = req.body.r_id;
   const bk_id = req.body.bk_id;
 
   const sqlInsert = "INSERT INTO active_reports (bk_id, r_id) VALUES (?, ?)";
-  db.query(
-    sqlInsert,
-    [bk_id, r_id],
-    (err, result) => {
-      if (err) return res.status(500).send(err.message);
-      console.log(res);
-      res.send(result);
-    }
-  );
+  db.query(sqlInsert, [bk_id, r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(res);
+    res.send(result);
+  });
 
   const sqlUpdate = "UPDATE reports SET active = true WHERE r_id = ?;";
   db.query(sqlUpdate, [r_id], (err, result) => {

@@ -1,37 +1,36 @@
 import * as React from "react";
 import { useFonts } from "expo-font";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Component } from "react";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
   Text,
   View,
   Image,
+  Animated,
+  ScrollView,
+  AppRegistry,
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
 
 export default function HomeScreen({ navigation }) {
-  const [reports, setReports] = useState([]);
+  const reportArray = new Array();
+  const [reports, setReports] = React.useState([]);
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  if (!loaded) {
-    return null;
-  }
-
   //fetching info from database to display
-  const showReports = async () => {
+  const fetchReports = async () => {
     const res = await axios
       //replace localhost with user's local IP address for reports to show display
       .get("http://localhost:3001/api/bk_appReports")
       .then((res) => {
         setReports(res.data);
       })
-      .then((res) => console.log(res.data))
       .catch(function (error) {
         if (error.response) {
           // The request was made and the server responded with a status code
@@ -50,14 +49,31 @@ export default function HomeScreen({ navigation }) {
         }
         console.log(error.config);
       });
+    return res;
   };
+
+  var i = 0;
+  reports.map((reports) => {
+    reportArray[i] = [reports.address, ", ", reports.city];
+    i++;
+  });
+
+  //for (var j = 0; j < reportArray.length; j++) {
+  //console.log(j + 1, ": ", reportArray[j]);
+  //}
+
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("AccountScreen", { screen: "AccountScreen" })
+            navigation.navigate("AccountScreen", {
+              screen: "AccountScreen",
+            })
           }
         >
           <Image
@@ -74,7 +90,9 @@ export default function HomeScreen({ navigation }) {
         </Text>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
+            navigation.navigate("SettingsScreen", {
+              screen: "SettingsScreen",
+            })
           }
         >
           <Image
@@ -122,7 +140,7 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.textContainer}>
             <Text style={styles.textBox}>Recent Activity</Text>
           </View>
-          <TouchableOpacity onPress={() => showReports()}>
+          <TouchableOpacity onPress={() => fetchReports()}>
             <Image
               source={require("../assets/refresh.png")}
               style={{
@@ -135,74 +153,85 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.task}>
-          <View style={styles.taskText}>
-            <Text value={{}} style={{ fontSize: 16 }}></Text>
-            <View>
-              {reports.map((reports, index) => (
-                <Text key={index}>
-                  {reports.address} {reports.city}; {reports.location}
+        <ScrollView>
+          <View style={{ flex: 1, padding: 4 }}>{null}</View>
+
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("ReportInfoScreen", {
+                screen: "ReportInfoScreen",
+              })
+            }
+          >
+            <View style={styles.task}>
+              <View style={styles.taskText}>
+                <Text value={{}} style={{ fontSize: 16 }}>
+                  A swarm has been reported at {reportArray[6]}
                 </Text>
-              ))}
+                <TouchableOpacity>
+                  <Image
+                    source={require("../assets/x.png")}
+                    style={styles.xButton}
+                  ></Image>
+                </TouchableOpacity>
+              </View>
+              <Text></Text>
             </View>
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/x.png")}
-                style={styles.xButton}
-              ></Image>
-            </TouchableOpacity>
-          </View>
-          <Text>
-            {reports.map((reports, index) => (
-              <Text key={index}>{reports.rdate}, </Text>
-            ))}
-          </Text>
-        </View>
+          </TouchableOpacity>
 
-        <View style={styles.task}>
-          <View style={styles.taskText}>
-            <Text style={{ fontSize: 16 }}>
-              A swarm has been reported in Orangevale
-            </Text>
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/x.png")}
-                style={styles.xButton}
-              ></Image>
-            </TouchableOpacity>
-          </View>
-          <Text>Wednesday at 4:35pm</Text>
-        </View>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("ReportInfoScreen", {
+                screen: "ReportInfoScreen",
+              })
+            }
+          >
+            <View style={styles.task}>
+              <View style={styles.taskText}>
+                <Text style={{ fontSize: 16 }}>
+                  A swarm has been reported at {reportArray[2]}
+                </Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../assets/x.png")}
+                    style={styles.xButton}
+                  ></Image>
+                </TouchableOpacity>
+              </View>
+              <Text>Wednesday at 4:35pm</Text>
+            </View>
+          </TouchableOpacity>
 
-        <View style={styles.task}>
-          <View style={styles.taskText}>
-            <Text style={{ fontSize: 16 }}>
-              A swarm has been reported in Orangevale
-            </Text>
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/x.png")}
-                style={styles.xButton}
-              ></Image>
-            </TouchableOpacity>
+          <View style={styles.task}>
+            <View style={styles.taskText}>
+              <Text style={{ fontSize: 16 }}>
+                A swarm has been reported in Orangevale
+              </Text>
+              <TouchableOpacity>
+                <Image
+                  source={require("../assets/x.png")}
+                  style={styles.xButton}
+                ></Image>
+              </TouchableOpacity>
+            </View>
+            <Text>Tuesday at 12:03pm</Text>
           </View>
-          <Text>Tuesday at 12:03pm</Text>
-        </View>
 
-        <View style={styles.task}>
-          <View style={styles.taskText}>
-            <Text style={{ fontSize: 16 }}>
-              A swarm has been reported in Orangevale
-            </Text>
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/x.png")}
-                style={styles.xButton}
-              ></Image>
-            </TouchableOpacity>
+          <View style={styles.task}>
+            <View style={styles.taskText}>
+              <Text style={{ fontSize: 16 }}>
+                A swarm has been reported in Orangevale
+              </Text>
+              <TouchableOpacity>
+                <Image
+                  source={require("../assets/x.png")}
+                  style={styles.xButton}
+                ></Image>
+              </TouchableOpacity>
+            </View>
+            <Text>Monday at 5:32pm</Text>
           </View>
-          <Text>Monday at 5:32pm</Text>
-        </View>
+        </ScrollView>
       </View>
 
       <SafeAreaView>
@@ -249,8 +278,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   middle: {
-    flex: 2.5,
-    justifyContent: "center",
+    flex: 2.6,
     borderColor: "lightgray",
     borderWidth: 1,
   },
