@@ -110,7 +110,6 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity style={styles.textContainer}>
           <Text style={styles.textBox}>Change location</Text>
         </TouchableOpacity>
-
         <Image
           source={require("../assets/map.png")}
           style={{
@@ -119,7 +118,6 @@ export default function HomeScreen({ navigation }) {
             height: 180,
           }}
         />
-
         <View
           style={{
             flexDirection: "row",
@@ -152,7 +150,6 @@ export default function HomeScreen({ navigation }) {
             ></Image>
           </TouchableOpacity>
         </View>
-
         <ScrollView>
           <View style={{ flex: 1, padding: 4 }}>{null}</View>
 
@@ -166,7 +163,7 @@ export default function HomeScreen({ navigation }) {
             <View style={styles.task}>
               <View style={styles.taskText}>
                 <Text value={{}} style={{ fontSize: 16 }}>
-                  A swarm has been reported at {reportArray[6]}
+                  A swarm has been reported at {reportArray[0]}
                 </Text>
                 <TouchableOpacity>
                   <Image
@@ -175,7 +172,7 @@ export default function HomeScreen({ navigation }) {
                   ></Image>
                 </TouchableOpacity>
               </View>
-              <Text></Text>
+              <Text>[time]</Text>
             </View>
           </TouchableOpacity>
 
@@ -189,6 +186,29 @@ export default function HomeScreen({ navigation }) {
             <View style={styles.task}>
               <View style={styles.taskText}>
                 <Text style={{ fontSize: 16 }}>
+                  A swarm has been reported at {reportArray[1]}
+                </Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../assets/x.png")}
+                    style={styles.xButton}
+                  ></Image>
+                </TouchableOpacity>
+              </View>
+              <Text>[time]</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("ReportInfoScreen", {
+                screen: "ReportInfoScreen",
+              })
+            }
+          >
+            <View style={styles.task}>
+              <View style={styles.taskText}>
+                <Text value={{}} style={{ fontSize: 16 }}>
                   A swarm has been reported at {reportArray[2]}
                 </Text>
                 <TouchableOpacity>
@@ -198,39 +218,32 @@ export default function HomeScreen({ navigation }) {
                   ></Image>
                 </TouchableOpacity>
               </View>
-              <Text>Wednesday at 4:35pm</Text>
+              <Text>[time]</Text>
             </View>
           </TouchableOpacity>
 
-          <View style={styles.task}>
-            <View style={styles.taskText}>
-              <Text style={{ fontSize: 16 }}>
-                A swarm has been reported in Orangevale
-              </Text>
-              <TouchableOpacity>
-                <Image
-                  source={require("../assets/x.png")}
-                  style={styles.xButton}
-                ></Image>
-              </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("ReportInfoScreen", {
+                screen: "ReportInfoScreen",
+              })
+            }
+          >
+            <View style={styles.task}>
+              <View style={styles.taskText}>
+                <Text value={{}} style={{ fontSize: 16 }}>
+                  A swarm has been reported at {reportArray[3]}
+                </Text>
+                <TouchableOpacity>
+                  <Image
+                    source={require("../assets/x.png")}
+                    style={styles.xButton}
+                  ></Image>
+                </TouchableOpacity>
+              </View>
+              <Text>[time]</Text>
             </View>
-            <Text>Tuesday at 12:03pm</Text>
-          </View>
-
-          <View style={styles.task}>
-            <View style={styles.taskText}>
-              <Text style={{ fontSize: 16 }}>
-                A swarm has been reported in Orangevale
-              </Text>
-              <TouchableOpacity>
-                <Image
-                  source={require("../assets/x.png")}
-                  style={styles.xButton}
-                ></Image>
-              </TouchableOpacity>
-            </View>
-            <Text>Monday at 5:32pm</Text>
-          </View>
+          </TouchableOpacity>
         </ScrollView>
       </View>
 
