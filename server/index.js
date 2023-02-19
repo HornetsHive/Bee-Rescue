@@ -200,7 +200,7 @@ app.post("/api/abandon_report", (req, res) => {
     console.log(res);
     res.send(result);
   });
-})
+});
 
 //GET REALMS//
 
@@ -254,7 +254,7 @@ app.get("/api/bk_appReports", (req, res) => {
   );
 });
 
-app.post("/api/claim+report", (req, res) => {
+app.post("/api/claim_report", (req, res) => {
   const r_id = req.body.r_id;
   const bk_id = req.body.bk_id;
 

@@ -41,11 +41,11 @@ export default function HomeScreen({ navigation }) {
   };
   */
 
-  // Claims a dummy report. Just passes 0 for the r_id and 0 for the bk_id for now.
+  // Claims a dummy report. Just passes 1 for the r_id and 1 for the bk_id for now.
   claimReport = () => {
     Axios.post("http://localhost:3001/api/claim_report", {
-      r_id: 0,
-      bk_id: 0
+      r_id: 1,
+      bk_id: 1
     })
     .then(function (response) {
       console.log(response);
