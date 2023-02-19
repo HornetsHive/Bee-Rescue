@@ -240,52 +240,41 @@ app.get("/api/bk_get", (req, res) => {
 
 // Fetch bee reports to display on the app
 app.get("/api/bk_appReports", (req, res) => {
-  const r_id = req.body.r_id;
-  const address = req.body.address;
-  const email = req.body.email;
-  const pass = req.body.pass;
-  const duration = req.body.duration;
-  const propertyLocation = req.body.propertyLoc;
-  const height = req.body.height;
-  const size = req.body.size;
-  const image = req.body.image;
-  const category = req.body.category;
-  const fname = req.body.fname;
-  const lname = req.body.lname;
-  const city = req.body.city;
-  const propertyType = req.body.propertyType;
-  const weight = req.body.weight;
-  const reportDate = req.body.reportDate;
   const active = req.body.active;
 
-  const sqlQuery = "SELECT * FROM reports";
+  const sqlQuery = "SELECT * FROM reports WHERE active = false;";
   db.query(
     sqlQuery,
-    [
-      r_id,
-      address,
-      email,
-      pass,
-      duration,
-      propertyLocation,
-      height,
-      size,
-      image,
-      category,
-      fname,
-      lname,
-      city,
-      propertyType,
-      weight,
-      reportDate,
-      active,
-    ],
+    [active],
     (err, result) => {
       if (err) return res.status(500).send(err.message);
       console.log(res);
       res.send(result);
     }
   );
+});
+
+app.post("/api/claim+report", (req, res) => {
+  const r_id = req.body.r_id;
+  const bk_id = req.body.bk_id;
+
+  const sqlInsert = "INSERT INTO active_reports (bk_id, r_id) VALUES (?, ?)";
+  db.query(
+    sqlInsert,
+    [bk_id, r_id],
+    (err, result) => {
+      if (err) return res.status(500).send(err.message);
+      console.log(res);
+      res.send(result);
+    }
+  );
+
+  const sqlUpdate = "UPDATE reports SET active = true WHERE r_id = ?;";
+  db.query(sqlUpdate, [r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(res);
+    res.send(result);
+  });
 });
 
 app.get("/", (req, res) => {

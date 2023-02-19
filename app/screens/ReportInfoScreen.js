@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
+import axios from "axios";
 
 export default function HomeScreen({ navigation }) {
   const onPress = () => {};
@@ -24,6 +25,7 @@ export default function HomeScreen({ navigation }) {
   }
 
   //fetching info from database to display
+  /*
   showReports = () => {
     Axios.get("http://localhost:3001/api/bk_appReports")
       .then((res) => {
@@ -36,6 +38,21 @@ export default function HomeScreen({ navigation }) {
         console.log("There has been a problem with your fetch operation");
         throw error;
       });
+  };
+  */
+
+  // Claims a dummy report. Just passes 0 for the r_id and 0 for the bk_id for now.
+  claimReport = () => {
+    Axios.post("http://localhost:3001/api/claim_report", {
+      r_id: 0,
+      bk_id: 0
+    })
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
 
   return (
@@ -69,7 +86,7 @@ export default function HomeScreen({ navigation }) {
         <View style={{ height: 57, top: 10, bottom: 100, }}>
           <TouchableOpacity
             style={{ padding: 8, margin: 10, borderRadius: 10, backgroundColor: "#d3e954", }}
-            onPress={() => showReports()} // change this to actually claim a report
+            onPress={() => claimReport()} // change this to actually claim a report
           >
             <Text style={{ textAlign: "center", fontFamily: "Comfortaa", }}>Claim Report</Text>
           </TouchableOpacity>
