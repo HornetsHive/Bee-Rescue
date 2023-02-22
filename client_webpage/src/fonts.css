@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'Comfortaa-Reg';
+    src: url('../assets/fonts/Comfortaa-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Comfortaa-Bold';
+    src: url('../assets/fonts/Comfortaa-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Comfortaa-Light';
+    src: url('../assets/fonts/Comfortaa-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Louis-George-Cafe';
+    src: url('../assets/fonts/Louis\ George\ Cafe.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Louis-George-Cafe-Bold';
+    src: url('../assets/fonts/Louis\ George\ Cafe\ Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Louis-George-Cafe-Italic';
+    src: url('../assets/fonts/Louis\ George\ Cafe\ Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Rounded-Sans';
+    src: url('../assets/fonts/rounded-sans-serif.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  

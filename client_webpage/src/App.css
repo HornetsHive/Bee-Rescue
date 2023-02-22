@@ -1,11 +1,47 @@
 .App {
-  text-align: center;
+  background-image: './assets/gradient1.png';
+  font-family: "Rounded-Sans";
 }
 
-.TextInputField {
-  margin: "{16}"
-};
+.Heading{
+  font-family: 'Comfortaa-Reg';
+  color: #333333;
+  font-size: 36px;
+  line-height: 1.2;
+}
 
-.SelectField {
-  margin: "{16}"
+.header {
+  font-family: 'Comfortaa-Reg';
+  display: flex;
+  align-items: flex;
+  justify-content: left;
+  padding: 16px;
+  background-color: #ffffff;
+}
+
+.header img {
+  height: 50px;
+}
+
+.header nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.header nav ul li {
+  margin-right: 16px;
+}
+
+.header nav ul li {
+  margin-left: 16px;
+}
+
+.header nav ul li a {
+  text-decoration: none;
+  color: #333333;
+  font-weight: bold;
+  display: inline-block;
+  text-align: left;
 }
