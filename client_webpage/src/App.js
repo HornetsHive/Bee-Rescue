@@ -36,7 +36,7 @@ function App(){
       return;
     }
 
-    Axios.post("http://192.168.1.54:3001/api/insert", {
+    Axios.post("http://localhost:3001/api/insert", {
       address: form.address,
       fname: form.fname,
       lname: form.lname,
