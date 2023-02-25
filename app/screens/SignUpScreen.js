@@ -1,5 +1,7 @@
-import * as React from "react";
+import React, { useState, setState } from "react";
 import { useFonts } from "expo-font";
+//import { TextInputField } from "evergreen-ui";
+import Axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -13,11 +15,94 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
+function isValidEmail(email) {
+  var regex =
+    /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+  return regex.test(email);
+}
+
+function isValidPassword(pass) {
+  var strongRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+  return strongRegex.test(pass);
+}
+
 export default function SignUpScreen({ navigation }) {
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
+
+  //const [email, setEmail] = useState("");
+  //const [pass, setPass] = useState("");
+
+  const [form, setForm] = useState({
+    bk_id: "",
+    fname: "",
+    lname: "",
+    email: "",
+    phone_no: "",
+    address: "",
+    city: "",
+    zip: "",
+    pass: "",
+  });
+
+  const [errors, setErrors] = useState({
+    email: "",
+    pass: "",
+  });
+
+  //submit email and password
+  const submitNewUser = (e) => {
+    e.preventDefault();
+
+    //validate submition
+    const err = validate();
+    if (err) {
+      console.log("Please input all required fields");
+      return;
+    }
+
+    Axios.post("http://localhost:3001/api/bk_insert", {
+      fname: "test",
+      lname: "test",
+      email: form.email,
+      phone_no: "test",
+      address: "test",
+      city: "test",
+      zip: "test",
+      pass: form.pass,
+    }).then(() => {
+      alert("successful insert");
+    });
+    console.log("User created!");
+  };
+
+  const validate = () => {
+    const newErrors = { ...errors };
+    if (!form.email) {
+      newErrors.email = "This field is required";
+      console.log("Please enter email");
+    }
+    if (!form.pass) {
+      newErrors.pass = "This field is required";
+      console.log("Please enter pasword");
+    }
+    if (!isValidPassword(form.pass)) {
+      newErrors.pass = "Please enter a valid password";
+      console.log("Please enter a valid password");
+    }
+    if (!isValidEmail(form.email)) {
+      newErrors.email = "Please enter a valid email";
+      console.log("Please enter a valid email");
+    }
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).every((error) => error === "");
+  };
+
+  ////////////////////////////////////////////////////////////////
 
   if (!loaded) {
     return null;
@@ -49,7 +134,26 @@ export default function SignUpScreen({ navigation }) {
 
           <View style={{ width: 300 }}>
             <Text style={styles.textRegular}>email</Text>
-            <TextInput style={styles.input} placeholder="email" />
+
+            {/*email input*/}
+            <TextInput
+              style={styles.input}
+              label="email"
+              placeholder="email"
+              required
+              isInvalid={Boolean(errors.email)}
+              validationMessage={errors.email ? errors.email : null}
+              type="text"
+              name="email"
+              onChange={(e) => {
+                setForm((prevState) => ({
+                  ...prevState,
+                  email: e.target,
+                }));
+                setErrors({ ...errors, email: "" });
+              }}
+            />
+
             <Text style={styles.textRegular}>password</Text>
             <Text style={styles.textSmall}>
               * must have a minimum of 8 chars
@@ -61,22 +165,28 @@ export default function SignUpScreen({ navigation }) {
               * must have at least one number
             </Text>
 
+            {/*password input*/}
             <TextInput
               style={styles.input}
+              label="password"
               placeholder="password"
+              required
               secureTextEntry={true}
+              isInvalid={Boolean(errors.pass)}
+              validationMessage={errors.pass ? errors.pass : null}
+              type="text"
+              name="password"
+              onChange={(e) => {
+                setForm((prevState) => ({
+                  ...prevState,
+                  pass: e.target,
+                }));
+                setErrors({ ...errors, pass: "" });
+              }}
             />
 
             <View style={styles.button}>
-              <Button
-                color="#d92978"
-                title="Sign Up"
-                onPress={() =>
-                  navigation.navigate("PreferencesScreen", {
-                    screen: "PreferencesScreen",
-                  })
-                }
-              />
+              <Button color="#d92978" title="Sign Up" onPress={submitNewUser} />
             </View>
           </View>
         </View>
