@@ -12,6 +12,7 @@ import {
   ScrollView,
   AppRegistry,
   SafeAreaView,
+  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 
@@ -85,7 +86,7 @@ export default function HomeScreen({ navigation }) {
             }}
           />
         </TouchableOpacity>
-        <Text style={{ fontFamily: "Comfortaa", fontSize: 15, width: 180 }}>
+        <Text style={{ fontFamily: "Comfortaa", fontSize: 16 }}>
           Location: Orangevale
         </Text>
         <TouchableOpacity
@@ -107,9 +108,6 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       <View style={styles.middle}>
-        <TouchableOpacity style={styles.textContainer}>
-          <Text style={styles.textBox}>Change location</Text>
-        </TouchableOpacity>
         <Image
           source={require("../assets/map.png")}
           style={{
@@ -135,9 +133,9 @@ export default function HomeScreen({ navigation }) {
               }}
             ></Image>
           </TouchableOpacity>
-          <View style={styles.textContainer}>
-            <Text style={styles.textBox}>Recent Activity</Text>
-          </View>
+          <TouchableOpacity style={styles.textContainer}>
+            <Text style={styles.textBox}>Change location</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => fetchReports()}>
             <Image
               source={require("../assets/refresh.png")}
@@ -151,8 +149,6 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <ScrollView>
-          <View style={{ flex: 1, padding: 4 }}>{null}</View>
-
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("ReportInfoScreen", {
@@ -248,26 +244,25 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       <SafeAreaView>
-        <Image
+        <ImageBackground
           source={require("../assets/gradient1.png")}
           style={styles.footer}
-        />
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-          }
         >
-          <Image
-            source={require("../assets/home.png")}
-            style={{
-              alignSelf: "center",
-              bottom: 15,
-              resizeMode: "contain",
-              height: 40,
-              width: 40,
-            }}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("HomeScreen", { screen: "HomeScreen" })
+            }
+          >
+            <Image
+              source={require("../assets/home.png")}
+              style={{
+                resizeMode: "contain",
+                height: 40,
+                width: 40,
+              }}
+            />
+          </TouchableOpacity>
+        </ImageBackground>
       </SafeAreaView>
     </View>
   );
@@ -291,16 +286,17 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   middle: {
-    flex: 2.6,
+    flex: 1.5,
     borderColor: "lightgray",
     borderWidth: 1,
   },
   footer: {
     flex: 0,
-    bottom: -40,
+    bottom: 0,
+    justifyContent: "center",
     alignItems: "center",
     resizeMode: "cover",
-    height: 70,
+    height: 65,
     width: "100%",
   },
   textBox: {
@@ -317,7 +313,7 @@ const styles = StyleSheet.create({
   task: {
     backgroundColor: "white",
     padding: 15,
-    borderWidth: 0.5,
+    borderTopWidth: 1,
     borderColor: "darkgray",
   },
   taskText: {

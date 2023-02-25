@@ -69,14 +69,7 @@ export default function SettingsScreen({ navigation }) {
         <View style={styles.middle}>
           <Text style={styles.subTitle}>Security</Text>
           <View style={{ alignItems: "center" }}>
-            <Text
-              style={{
-                fontFamily: "Comfortaa",
-                fontSize: 15,
-              }}
-            >
-              email:
-            </Text>
+            <Text style={styles.text}>email:</Text>
             <TextInput
               style={styles.input}
               onChangeText={onChangeText}
@@ -141,11 +134,10 @@ export default function SettingsScreen({ navigation }) {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View>
         <ImageBackground
-          style={styles.background}
           source={require("../assets/gradient1.png")}
-          resizeMode="cover"
+          style={styles.footer}
         >
           <TouchableOpacity
             onPress={() => {
@@ -168,15 +160,18 @@ export default function SettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    top: 10,
+    flexDirection: "column",
+    backgroundColor: "#fff",
   },
   header: {
     flex: 0.2,
-    justifyContent: "space-evenly",
+    top: 10,
     flexDirection: "row",
+    backgroundColor: "white",
+    borderColor: "darkgray",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "grey",
+    justifyContent: "space-between",
+    padding: 10,
   },
   middle: {
     flex: 1,
@@ -184,18 +179,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignSelf: "center",
   },
+  footer: {
+    flex: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    resizeMode: "cover",
+    height: 65,
+    width: "100%",
+  },
   titleText: {
-    fontSize: 40,
+    fontSize: 26,
     fontFamily: "Comfortaa",
   },
   subTitle: {
     textAlign: "center",
     fontFamily: "Comfortaa",
     fontSize: 20,
-    margin: 15,
+    marginVertical: 10,
   },
   text: {
-    fontSize: 20,
+    fontSize: 15,
     fontFamily: "Comfortaa",
   },
   input: {
@@ -228,12 +232,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-  },
-  footer: {
-    flex: 0.1,
-    top: 715,
-    width: "100%",
-    height: 70,
-    position: "absolute",
   },
 });

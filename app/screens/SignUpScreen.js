@@ -1,9 +1,9 @@
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import React, { useState, setState } from "react";
+import { styles } from "../StyleSheet";
 import { useFonts } from "expo-font";
-//import { TextInputField } from "evergreen-ui";
 import Axios from "axios";
 import {
-  StyleSheet,
   Text,
   View,
   ImageBackground,
@@ -12,7 +12,6 @@ import {
   SafeAreaView,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
 } from "react-native";
 
 function isValidEmail(email) {
@@ -33,10 +32,10 @@ export default function SignUpScreen({ navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  //const [email, setEmail] = useState("");
-  //const [pass, setPass] = useState("");
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
 
-  const [form, setForm] = useState({
+  /*const [form, setForm] = useState({
     bk_id: "",
     fname: "",
     lname: "",
@@ -51,28 +50,28 @@ export default function SignUpScreen({ navigation }) {
   const [errors, setErrors] = useState({
     email: "",
     pass: "",
-  });
+  });*/
 
   //submit email and password
   const submitNewUser = (e) => {
     e.preventDefault();
 
     //validate submition
-    const err = validate();
+    /*const err = validate();
     if (err) {
       console.log("Please input all required fields");
       return;
-    }
+    }*/
 
     Axios.post("http://localhost:3001/api/bk_insert", {
       fname: "test",
       lname: "test",
-      email: form.email,
+      email: email,
       phone_no: "test",
       address: "test",
       city: "test",
       zip: "test",
-      pass: form.pass,
+      pass: pass,
     }).then(() => {
       alert("successful insert");
     });
@@ -115,87 +114,81 @@ export default function SignUpScreen({ navigation }) {
         source={require("../assets/gradient1.png")}
         resizeMode="cover"
       >
-        <View style={styles.header}>
-          <Image
-            style={{
-              alignSelf: "center",
-              resizeMode: "contain",
-              height: 145,
-              width: 500,
-            }}
-            source={require("../assets/LoginBeePicture.png")}
-            resizeMode="contain"
-          />
-        </View>
-
-        <View style={styles.middle}>
-          <Text style={styles.titleText}>Bee Rescue</Text>
-          <Text style={styles.text}>Sign Up</Text>
-
-          <View style={{ width: 300 }}>
-            <Text style={styles.textRegular}>email</Text>
-
-            {/*email input*/}
-            <TextInput
-              style={styles.input}
-              label="email"
-              placeholder="email"
-              required
-              isInvalid={Boolean(errors.email)}
-              validationMessage={errors.email ? errors.email : null}
-              type="text"
-              name="email"
-              onChange={(e) => {
-                setForm((prevState) => ({
-                  ...prevState,
-                  email: e.target,
-                }));
-                setErrors({ ...errors, email: "" });
+        <KeyboardAwareScrollView>
+          <View style={styles.header}>
+            <Image
+              style={{
+                alignSelf: "center",
+                resizeMode: "contain",
+                height: 145,
+                width: 500,
               }}
+              source={require("../assets/LoginBeePicture.png")}
+              resizeMode="contain"
             />
+          </View>
 
-            <Text style={styles.textRegular}>password</Text>
-            <Text style={styles.textSmall}>
-              * must have a minimum of 8 chars
-            </Text>
-            <Text style={styles.textSmall}>
-              * must have at least one special character
-            </Text>
-            <Text style={styles.textSmall}>
-              * must have at least one number
-            </Text>
+          <View style={styles.middle}>
+            <Text style={styles.titleText}>Bee Rescue</Text>
+            <Text style={styles.text}>Sign Up</Text>
 
-            {/*password input*/}
-            <TextInput
-              style={styles.input}
-              label="password"
-              placeholder="password"
-              required
-              secureTextEntry={true}
-              isInvalid={Boolean(errors.pass)}
-              validationMessage={errors.pass ? errors.pass : null}
-              type="text"
-              name="password"
-              onChange={(e) => {
-                setForm((prevState) => ({
-                  ...prevState,
-                  pass: e.target,
-                }));
-                setErrors({ ...errors, pass: "" });
-              }}
-            />
+            <View style={{ width: 300 }}>
+              <Text style={styles.textRegular}>email</Text>
 
-            <View style={styles.button}>
-              <Button color="#d92978" title="Sign Up" onPress={submitNewUser} />
+              {/*email input*/}
+              <TextInput
+                style={styles.input}
+                label="email"
+                placeholder="email"
+                required
+                //isInvalid={Boolean(errors.email)}
+                //validationMessage={errors.email ? errors.email : null}
+                type="text"
+                name="email"
+                onChange={setEmail}
+              />
+
+              <Text style={styles.textRegular}>password</Text>
+              <Text style={styles.textSmall}>
+                * must have a minimum of 8 chars
+              </Text>
+              <Text style={styles.textSmall}>
+                * must have at least one special character
+              </Text>
+              <Text style={styles.textSmall}>
+                * must have at least one number
+              </Text>
+
+              {/*password input*/}
+              <TextInput
+                style={styles.input}
+                label="password"
+                placeholder="password"
+                required
+                secureTextEntry={true}
+                //isInvalid={Boolean(errors.pass)}
+                //validationMessage={errors.pass ? errors.pass : null}
+                type="text"
+                name="password"
+                onChange={setPass}
+              />
+
+              <View style={styles.button}>
+                <Button
+                  color="#d92978"
+                  title="Sign Up"
+                  onPress={submitNewUser}
+                />
+              </View>
             </View>
           </View>
-        </View>
+        </KeyboardAwareScrollView>
       </ImageBackground>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+/*const styles = StyleSheet.create({
   container: {
     flex: 1,
     top: 10,
@@ -244,4 +237,4 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 10,
   },
-});
+});*/
