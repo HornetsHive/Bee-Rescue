@@ -116,9 +116,9 @@ function App(){
 
   return (    
     <div className="App">
-
+      
       {/*Header*/}
-      <div className="header">
+      <Pane className="header" borderRadius='1em'>
         <img src="path/to/logo.png" alt="Bee Rescue logo" />
         <nav>
           <ul>
@@ -127,9 +127,10 @@ function App(){
             <li><a href="#">About us</a></li>
           </ul>
         </nav>
-      </div>
-        <Pane elevation={1} flexDirection="row">
-          <Pane float="left" marginLeft={majorScale(4)} width="45%" flexDirection="column">
+      </Pane>
+
+        <Pane flexDirection="row" alignContent="center" display="flex" justifyContent="center">
+          <Pane width="45%" flexDirection="column">
 
             {/*Heading*/}
             <Pane
@@ -140,7 +141,8 @@ function App(){
               <Heading fontFamily="Comfortaa-Bold" size="900">Bee Rescue - Hive Reporting</Heading>
               <Heading paddingTop={majorScale(2)}>Welcome to the Bee Rescue Swarm reporting tool</Heading>
               <Paragraph
-                fontFamily="Louis-George-Cafe" 
+                fontFamily="Louis-George-Cafe"
+                color="#000000" 
                 margin={majorScale(1)} 
                 size={500} 
                 textAlign="left"
@@ -154,7 +156,9 @@ function App(){
 
             {/* ---------------------------Info--------------------------------*/}
             <Pane 
-              elevation='1' 
+              elevation='1'
+              borderRadius='1em'
+              backgroundColor="#D3D96F" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)}
               padding={majorScale(2)} 
@@ -162,7 +166,8 @@ function App(){
               <Heading fontFamily="Comfortaa-Bold">Why do bees swarm?</Heading>
 
               <Paragraph 
-                fontFamily="Louis-George-Cafe" 
+                fontFamily="Louis-George-Cafe"
+                color="#000000" 
                 margin={majorScale(1)} 
                 size={500} 
                 textAlign="left"
@@ -178,7 +183,9 @@ function App(){
             </Pane>
 
             <Pane 
-              elevation='1' 
+              elevation='1'
+              borderRadius='1em'
+              backgroundColor="#D3D96F" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)} 
               padding={majorScale(2)} 
@@ -186,13 +193,14 @@ function App(){
               <Heading fontFamily="Comfortaa-Bold">Make Observations</Heading>
 
               <Paragraph 
-                fontFamily="Louis-George-Cafe" 
+                fontFamily="Louis-George-Cafe"
+                color="#000000" 
                 margin={majorScale(1)} 
                 size={500} 
                 textAlign="left"
               >
                 Please have the following information ready before you submit your report. <br></br>Notes to make:<br></br>
-                <UnorderedList padding='0.5em' paddingTop='0'>
+                <UnorderedList padding='0.5em' paddingTop='0' color="#000000">
                   <ListItem margin='-0.1em'>Are they honey bees or other similar insects?</ListItem>
                   <ListItem margin='-0.1em'>Where are the bees?</ListItem>
                   <ListItem margin='-0.1em'>How high above the ground?</ListItem>
@@ -208,7 +216,9 @@ function App(){
             </Pane>
 
             <Pane 
-              elevation='1' 
+              elevation='1'
+              borderRadius='1em'
+              backgroundColor="#D3D96F" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)}
               padding={majorScale(2)} 
@@ -217,6 +227,7 @@ function App(){
 
               <Paragraph 
                 fontFamily="Louis-George-Cafe" 
+                color="#000000"
                 margin={majorScale(1)} 
                 size={500} 
                 textAlign="left"
@@ -230,7 +241,9 @@ function App(){
             </Pane>
 
             <Pane 
-              elevation='1' 
+              elevation='1'
+              borderRadius='1em'
+              backgroundColor="#D3D96F" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)}
               padding={majorScale(2)} 
@@ -238,7 +251,8 @@ function App(){
               <Heading fontFamily="Comfortaa-Bold">Safe Distance</Heading>
 
               <Paragraph 
-                fontFamily="Louis-George-Cafe" 
+                fontFamily="Louis-George-Cafe"
+                color="#000000" 
                 margin={majorScale(1)} 
                 size={500} 
                 textAlign="left"
@@ -251,7 +265,9 @@ function App(){
             </Pane>
 
             <Pane 
-              elevation='1' 
+              elevation='1'
+              borderRadius='1em'
+              backgroundColor="#D3D96F" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)}
               padding={majorScale(2)} 
@@ -259,7 +275,8 @@ function App(){
               <Heading fontFamily="Comfortaa-Bold">Tell Others or Contribute</Heading>
 
               <Paragraph 
-                fontFamily="Louis-George-Cafe" 
+                fontFamily="Louis-George-Cafe"
+                color="#000000" 
                 margin={majorScale(1)} 
                 size={500} 
                 textAlign="left"
@@ -273,298 +290,303 @@ function App(){
 
           {/* ---------------------------Form--------------------------------*/}
           <Pane
+            className="form"
             elevation={1}
+            borderRadius='1em'
             width="33%"
+            height="fit-content"
             margin={32}
             marginTop={majorScale(12)}
-            marginRight={majorScale(16)}
-            float="right"
             align="center"
             flexDirection="row"
           >
             <Heading margin={majorScale(1)} size="600">Submit a new Bee Rescue report</Heading>
-            <div className = "form">
-              {/*------------ NAME ------------*/}
-              <Pane
-                name="Reporter info"
-                width="85%"
-                margin={majorScale(2)}
-                float="center"
-                backgroundColor="white"
-                display="flex"
-                justifyContent="normal"
-                alignItems="center"
-                flexDirection="row"
-              >
-                {/*first name*/}
-                <TextInputField
-                  label="First name:"
-                  margin={majorScale(1)}
-                  isInvalid={Boolean(errors.fname)}
-                  validationMessage={errors.fname ? errors.fname : null}
-                  required 
-                  type="text" 
-                  name="fname" 
-                  onChange={(e)=> {
-                    setForm(prevState => ({
-                          ...prevState,
-                          fname: e.target.value
-                    }));
-                    setErrors({...errors, fname: ''});
-                  }}
-                  error="test" 
-                />
-
-                {/*last name*/}
-                <TextInputField
-                  label="Last name:"
-                  margin={majorScale(1)}
-                  isInvalid={Boolean(errors.lname)}
-                  validationMessage={errors.lname ? errors.lname : null}
-                  required
-                  type="text" 
-                  name="lname" 
-                  onChange={(e)=> {
-                    setForm(prevState => ({
-                          ...prevState,
-                          lname: e.target.value
-                    }));
-                    setErrors({...errors, lname: ''});
-                  }} 
-                />
-
-                {/*email*/}
-                <TextInputField 
-                  label="email"
-                  margin={majorScale(1)}
-                  required
-                  isInvalid={Boolean(errors.email)}
-                  validationMessage={errors.email ? errors.email : null}
-                  type="text"
-                  name="email"
-                  onChange={(e)=> {
-                    setForm(prevState => ({
-                      ...prevState,
-                      email: e.target.value
-                    }));
-                    setErrors({...errors, email: ''});
-                  }} 
-                />
-              </Pane>
-
-                {/*------------ ADDRESS ------------*/}
-              <Pane
-                name="address info"
-                margin={majorScale(1)}
-                float="center"
-                width="85%"
-                backgroundColor="white"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                flexDirection="row"
-              >
-                {/*address*/}
-                <TextInputField 
-                  label="Address:"
-                  margin={majorScale(1)}
-                  required
-                  isInvalid={Boolean(errors.address)}
-                  validationMessage={errors.address ? errors.address : null}
-                  type="text" 
-                  name="address"
-                  onChange={(e)=> {
-                    setForm(prevState => ({
-                          ...prevState,
-                          address: e.target.value
-                    }));
-                    setErrors({...errors, address: ''});
-                  }} 
-                />
-
-                {/*city*/}
-                <TextInputField
-                  label="City:"
-                  margin={majorScale(1)}
-                  required
-                  isInvalid={Boolean(errors.city)}
-                  validationMessage={errors.city ? errors.city : null}
-                  type="text" 
-                  name="city" 
-                  onChange={(e)=> {
-                    setForm(prevState => ({
-                          ...prevState,
-                          city: e.target.value
-                    }));
-                    setErrors({...errors, city: ''});
-                  }} 
-                />
-
-                {/*zip*/}
-                <TextInputField
-                  label="zip"
-                  margin={majorScale(1)}
-                  required
-                  isInvalid={Boolean(errors.zip)}
-                  validationMessage={errors.zip ? errors.zip : null}
-                  type="text" 
-                  name="zip" 
-                  onChange={(e)=> {
-                    setForm(prevState => ({
-                          ...prevState,
-                          zip: e.target.value
-                    }));
-                    setErrors({...errors, zip: ''});
-                  }} 
-                />
-              </Pane>
-                
-                {/*------------ PROPERTY INFO ------------*/} 
-              <Pane
-                name="propertyInfo"
-                margin={majorScale(2)}
-                float="center"
-                width="fit-content"
-                backgroundColor="white"
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                flexDirection="column"
-              > 
-                {/*type of property*/}  
-                <SelectField
-                  required
-                  isInvalid={Boolean(errors.propertyType)}
-                  validationMessage={errors.propertyType ? errors.propertyType : null}
-                  label="Type of Property"
-                  margin={majorScale(1)}
-                  width="65%"
-                  defaultValue=""
-                  value={form.propertyType} 
-                  onChange={ (e)=> {
-                    setForm(prevState => ({
-                      ...prevState,
-                      propertyType: e.target.value
-                    }));
-                    setErrors({...errors, propertyType: ''});
-                  }}
-                >
-                  <option disabled={true} value="">Select a property type</option>
-                  <option value="res_detached">Residential detached home</option>
-                  <option value="res_apartment">Residential apartment</option>
-                  <option value="commercial">Commercial</option>
-                  <option value="rural">Rural</option>
-                </SelectField>
-                
-                {/*Location on property*/}
-                <SelectField
-                  label="Where is the hive located on the property?"
-                  margin={majorScale(1)}
-                  width="65%"
-                  required
-                  isInvalid={Boolean(errors.propertyLoc)}
-                  validationMessage={errors.propertyLoc ? errors.propertyLoc : null}
-                  defaultValue=""
-                  value={form.propertyLoc} 
-                  onChange={ (e)=> {
-                    setForm(prevState => ({
-                      ...prevState,
-                      propertyLoc: e.target.value
-                    }));
-                    setErrors({...errors, propertyLoc: ''});
-                  }}
-                >
-                  <option disabled={true} value="">Select a location</option>
-                  <option value="indoors">Indoors</option>
-                  <option value="ext_wall">Exterior structure</option>
-                  <option value="ext_tree">Exterior tree/plant/fixture</option>
-                  <option value="chimney">Chimney</option>
-                  <option value="infested">Inside of a wall/Other inaccessible area</option>
-                  <option value="ground">Ground</option>
-                  <option value="other">Other</option>
-
-                  
-                </SelectField> 
-
-                {/*height*/}
-                <SelectField
-                  label="How high up is the hive?"
-                  margin={majorScale(1)}
-                  width="65%"
-                  required
-                  isInvalid={Boolean(errors.height)}
-                  validationMessage={errors.height ? errors.height : null}
-                  defaultValue="" 
-                  value={form.height} 
-                  onChange={ (e)=> {
-                    setForm(prevState => ({
-                      ...prevState,
-                      height: e.target.value
-                    }));
-                    setErrors({...errors, height: ''});
-                  }}
-                >
-                  <option disabled={true} value="">Select a height</option>
-                  <option value="low">Less than 10'</option>
-                  <option value="med">10' to 20'</option>
-                  <option value="high">Greater than 20'</option>
-                </SelectField>
-
-                {/*size*/}
-                <SelectField
-                  label="How large is the hive?"
-                  margin={majorScale(1)}
-                  width="65%"
-                  defaultValue=""
-                  value={form.size} 
-                  onChange={ (e)=> {
-                    setForm(prevState => ({
-                      ...prevState,
-                      size: e.target.value
-                    }));
-                  }}
-                >
-                  <option disabled={true} value="">Select a size</option>
-                  <option value="small">Small (Size of grapefruit or smaller)</option>
-                  <option value="med">Medium (Size of basketball or smaller)</option>
-                  <option value="large">Large (Larger than a basketball)</option>
-                </SelectField>
-
-                {/*time present*/}
-                <TextInputField
-                  label="Approximately how many days has the hive been present?"
-                  placeholder="Numeric only, ie. '4'"
+              {/*------------ REPORTER INFO ------------*/}
+              <Pane className="reporterInfo" elevation='2' margin='2em' padding='0.5em' borderRadius='1em'>
+                {/*------------ NAME ------------*/}
+                <Pane
+                  width="85%"
                   margin={majorScale(2)}
-                  width="65%"
-                  isInvalid={Boolean(errors.duration)}
-                  validationMessage={errors.duration ? errors.duration : null}
-                  type="text" 
-                  name="duration" 
-                  onChange={(e)=> {
-                    setForm(prevState => ({
-                          ...prevState,
-                          duration: e.target.value
-                    }));
-                    setErrors({...errors, duration: ''});
-                  }} 
-                />
+                  float="center"
+                  display="flex"
+                  justifyContent="normal"
+                  alignItems="center"
+                  flexDirection="row"
+                >
+                  {/*first name*/}
+                  <TextInputField
+                    label="First name:"
+                    margin={majorScale(1)}
+                    isInvalid={Boolean(errors.fname)}
+                    validationMessage={errors.fname ? errors.fname : null}
+                    required 
+                    type="text" 
+                    name="fname" 
+                    onChange={(e)=> {
+                      setForm(prevState => ({
+                            ...prevState,
+                            fname: e.target.value
+                      }));
+                      setErrors({...errors, fname: ''});
+                    }}
+                    error="test" 
+                  />
 
+                  {/*last name*/}
+                  <TextInputField
+                    label="Last name:"
+                    margin={majorScale(1)}
+                    isInvalid={Boolean(errors.lname)}
+                    validationMessage={errors.lname ? errors.lname : null}
+                    required
+                    type="text" 
+                    name="lname" 
+                    onChange={(e)=> {
+                      setForm(prevState => ({
+                            ...prevState,
+                            lname: e.target.value
+                      }));
+                      setErrors({...errors, lname: ''});
+                    }} 
+                  />
 
-                <input
-                  label="image"
-                  margin={majorScale(1)} 
-                  type="file"
-                  name="image"
-                  onChange={(e)=> {
-                    setForm(prevState => ({
-                      ...prevState,
-                      image: e.target.value
-                  }));
-                  }} 
-                />
+                  {/*email*/}
+                  <TextInputField 
+                    label="email"
+                    margin={majorScale(1)}
+                    required
+                    isInvalid={Boolean(errors.email)}
+                    validationMessage={errors.email ? errors.email : null}
+                    type="text"
+                    name="email"
+                    onChange={(e)=> {
+                      setForm(prevState => ({
+                        ...prevState,
+                        email: e.target.value
+                      }));
+                      setErrors({...errors, email: ''});
+                    }} 
+                  />
+                </Pane>
+
+                  {/*------------ ADDRESS ------------*/}
+                <Pane
+                  margin={majorScale(1)}
+                  float="center"
+                  width="85%"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  flexDirection="row"
+                >
+                  {/*address*/}
+                  <TextInputField 
+                    label="Address:"
+                    margin={majorScale(1)}
+                    required
+                    isInvalid={Boolean(errors.address)}
+                    validationMessage={errors.address ? errors.address : null}
+                    type="text" 
+                    name="address"
+                    onChange={(e)=> {
+                      setForm(prevState => ({
+                            ...prevState,
+                            address: e.target.value
+                      }));
+                      setErrors({...errors, address: ''});
+                    }} 
+                  />
+
+                  {/*city*/}
+                  <TextInputField
+                    label="City:"
+                    margin={majorScale(1)}
+                    required
+                    isInvalid={Boolean(errors.city)}
+                    validationMessage={errors.city ? errors.city : null}
+                    type="text" 
+                    name="city" 
+                    onChange={(e)=> {
+                      setForm(prevState => ({
+                            ...prevState,
+                            city: e.target.value
+                      }));
+                      setErrors({...errors, city: ''});
+                    }} 
+                  />
+
+                  {/*zip*/}
+                  <TextInputField
+                    label="zip"
+                    margin={majorScale(1)}
+                    required
+                    isInvalid={Boolean(errors.zip)}
+                    validationMessage={errors.zip ? errors.zip : null}
+                    type="text" 
+                    name="zip" 
+                    onChange={(e)=> {
+                      setForm(prevState => ({
+                            ...prevState,
+                            zip: e.target.value
+                      }));
+                      setErrors({...errors, zip: ''});
+                    }} 
+                  />
+                </Pane>
               </Pane>
-              <Button appearance="primary" margin={majorScale(1)} marginBottom={majorScale(2)} onClick={submitReport}>Submit</Button>
-            </div>
+              
+              {/*------------ PROPERTY INFO ------------*/} 
+              <Pane className="propertyInfo" elevation='2' margin='2em' padding='0.5em' borderRadius='1em'>  
+                <Pane
+                  margin={majorScale(2)}
+                  float="center"
+                  width="fit-content"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  flexDirection="column"
+                > 
+                  {/*type of property*/}  
+                  <SelectField
+                    required
+                    isInvalid={Boolean(errors.propertyType)}
+                    validationMessage={errors.propertyType ? errors.propertyType : null}
+                    label="Type of Property"
+                    margin={majorScale(1)}
+                    width="65%"
+                    defaultValue=""
+                    value={form.propertyType} 
+                    onChange={ (e)=> {
+                      setForm(prevState => ({
+                        ...prevState,
+                        propertyType: e.target.value
+                      }));
+                      setErrors({...errors, propertyType: ''});
+                    }}
+                  >
+                    <option disabled={true} value="">Select a property type</option>
+                    <option value="res_detached">Residential detached home</option>
+                    <option value="res_apartment">Residential apartment</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="rural">Rural</option>
+                  </SelectField>
+                  
+                  {/*Location on property*/}
+                  <SelectField
+                    label="Where is the hive located on the property?"
+                    margin={majorScale(1)}
+                    width="65%"
+                    required
+                    isInvalid={Boolean(errors.propertyLoc)}
+                    validationMessage={errors.propertyLoc ? errors.propertyLoc : null}
+                    defaultValue=""
+                    value={form.propertyLoc} 
+                    onChange={ (e)=> {
+                      setForm(prevState => ({
+                        ...prevState,
+                        propertyLoc: e.target.value
+                      }));
+                      setErrors({...errors, propertyLoc: ''});
+                    }}
+                  >
+                    <option disabled={true} value="">Select a location</option>
+                    <option value="indoors">Indoors</option>
+                    <option value="ext_wall">Exterior structure</option>
+                    <option value="ext_tree">Exterior tree/plant/fixture</option>
+                    <option value="chimney">Chimney</option>
+                    <option value="infested">Inside of a wall/Other inaccessible area</option>
+                    <option value="ground">Ground</option>
+                    <option value="other">Other</option>
+
+                    
+                  </SelectField> 
+
+                  {/*height*/}
+                  <SelectField
+                    label="How high up is the hive?"
+                    margin={majorScale(1)}
+                    width="65%"
+                    required
+                    isInvalid={Boolean(errors.height)}
+                    validationMessage={errors.height ? errors.height : null}
+                    defaultValue="" 
+                    value={form.height} 
+                    onChange={ (e)=> {
+                      setForm(prevState => ({
+                        ...prevState,
+                        height: e.target.value
+                      }));
+                      setErrors({...errors, height: ''});
+                    }}
+                  >
+                    <option disabled={true} value="">Select a height</option>
+                    <option value="low">Less than 10'</option>
+                    <option value="med">10' to 20'</option>
+                    <option value="high">Greater than 20'</option>
+                  </SelectField>
+
+                  {/*size*/}
+                  <SelectField
+                    label="How large is the hive?"
+                    margin={majorScale(1)}
+                    width="65%"
+                    defaultValue=""
+                    value={form.size} 
+                    onChange={ (e)=> {
+                      setForm(prevState => ({
+                        ...prevState,
+                        size: e.target.value
+                      }));
+                    }}
+                  >
+                    <option disabled={true} value="">Select a size</option>
+                    <option value="small">Small (Size of grapefruit or smaller)</option>
+                    <option value="med">Medium (Size of basketball or smaller)</option>
+                    <option value="large">Large (Larger than a basketball)</option>
+                  </SelectField>
+
+                  {/*time present*/}
+                  <TextInputField
+                    label="Approximately how many days has the hive been present?"
+                    placeholder="Numeric only, ie. '4'"
+                    margin={majorScale(2)}
+                    width="65%"
+                    isInvalid={Boolean(errors.duration)}
+                    validationMessage={errors.duration ? errors.duration : null}
+                    type="text" 
+                    name="duration" 
+                    onChange={(e)=> {
+                      setForm(prevState => ({
+                            ...prevState,
+                            duration: e.target.value
+                      }));
+                      setErrors({...errors, duration: ''});
+                    }} 
+                  />
+
+
+                  <input
+                    label="image"
+                    margin={majorScale(1)} 
+                    type="file"
+                    name="image"
+                    onChange={(e)=> {
+                      setForm(prevState => ({
+                        ...prevState,
+                        image: e.target.value
+                    }));
+                    }} 
+                  />
+                </Pane>
+              </Pane>
+              <Button 
+                width="25%"
+                margin={majorScale(1)}
+                marginBottom={majorScale(2)}
+                onClick={submitReport}
+              >
+                Submit
+              </Button>
           </Pane>
         </Pane>
     </div>

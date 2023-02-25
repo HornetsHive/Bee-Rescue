@@ -1,13 +1,10 @@
-.App {
-  background-image: './assets/gradient1.png';
-  font-family: "Rounded-Sans";
-}
-
-.Heading{
-  font-family: 'Comfortaa-Reg';
-  color: #333333;
-  font-size: 36px;
-  line-height: 1.2;
+html { 
+  /*background: url("../public/gradient1.png") no-repeat center center fixed;*/
+  background-color: rgb(222, 228, 207);
+  -webkit-background-size: cover;
+  -moz-background-size: cover; 
+  -o-background-size: cover; 
+  background-size: cover;
 }
 
 .header {
@@ -16,7 +13,18 @@
   align-items: flex;
   justify-content: left;
   padding: 16px;
-  background-color: #ffffff;
+}
+
+.form{
+  background-color: #FFFFFF;
+}
+
+.reporterInfo{
+  background-color: #FFFFFF;
+}
+
+.propertyInfo{
+  background-color: #FFFFFF;
 }
 
 .header img {
@@ -40,7 +48,7 @@
 
 .header nav ul li a {
   text-decoration: none;
-  color: #333333;
+  color: #000000;
   font-weight: bold;
   display: inline-block;
   text-align: left;
