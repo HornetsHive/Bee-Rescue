@@ -26,7 +26,7 @@ export default function PreferencesScreen({ navigation }) {
   if (!loaded) {
     return null;
   }
-
+  // Get the current bk_id for correct preferences
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
