@@ -110,23 +110,38 @@ app.post("/api/insert", (req, res) => {
   );
 });
 
-// Inserts a Beekeeper user
+//Inserts a new Beekeeper
 app.post("/api/bk_insert", (req, res) => {
+  const email = req.body.email;
+  const pass = req.body.pass;
+  const sqlINSERT =
+    "INSERT INTO BEEKEEPERS (email, pass) VALUES (?, ?);";
+  db.query(
+    sqlINSERT,
+    [email, pass],
+    (err, result) => {
+      if (err) return res.status(500).send(err.message);
+      console.log(result);
+    }
+  );
+});
+
+// Update Beekeeper table with personal info
+app.post("/api/bk_update", (req, res) => {
   const fname = req.body.fname;
   const lname = req.body.lname;
-  const email = req.body.email;
   const phone_no = req.body.phone_no;
   const address = req.body.address;
   const city = req.body.city;
   const zip = req.body.zip;
-  const pass = req.body.pass;
-
+  const bk_id = req.body.bk_id;
+  
   //No need to insert bk_id, it manages itself
-  const sqlINSERT =
-    "INSERT INTO BEEKEEPERS (fname, lname, email, phone_no, address, city, zip, pass) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  const sqlUPDATE =
+    "UPDATE BEEKEEPERS SET fname = ?, lname = ?, phone_no = ?, address = ?, city = ?, zip = ? WHERE bk_id = ?;";
   db.query(
-    sqlINSERT,
-    [fname, lname, email, phone_no, address, city, zip, pass],
+    sqlUPDATE,
+    [fname, lname, phone_no, address, city, zip, bk_id],
     (err, result) => {
       if (err) return res.status(500).send(err.message);
       console.log(result);
@@ -136,9 +151,7 @@ app.post("/api/bk_insert", (req, res) => {
 
 // Updates a Beekeeper user's Qualifications where the bk_id is equal to the email/pass combo corresponding to the bk_id of the Beekeepers
 app.post("/api/bk_qualif_update", (req, res) => {
-  const email = req.body.email;
-  const pass = req.body.pass;
-
+  
   const ground_swarms = req.body.ground_swarms;
   const valve_or_water_main = req.body.valve_or_water_main;
   const shrubs = req.body.shrubs;
@@ -172,7 +185,7 @@ app.post("/api/complete_report", (req, res) => {
     res.send(result);
   });
   const sqlDelete = "DELETE FROM reports WHERE r_id = ?;";
-  db.query(sqlDelete, [bk_id, r_id], (err, result) => {
+  db.query(sqlDelete, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
     res.send(result);

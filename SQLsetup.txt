@@ -117,12 +117,6 @@ BEGIN
     INSERT INTO report_tags(r_id, need_help, not_bees, cutout_trapout, ground, tree, indoor, structure, utility_box, chimney, fence, accident) values (new.r_id, null, null, null, null, null, null, null, null, null, null, null);  
 END$
 DELIMITER ;
-DELIMITER $
-CREATE PROCEDURE one_bk(IN rownum INT, IN rid INT, OUT bkid INT)
-BEGIN
-	SELECT bk_id into bkid FROM active_reports WHERE r_id = rid LIMIT 1 OFFSET rownum;
-END$
-DELIMITER ;
 -- DATA WARNING THIS WILL DUPLICATE COMPLETED REPORTS INTO ARCHIVE TABLE, DELETE REPORTS TO SAVE SPACE
 DELIMITER $
 CREATE TRIGGER updateReports 
