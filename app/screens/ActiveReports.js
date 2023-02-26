@@ -37,7 +37,17 @@ export default function ActiveReportsScreen({ navigation }) {
         throw error;
       });
   };
-
+  completeReport = () => {
+    Axios.post("http://localhost:3001/api/complete_report", {
+      r_id: 0,                                                //dummy value must get the actual report id
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -75,7 +85,7 @@ export default function ActiveReportsScreen({ navigation }) {
               borderRadius: 10,
               backgroundColor: "#d3e954",
             }}
-            onPress={() => completeReport()} // NEED TO IMPLEMENT
+            onPress={() => completeReport()} // NEED TO IMPLEMENT its kinda there now
           >
             <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
               Complete

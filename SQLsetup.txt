@@ -134,6 +134,7 @@ BEGIN
             SELECT reports.r_id, curdate(), reports.category, reports.fname, reports.lname, reports.address, reports.city, reports.p_type, reports.location, reports.duration, reports.height, reports.size, reports.weight, active_reports.bk_id, BEEKEEPERS.fname, BEEKEEPERS.lname, report_tags.need_help, report_tags.success
             FROM reports JOIN active_reports ON old.r_id = active_reports.r_id JOIN BEEKEEPERS ON active_reports.bk_id = beekeepers.bk_id JOIN report_tags ON old.r_id = report_tags.r_id
             WHERE reports.r_id = old.r_id;
+            DELETE FROM active_reports WHERE r_id = old.r_id;
     END IF;
 END$
 DELIMITER ;
@@ -142,9 +143,9 @@ CREATE TRIGGER deleteReports
 BEFORE DELETE ON reports
 FOR EACH ROW
 BEGIN
-	-- ensure it exists in archive first and delete tags then delete report
-    IF old.r_id = (select r_id FROM report_archive WHERE report_archive.r_id = old.r_id) THEN
-		DELETE FROM report_tags WHERE report_tags.r_id = old.r_id;
+	-- ensure it has been completed aka arkived
+	IF old.complete is TRUE THEN
+		DELETE FROM report_tags WHERE r_id = old.r_id;
 	END IF;
 END$
 delimiter ;

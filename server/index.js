@@ -121,12 +121,12 @@ app.post("/api/bk_insert", (req, res) => {
   const zip = req.body.zip;
   const pass = req.body.pass;
 
-  //I replaced DEFAULT with 000 since it did not recognize it
+  //No need to insert bk_id, it manages itself
   const sqlINSERT =
-    "INSERT INTO BEEKEEPERS (bk_id, fname, lname, email, phone_no, address, city, zip, pass) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO BEEKEEPERS (fname, lname, email, phone_no, address, city, zip, pass) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlINSERT,
-    [000, fname, lname, email, phone_no, address, city, zip, pass],
+    [fname, lname, email, phone_no, address, city, zip, pass],
     (err, result) => {
       if (err) return res.status(500).send(err.message);
       console.log(result);
@@ -165,10 +165,17 @@ app.post("/api/complete_report", (req, res) => {
   const r_id = req.body.r_id;
   //const active = req.body.active;
 
-  const sqlUpdate = "UPDATE reports SET active = false WHERE r_id = ?;";
-
+  const sqlUpdate = "UPDATE reports SET complete = true WHERE r_id = ?;";
   db.query(sqlUpdate, [r_id], (err, result) => {
-    console.log(result);
+    if (err) return res.status(500).send(err.message);
+    console.log(res);
+    res.send(result);
+  });
+  const sqlDelete = "DELETE FROM reports WHERE r_id = ?;";
+  db.query(sqlDelete, [bk_id, r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(res);
+    res.send(result);
   });
 });
 
