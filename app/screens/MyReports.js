@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default function ActiveReportsScreen({ navigation }) {
+export default function MyReportsScreen({ navigation }) {
   const onPress = () => {};
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
@@ -39,7 +39,7 @@ export default function ActiveReportsScreen({ navigation }) {
   };
   completeReport = () => {
     Axios.post("http://localhost:3001/api/complete_report", {
-      r_id: 0,                                                //dummy value must get the actual report id
+      r_id: 0, //dummy value must get the actual report id
     })
       .then(function (response) {
         console.log(response);
@@ -102,11 +102,11 @@ export default function ActiveReportsScreen({ navigation }) {
             onPress={() => abandonReport()} // NEED TO IMPLEMENT
           >
             <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
-              Abandon 
+              Abandon
             </Text>
           </TouchableOpacity>
         </View>
-        
+
         <View style={styles.itemTall}>
           <View style={styles.label}>
             <Text
