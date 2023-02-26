@@ -9,6 +9,7 @@ import {
   ScrollView,
   Image,
   SafeAreaView,
+  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 import axios from "axios";
@@ -239,26 +240,25 @@ export default function ReportInfoScreen({ navigation }) {
       </ScrollView>
 
       <SafeAreaView>
-        <Image
+        <ImageBackground
           source={require("../assets/gradient1.png")}
           style={styles.footer}
-        />
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-          }
         >
-          <Image
-            source={require("../assets/home.png")}
-            style={{
-              alignSelf: "center",
-              bottom: 15,
-              resizeMode: "contain",
-              height: 40,
-              width: 40,
-            }}
-          />
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("HomeScreen", { screen: "HomeScreen" })
+            }
+          >
+            <Image
+              source={require("../assets/home.png")}
+              style={{
+                resizeMode: "contain",
+                height: 40,
+                width: 40,
+              }}
+            />
+          </TouchableOpacity>
+        </ImageBackground>
       </SafeAreaView>
     </View>
   );
@@ -290,10 +290,11 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 0,
-    bottom: -40,
+    bottom: 0,
+    justifyContent: "center",
     alignItems: "center",
     resizeMode: "cover",
-    height: 70,
+    height: 65,
     width: "100%",
   },
   item: {

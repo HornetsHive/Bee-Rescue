@@ -121,12 +121,14 @@ app.post("/api/bk_insert", (req, res) => {
   const zip = req.body.zip;
   const pass = req.body.pass;
 
+  //I replaced DEFAULT with 000 since it did not recognize it
   const sqlINSERT =
     "INSERT INTO BEEKEEPERS (bk_id, fname, lname, email, phone_no, address, city, zip, pass) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlINSERT,
-    [DEFAULT, fname, lname, email, phone_no, address, city, zip, pass],
+    [000, fname, lname, email, phone_no, address, city, zip, pass],
     (err, result) => {
+      if (err) return res.status(500).send(err.message);
       console.log(result);
     }
   );
@@ -200,6 +202,7 @@ app.get("/api/bk_user", (req, res) => {
   const sqlQuery = "SELECT email FROM BEEKEEPERS WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
     console.log(result);
+    res.send(result);
   });
 });
 

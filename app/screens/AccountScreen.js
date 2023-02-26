@@ -394,22 +394,23 @@ export default function AccountScreen({ navigation }) {
         ></Button>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View>
         <ImageBackground
-          style={styles.background}
           source={require("../assets/gradient1.png")}
-          resizeMode="cover"
+          style={styles.footer}
         >
           <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("HomeScreen", {
-                screen: "HomeScreen",
-              });
-            }}
+            onPress={() =>
+              navigation.navigate("HomeScreen", { screen: "HomeScreen" })
+            }
           >
             <Image
               source={require("../assets/home.png")}
-              style={styles.homeButton}
+              style={{
+                resizeMode: "contain",
+                height: 40,
+                width: 40,
+              }}
             />
           </TouchableOpacity>
         </ImageBackground>
@@ -520,11 +521,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   footer: {
-    flex: 0.1,
-    top: 715,
+    flex: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    resizeMode: "cover",
+    height: 65,
     width: "100%",
-    height: 70,
-    position: "absolute",
   },
   background: {
     flex: 1,
