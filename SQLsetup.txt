@@ -12,6 +12,7 @@ create table reports (
     fname		varchar(256),
     lname		varchar(256),
     city		varchar(256),
+    zip         varchar(256),
     p_type		varchar(256), -- property type
     phone_no	varchar(256), -- consider regions  (areacode)-###-####
     weight		int,
@@ -47,7 +48,7 @@ create table BEEKEEPERS (
     address varchar(255),
     city varchar(255),
     zip varchar(255),
-    password varchar(255)
+    pass varchar(255)
 );
 create table QUALIFICATIONS (
 	bk_id int NOT NULL,
