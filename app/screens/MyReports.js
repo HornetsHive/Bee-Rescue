@@ -76,7 +76,6 @@ export default function ActiveReportsScreen({ navigation }) {
       </View>
 
       <ScrollView style={styles.middle}>
-        // Complete Button
         <View style={{ height: 57, top: 10, bottom: 100 }}>
           <TouchableOpacity
             style={{
@@ -92,7 +91,6 @@ export default function ActiveReportsScreen({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-        // Abandon Button
         <View style={{ height: 57, top: 10, bottom: 100 }}>
           <TouchableOpacity
             style={{
@@ -104,10 +102,11 @@ export default function ActiveReportsScreen({ navigation }) {
             onPress={() => abandonReport()} // NEED TO IMPLEMENT
           >
             <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
-              Claim Report
+              Abandon 
             </Text>
           </TouchableOpacity>
         </View>
+        
         <View style={styles.itemTall}>
           <View style={styles.label}>
             <Text
