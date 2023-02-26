@@ -1,16 +1,16 @@
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import React, { useState, setState } from "react";
+import React, { useState } from "react";
 import { styles } from "../StyleSheet";
 import { useFonts } from "expo-font";
 import Axios from "axios";
 import {
   Text,
   View,
-  ImageBackground,
-  Button,
   Image,
-  SafeAreaView,
+  Button,
   TextInput,
+  SafeAreaView,
+  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 
@@ -32,11 +32,7 @@ export default function SignUpScreen({ navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
-
-  /*const [form, setForm] = useState({
-    bk_id: "",
+  const [form, setForm] = useState({
     fname: "",
     lname: "",
     email: "",
@@ -50,52 +46,58 @@ export default function SignUpScreen({ navigation }) {
   const [errors, setErrors] = useState({
     email: "",
     pass: "",
-  });*/
+  });
 
   //submit email and password
   const submitNewUser = (e) => {
     e.preventDefault();
+    // Prevents React from resetting its properties:
+    e.persist();
 
     //validate submition
-    /*const err = validate();
-    if (err) {
-      console.log("Please input all required fields");
-      return;
-    }*/
+    //const err = validate();
+    //if (err) {
+    //console.log("Please input all required fields");
+    //return;
+    //}
 
     Axios.post("http://localhost:3001/api/bk_insert", {
       fname: "test",
       lname: "test",
-      email: email,
+      email: "emailTest",
       phone_no: "test",
       address: "test",
       city: "test",
       zip: "test",
-      pass: pass,
-    }).then(() => {
-      alert("successful insert");
-    });
-    console.log("User created!");
+      pass: "pass",
+    })
+      .then(() => {
+        console.log("User created!");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    console.log("Beekeeper possibly submitted (; ;)");
   };
 
   const validate = () => {
     const newErrors = { ...errors };
-    if (!form.email) {
-      newErrors.email = "This field is required";
-      console.log("Please enter email");
-    }
-    if (!form.pass) {
-      newErrors.pass = "This field is required";
-      console.log("Please enter pasword");
-    }
-    if (!isValidPassword(form.pass)) {
-      newErrors.pass = "Please enter a valid password";
-      console.log("Please enter a valid password");
-    }
-    if (!isValidEmail(form.email)) {
-      newErrors.email = "Please enter a valid email";
-      console.log("Please enter a valid email");
-    }
+    //if (!form.email) {
+    //newErrors.email = "This field is required";
+    //console.log("Please enter email");
+    //}
+    //if (!form.pass) {
+    //newErrors.pass = "This field is required";
+    //console.log("Please enter pasword");
+    // }
+    //if (!isValidPassword(form.pass)) {
+    //newErrors.pass = "Please enter a valid password";
+    //console.log("Please enter a valid password");
+    //}
+    //if (!isValidEmail(form.email)) {
+    //newErrors.email = "Please enter a valid email";
+    //console.log("Please enter a valid email");
+    //}
 
     setErrors(newErrors);
     return !Object.values(newErrors).every((error) => error === "");
@@ -141,11 +143,17 @@ export default function SignUpScreen({ navigation }) {
                 label="email"
                 placeholder="email"
                 required
-                //isInvalid={Boolean(errors.email)}
-                //validationMessage={errors.email ? errors.email : null}
+                isInvalid={Boolean(errors.email)}
+                validationMessage={errors.email ? errors.email : null}
                 type="text"
                 name="email"
-                onChange={setEmail}
+                onChange={(e) => {
+                  setForm((prevState) => ({
+                    ...prevState,
+                    email: e.target,
+                  }));
+                  setErrors({ ...errors, email: "" });
+                }}
               />
 
               <Text style={styles.textRegular}>password</Text>
@@ -166,11 +174,17 @@ export default function SignUpScreen({ navigation }) {
                 placeholder="password"
                 required
                 secureTextEntry={true}
-                //isInvalid={Boolean(errors.pass)}
-                //validationMessage={errors.pass ? errors.pass : null}
+                isInvalid={Boolean(errors.pass)}
+                validationMessage={errors.pass ? errors.pass : null}
                 type="text"
                 name="password"
-                onChange={setPass}
+                onChange={(e) => {
+                  setForm((prevState) => ({
+                    ...prevState,
+                    pass: e.target,
+                  }));
+                  setErrors({ ...errors, pass: "" });
+                }}
               />
 
               <View style={styles.button}>
@@ -187,54 +201,3 @@ export default function SignUpScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-
-/*const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    top: 10,
-    flexDirection: "column",
-    alignSelf: "center",
-  },
-  header: {
-    flex: 0.2,
-  },
-  middle: {
-    top: 150,
-    flex: 0.6,
-    alignItems: "center",
-    alignSelf: "center",
-    position: "absolute",
-  },
-  titleText: {
-    alignItems: "center",
-    fontSize: 40,
-    fontFamily: "RoundSerif",
-  },
-  text: {
-    alignItems: "center",
-    paddingTop: "5%",
-    fontSize: 22,
-    fontFamily: "Comfortaa",
-  },
-  textRegular: {
-    fontSize: 18,
-    paddingLeft: 10,
-    fontFamily: "Comfortaa",
-  },
-  textSmall: {
-    fontSize: 12,
-    paddingLeft: 10,
-    fontFamily: "Comfortaa",
-  },
-  input: {
-    height: 50,
-    margin: 10,
-    padding: 10,
-    backgroundColor: "white",
-    borderColor: "white",
-  },
-  button: {
-    height: 50,
-    margin: 10,
-  },
-});*/

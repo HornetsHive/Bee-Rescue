@@ -1,13 +1,13 @@
 import * as React from "react";
+
 import { useFonts } from "expo-font";
 import Axios from "axios";
-import { StatusBar } from "expo-status-bar";
 import {
-  StyleSheet,
   Text,
   View,
-  ScrollView,
   Image,
+  ScrollView,
+  StyleSheet,
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
