@@ -22,9 +22,10 @@ export default function App() {
           headerShown: false,
         }}
       >
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+
         <Stack.Screen name="AccountScreen" component={AccountScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="MyReportsScreen" component={MyReportsScreen} />
         <Stack.Screen name="PreferencesScreen" component={PreferencesScreen} />
         <Stack.Screen name="ReportInfoScreen" component={ReportInfoScreen} />

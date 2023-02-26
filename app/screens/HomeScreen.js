@@ -1,16 +1,13 @@
 import * as React from "react";
+
 import { useFonts } from "expo-font";
 import axios from "axios";
-import { useEffect, useState, Component } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
-  StyleSheet,
   Text,
   View,
   Image,
-  Animated,
   ScrollView,
-  AppRegistry,
+  StyleSheet,
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
