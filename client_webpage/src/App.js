@@ -352,7 +352,7 @@ function App(){
 
                   {/*email*/}
                   <TextInputField 
-                    label="email"
+                    label="Email:"
                     margin={majorScale(1)}
                     required
                     isInvalid={Boolean(errors.email)}
@@ -417,7 +417,7 @@ function App(){
 
                   {/*zip*/}
                   <TextInputField
-                    label="zip"
+                    label="Zip Code:"
                     margin={majorScale(1)}
                     required
                     isInvalid={Boolean(errors.zip)}

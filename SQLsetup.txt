@@ -13,9 +13,11 @@ create table reports (
     lname		varchar(256),
     city		varchar(256),
     p_type		varchar(256), -- property type
+    phone_no	varchar(256), -- consider regions  (areacode)-###-####
     weight		int,
     rdate		datetime DEFAULT now(), -- consider UTC time
-    active		boolean DEFAULT FALSE
+    active		boolean DEFAULT FALSE, 
+    complete	boolean DEFAULT FALSE
 );
 
 create table report_tags (
@@ -31,7 +33,7 @@ create table report_tags (
     chimney				boolean,
     fence				boolean,
     accident			boolean,
-    success 			boolean,
+    success 			boolean, -- consider removing, if not successful reports should be abandonded and remade available
     primary key(r_id),
     foreign key(r_id) references reports(r_id)
 );
@@ -44,8 +46,7 @@ create table BEEKEEPERS (
     phone_no varchar(255),
     address varchar(255),
     city varchar(255),
-    zip varchar(255),
-    pass varchar(255)
+    zip varchar(255)
 );
 create table QUALIFICATIONS (
 	bk_id int NOT NULL,
@@ -100,10 +101,10 @@ CREATE TABLE report_archive (
 -- Triggers
 DELIMITER //
 create trigger QUALIFICATIONS_INSERT
-after insert on BEEKEEPERS
+after insert on Beekeepers
 for each row
 begin
-	insert into QUALIFICATIONS(bk_id, groud_swarms, valve_or_water_main, shrubs, low_tree, mid_tree, tall_tree, fences, low_structure, mid_structure, chimney, interior, cut_or_trap_out, traffic_accidents, bucket_w_pole, ladder, mechanical_lift)
+	insert into QUALIFICATIONS(bk_id, ground_swarms, valve_or_water_main, shrubs, low_tree, mid_tree, tall_tree, fences, low_structure, mid_structure, chimney, interior, cut_or_trap_out, traffic_accidents, bucket_w_pole, ladder, mechanical_lift)
 	values(new.bk_id, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 END //
 delimiter ;
@@ -115,19 +116,24 @@ BEGIN
     INSERT INTO report_tags(r_id, need_help, not_bees, cutout_trapout, ground, tree, indoor, structure, utility_box, chimney, fence, accident) values (new.r_id, null, null, null, null, null, null, null, null, null, null, null);  
 END$
 DELIMITER ;
-
--- DATA WARNING ONLY USE UPDATE AFTER A REPORT IS ACTIVATED, DELETE REPORTS TO SAVE SPACE
+DELIMITER $
+CREATE PROCEDURE one_bk(IN rownum INT, IN rid INT, OUT bkid INT)
+BEGIN
+	SELECT bk_id into bkid FROM active_reports WHERE r_id = rid LIMIT 1 OFFSET rownum;
+END$
+DELIMITER ;
+-- DATA WARNING THIS WILL DUPLICATE COMPLETED REPORTS INTO ARCHIVE TABLE, DELETE REPORTS TO SAVE SPACE
 DELIMITER $
 CREATE TRIGGER updateReports 
 BEFORE UPDATE ON reports
 FOR EACH ROW
 BEGIN
-	IF new.active is FALSE THEN 
+	IF new.complete is TRUE THEN 
     -- archive report
-		INSERT INTO report_archive(r_id, date, category, r_fname, r_lname, address, city, p_type, location, duration, height, size, weight) 
-			VALUES (old.r_id, curdate(), old.category, old.fname, old.lname, old.address, old.city, old.p_type, old.location, old.duration, old.height, old.size, old.weight);
-		INSERT INTO report_archive(bk_id, bk_fname, bk_lname) SELECT bk_id, fname, lname FROM BEEKEEPERS where bk_id =(SELECT bk_id FROM active_reports where active_reports.r_id = old.r_id);
-		INSERT INTO report_archive(need_help, success) SELECT need_help, success FROM report_tags WHERE report_tags.r_id = old.r_id;
+			INSERT INTO report_archive(r_id, date, category, r_fname, r_lname, address, city, p_type, location, duration, height, size, weight, bk_id, bk_fname, bk_lname, need_help, success)
+            SELECT reports.r_id, curdate(), reports.category, reports.fname, reports.lname, reports.address, reports.city, reports.p_type, reports.location, reports.duration, reports.height, reports.size, reports.weight, active_reports.bk_id, BEEKEEPERS.fname, BEEKEEPERS.lname, report_tags.need_help, report_tags.success
+            FROM reports JOIN active_reports ON old.r_id = active_reports.r_id JOIN BEEKEEPERS ON active_reports.bk_id = beekeepers.bk_id JOIN report_tags ON old.r_id = report_tags.r_id
+            WHERE reports.r_id = old.r_id;
     END IF;
 END$
 DELIMITER ;
@@ -141,3 +147,4 @@ BEGIN
 		DELETE FROM report_tags WHERE report_tags.r_id = old.r_id;
 	END IF;
 END$
+delimiter ;
