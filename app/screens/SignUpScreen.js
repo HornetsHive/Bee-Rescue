@@ -23,19 +23,18 @@ function isValidEmail(email) {
 
 function isValidPassword(pass) {
   var strongRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{8,})/;
   return strongRegex.test(pass);
 }
 
 export default function SignUpScreen({ navigation }) {
+  const [errors, setErrors] = useState("");
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
-
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
-  const [errors, setErrors] = useState("");
 
   //submit email and password
   const submitNewUser = (e) => {
@@ -50,13 +49,15 @@ export default function SignUpScreen({ navigation }) {
     Axios.post("http://10.0.2.2:3001/api/bk_insert", {
       email: email,
       pass: pass,
-    })
-      .catch(function (error) {
-        if (error) console.log(error);
-      })
-      .then(() => {
-        console.log("User created!");
-      });
+    }).catch(function (error) {
+      if (error) console.log(error);
+    });
+    console.log("User created!");
+
+    //navigate to prefrences page
+    navigation.navigate("PreferencesScreen", {
+      screen: "PreferencesScreen",
+    });
   };
 
   const validate = () => {
@@ -78,11 +79,6 @@ export default function SignUpScreen({ navigation }) {
       console.log("Please enter a valid email");
     }
     setErrors(newErrors);
-
-    //navigate to prefrences page
-    navigation.navigate("PreferencesScreen", {
-      screen: "PreferencesScreen",
-    });
 
     return !Object.values(newErrors).every((error) => error === "");
   }; /////////////////////////////////////////////////////////////////////////////

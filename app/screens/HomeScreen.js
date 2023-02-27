@@ -24,8 +24,8 @@ export default function HomeScreen({ navigation }) {
   //fetching info from database to display
   const fetchReports = async () => {
     const res = await Axios
-      //replace localhost with user's local IP address for reports to show display
-      .get("http://localhost:3001/api/bk_appReports")
+      //10.0.2.2 is a general IP address for the emulator
+      .get("http://10.0.2.2:3001/api/bk_appReports")
       .then((res) => {
         setReports(res.data);
       })
