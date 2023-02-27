@@ -47,7 +47,7 @@ export default function SignUpScreen({ navigation }) {
       return;
     }
 
-    Axios.post("http://10.254.0.107:3001/api/bk_insert", {
+    Axios.post("http://10.0.2.2:3001/api/bk_insert", {
       email: email,
       pass: pass,
     })
