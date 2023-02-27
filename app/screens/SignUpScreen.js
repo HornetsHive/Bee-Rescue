@@ -32,78 +32,55 @@ export default function SignUpScreen({ navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  const [form, setForm] = useState({
-    fname: "",
-    lname: "",
-    email: "",
-    phone_no: "",
-    address: "",
-    city: "",
-    zip: "",
-    pass: "",
-  });
-
-  const [errors, setErrors] = useState({
-    email: "",
-    pass: "",
-  });
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [errors, setErrors] = useState("");
 
   //submit email and password
   const submitNewUser = (e) => {
     e.preventDefault();
-    // Prevents React from resetting its properties:
-    e.persist();
 
     //validate submition
-    //const err = validate();
-    //if (err) {
-    //console.log("Please input all required fields");
-    //return;
-    //}
+    const err = validate();
+    if (err) {
+      return;
+    }
 
     Axios.post("http://localhost:3001/api/bk_insert", {
-      fname: "test",
-      lname: "test",
-      email: "emailTest",
-      phone_no: "test",
-      address: "test",
-      city: "test",
-      zip: "test",
-      pass: "pass",
+      email: email,
+      pass: pass,
     })
+      .catch(function (error) {
+        if (error) console.log(error);
+      })
       .then(() => {
         console.log("User created!");
-      })
-      .catch(function (error) {
-        console.log(error);
       });
-    console.log("Beekeeper possibly submitted (; ;)");
   };
 
   const validate = () => {
     const newErrors = { ...errors };
-    //if (!form.email) {
-    //newErrors.email = "This field is required";
-    //console.log("Please enter email");
-    //}
-    //if (!form.pass) {
-    //newErrors.pass = "This field is required";
-    //console.log("Please enter pasword");
-    // }
-    //if (!isValidPassword(form.pass)) {
-    //newErrors.pass = "Please enter a valid password";
-    //console.log("Please enter a valid password");
-    //}
-    //if (!isValidEmail(form.email)) {
-    //newErrors.email = "Please enter a valid email";
-    //console.log("Please enter a valid email");
-    //}
-
+    if (!email) {
+      newErrors.email = "This field is required";
+      console.log("Please enter email");
+    }
+    if (!pass) {
+      newErrors.pass = "This field is required";
+      console.log("Please enter pasword");
+    }
+    if (!isValidPassword(pass)) {
+      newErrors.pass = "Please enter a valid password";
+      console.log("Please enter a valid password");
+    }
+    if (!isValidEmail(email)) {
+      newErrors.email = "Please enter a valid email";
+      console.log("Please enter a valid email");
+    }
     setErrors(newErrors);
     return !Object.values(newErrors).every((error) => error === "");
   };
 
-  ////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////////////////////
 
   if (!loaded) {
     return null;
@@ -147,11 +124,8 @@ export default function SignUpScreen({ navigation }) {
                 validationMessage={errors.email ? errors.email : null}
                 type="text"
                 name="email"
-                onChange={(e) => {
-                  setForm((prevState) => ({
-                    ...prevState,
-                    email: e.target,
-                  }));
+                onChangeText={(email) => {
+                  setEmail(email);
                   setErrors({ ...errors, email: "" });
                 }}
               />
@@ -178,11 +152,8 @@ export default function SignUpScreen({ navigation }) {
                 validationMessage={errors.pass ? errors.pass : null}
                 type="text"
                 name="password"
-                onChange={(e) => {
-                  setForm((prevState) => ({
-                    ...prevState,
-                    pass: e.target,
-                  }));
+                onChangeText={(pass) => {
+                  setPass(pass);
                   setErrors({ ...errors, pass: "" });
                 }}
               />
