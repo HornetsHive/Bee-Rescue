@@ -55,18 +55,22 @@ app.post("/api/insert", (req, res) => {
 
   const propertyType = req.body.propertyType;
   const propertyLocation = req.body.propertyLoc;
-  const duration = req.body.duration;
+  const duration = req.body.duration; 
   const height = req.body.height;
   const size = req.body.size;
   const image = req.body.image;
 
+  const phone_no = req.body.phone_no;
+
   const sqlINSERT =
-    "INSERT INTO reports (address, city, fname, lname, email, duration, p_type, location, height, size, category, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO reports (address, city, zip, phone_no, fname, lname, email, duration, p_type, location, height, size, category, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlINSERT,
     [
       address,
       city,
+      zip,
+      phone_no,
       fname,
       lname,
       email,
@@ -136,7 +140,6 @@ app.post("/api/bk_update", (req, res) => {
   const zip = req.body.zip;
   const bk_id = req.body.bk_id;
   
-  //No need to insert bk_id, it manages itself
   const sqlUPDATE =
     "UPDATE BEEKEEPERS SET fname = ?, lname = ?, phone_no = ?, address = ?, city = ?, zip = ? WHERE bk_id = ?;";
   db.query(
@@ -151,7 +154,6 @@ app.post("/api/bk_update", (req, res) => {
 
 // Updates a Beekeeper user's Qualifications where the bk_id is equal to the email/pass combo corresponding to the bk_id of the Beekeepers
 app.post("/api/bk_qualif_update", (req, res) => {
-  
   const ground_swarms = req.body.ground_swarms;
   const valve_or_water_main = req.body.valve_or_water_main;
   const shrubs = req.body.shrubs;
@@ -166,11 +168,37 @@ app.post("/api/bk_qualif_update", (req, res) => {
   const cut_or_trap_out = req.body.cut_or_trap_out;
   const traffic_accidents = req.body.traffic_accidents;
   const bucket_w_pole = req.body.bucket_w_pole;
-  // LADDER IS OF TYPE INT
-  const ladder = req.body.ladder;
+  const ladder = req.body.ladder;  // LADDER IS OF TYPE INT
   const mechanical_lift = req.body.mechanical_lift;
-  // TODO: Update query, consider refactoring tables to remove bk_id and only include email/pass as primary key
-  //const sqlINSERT = "UPDATE QUALIFICATIONS SET "
+  const bk_id = req.body.bk_id;
+  // TODO: Update query, consider refactoring tables to remove bk_id and only include email/pass as primary key, FROM THE DB TEAM: No
+  const sqlUPDATE = "UPDATE QUALIFICATIONS SET ground_swarms = ?, valve_or_water_main = ?, shrubs = ?, low_tree = ?, mid_tree = ?, tall_tree = ?, fences = ?, low_structure = ?, mid_structure = ?, chimney = ?, interior = ?, cut_or_trap_out = ?, traffic_accidents = ?, bucket_w_pole = ?, ladder = ?, mechanical_lift = ? WHERE bk_id = ?;";
+  db.query(
+    sqlUPDATE,
+    [
+      ground_swarms,
+      valve_or_water_main,
+      shrubs,
+      low_tree,
+      mid_tree,
+      tall_tree,
+      fences,
+      low_structure,
+      mid_structure,
+      chimney,
+      interior,
+      cut_or_trap_out,
+      traffic_accidents,
+      bucket_w_pole,
+      ladder,
+      mechanical_lift,
+      bk_id
+    ],
+    (err, result) => {
+      if (err) return res.status(500).send(err.message);
+      console.log(result);
+    }
+  );
 });
 
 //Posts update to mark report as complete TRIGGER WARNING this will delete this report from reports, if you want to find it again it will be in report_archive
