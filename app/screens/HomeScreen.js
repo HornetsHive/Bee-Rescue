@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { useFonts } from "expo-font";
-import axios from "axios";
+import Axios from "axios";
 import {
   Text,
   View,
@@ -14,8 +14,8 @@ import {
 } from "react-native";
 
 export default function HomeScreen({ navigation }) {
-  const reportArray = new Array();
   const [reports, setReports] = React.useState([]);
+  const reportArray = new Array();
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }) {
 
   //fetching info from database to display
   const fetchReports = async () => {
-    const res = await axios
+    const res = await Axios
       //replace localhost with user's local IP address for reports to show display
       .get("http://localhost:3001/api/bk_appReports")
       .then((res) => {

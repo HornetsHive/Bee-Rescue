@@ -1,19 +1,20 @@
+import * as ImagePicker from "expo-image-picker";
+
 import { useFonts } from "expo-font";
 import { useState } from "react";
-import * as ImagePicker from "expo-image-picker";
 import {
-  StyleSheet,
   Text,
   View,
-  Button,
   Image,
-  SafeAreaView,
-  TextInput,
   Switch,
-  ScrollView,
-  TouchableOpacity,
+  Button,
+  TextInput,
   StatusBar,
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 
 export default function AccountScreen({ navigation }) {

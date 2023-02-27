@@ -1,15 +1,16 @@
+import * as React from "react";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { styles } from "../StyleSheet";
-import * as React from "react";
 import { useFonts } from "expo-font";
 import {
   Text,
   View,
-  ImageBackground,
-  Button,
   Image,
-  SafeAreaView,
+  Button,
   TextInput,
+  SafeAreaView,
+  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 

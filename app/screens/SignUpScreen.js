@@ -1,7 +1,9 @@
+import * as React from "react";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import React, { useState } from "react";
 import { styles } from "../StyleSheet";
 import { useFonts } from "expo-font";
+import { useState } from "react";
 import Axios from "axios";
 import {
   Text,
@@ -11,7 +13,6 @@ import {
   TextInput,
   SafeAreaView,
   ImageBackground,
-  TouchableOpacity,
 } from "react-native";
 
 function isValidEmail(email) {
@@ -46,7 +47,7 @@ export default function SignUpScreen({ navigation }) {
       return;
     }
 
-    Axios.post("http://localhost:3001/api/bk_insert", {
+    Axios.post("http://10.254.0.107:3001/api/bk_insert", {
       email: email,
       pass: pass,
     })
@@ -77,10 +78,14 @@ export default function SignUpScreen({ navigation }) {
       console.log("Please enter a valid email");
     }
     setErrors(newErrors);
-    return !Object.values(newErrors).every((error) => error === "");
-  };
 
-  /////////////////////////////////////////////////////////////////////////////
+    //navigate to prefrences page
+    navigation.navigate("PreferencesScreen", {
+      screen: "PreferencesScreen",
+    });
+
+    return !Object.values(newErrors).every((error) => error === "");
+  }; /////////////////////////////////////////////////////////////////////////////
 
   if (!loaded) {
     return null;

@@ -1,21 +1,19 @@
 import * as React from "react";
+
 import { useFonts } from "expo-font";
 import Axios from "axios";
-import { StatusBar } from "expo-status-bar";
 import {
-  StyleSheet,
   Text,
   View,
-  ScrollView,
   Image,
+  ScrollView,
+  StyleSheet,
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import axios from "axios";
 
 export default function ReportInfoScreen({ navigation }) {
-  const onPress = () => {};
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -43,7 +41,7 @@ export default function ReportInfoScreen({ navigation }) {
   */
 
   // Claims a dummy report. Just passes 1 for the r_id and 1 for the bk_id for now.
-  claimReport = () => {
+  const claimReport = () => {
     Axios.post("http://localhost:3001/api/claim_report", {
       r_id: 0,
       bk_id: 0,

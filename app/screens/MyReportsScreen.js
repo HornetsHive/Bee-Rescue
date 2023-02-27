@@ -13,7 +13,6 @@ import {
 } from "react-native";
 
 export default function MyReportsScreen({ navigation }) {
-  const onPress = () => {};
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),

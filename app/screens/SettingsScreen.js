@@ -1,31 +1,34 @@
-import { useFonts } from "expo-font";
-import React, { useState } from "react";
+import * as React from "react";
 
+import { useFonts } from "expo-font";
+import { useState } from "react";
 import {
-  StyleSheet,
   Text,
   View,
   Image,
-  SafeAreaView,
-  TextInput,
   Switch,
   Button,
+  TextInput,
   ScrollView,
-  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
   ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 
 export default function SettingsScreen({ navigation }) {
+  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
+  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
+
+  const [text, onChangeText] = React.useState("example@gmail.com");
+
   const [isEnabled1, setIsEnabled1] = useState(true);
   const [isEnabled2, setIsEnabled2] = useState(true);
   const [shouldShow, setShouldShow] = useState(true);
-  const [text, onChangeText] = React.useState("example@gmail.com");
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
-  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
-  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
 
   if (!loaded) {
     return null;

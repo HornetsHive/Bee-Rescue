@@ -1,23 +1,21 @@
 import * as React from "react";
+
 import { useFonts } from "expo-font";
 import { useState } from "react";
-import CheckBox from "@react-native-community/checkbox";
 import {
-  StyleSheet,
   Text,
   View,
   Image,
-  Button,
-  SafeAreaView,
   TextInput,
   ScrollView,
-  Switch,
-  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
 } from "react-native";
 
 export default function PreferencesScreen({ navigation }) {
-  const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  const [isEnabled, setIsEnabled] = useState(true);
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
