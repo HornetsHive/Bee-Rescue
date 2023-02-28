@@ -16,6 +16,9 @@ import {
 export default function HomeScreen({ navigation }) {
   const [reports, setReports] = React.useState([]);
   const reportArray = new Array();
+  const dateArray = new Array();
+  const timeArray = new Array();
+  const dateTime = new Array();
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -53,12 +56,52 @@ export default function HomeScreen({ navigation }) {
   var i = 0;
   reports.map((reports) => {
     reportArray[i] = [reports.address, ", ", reports.city];
+    dateArray[i] = [reports.rdate];
     i++;
   });
 
-  //for (var j = 0; j < reportArray.length; j++) {
-  //console.log(j + 1, ": ", reportArray[j]);
-  //}
+  //dateTime conversions for homescreen display
+  for (var j = 0; j < reportArray.length; j++) {
+    //stringinfy the array with the date and time
+    dateArray[j] = JSON.stringify(dateArray[j]);
+
+    //split between date and time
+    dateArray[j] = dateArray[j].split("T");
+    var time = dateArray[j][1];
+
+    //separate the date and its parts
+    dateArray[j] = dateArray[j][0].split('"');
+    dateArray[j] = dateArray[j][1].split("-");
+
+    //extract time from the date array
+    timeArray[j] = time.split(".");
+    //separate hours, minutes, seconds
+    timeArray[j] = timeArray[j][0];
+    timeArray[j] = timeArray[j].split(":");
+    ///////////////////////////////////////
+
+    //convert the date array to logical format of integers
+    var month = parseInt(dateArray[j][1]);
+    var day = parseInt(dateArray[j][2]);
+    dateArray[j] = [month, "/", day];
+
+    //convert time array to logical format of integers with am and pm
+    var hour = parseInt(timeArray[j][0]);
+    var minute = parseInt(timeArray[j][1]);
+    var am_pm = "am";
+    if (hour <= 12) {
+      am_pm = "pm";
+    }
+
+    hour = hour % 12;
+    if (hour == 0) {
+      hour = 12;
+    }
+    timeArray[j] = [hour, ":", minute, " ", am_pm];
+
+    //put date and time into one array to use for display
+    dateTime[j] = [dateArray[j], " at ", timeArray[j]];
+  }
 
   if (!loaded) {
     return null;
@@ -165,7 +208,7 @@ export default function HomeScreen({ navigation }) {
                   ></Image>
                 </TouchableOpacity>
               </View>
-              <Text>[time]</Text>
+              <Text>{dateTime[0]}</Text>
             </View>
           </TouchableOpacity>
 
@@ -188,7 +231,7 @@ export default function HomeScreen({ navigation }) {
                   ></Image>
                 </TouchableOpacity>
               </View>
-              <Text>[time]</Text>
+              <Text>{dateTime[1]}</Text>
             </View>
           </TouchableOpacity>
 
@@ -211,7 +254,7 @@ export default function HomeScreen({ navigation }) {
                   ></Image>
                 </TouchableOpacity>
               </View>
-              <Text>[time]</Text>
+              <Text>{dateTime[2]}</Text>
             </View>
           </TouchableOpacity>
 
@@ -234,7 +277,7 @@ export default function HomeScreen({ navigation }) {
                   ></Image>
                 </TouchableOpacity>
               </View>
-              <Text>[time]</Text>
+              <Text>{dateTime[3]}</Text>
             </View>
           </TouchableOpacity>
         </ScrollView>

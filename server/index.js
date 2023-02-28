@@ -269,12 +269,11 @@ app.get("/api/bk_user", (req, res) => {
   });
 });
 
-// Fetches the user email/password unique pair based on beekeepers ID 
+// Fetches the user email/password unique pair based on beekeepers ID
 app.get("/api/bk_pass", (req, res) => {
   const bk_id = req.body.bk_id;
 
-  const sqlQuery =
-    "SELECT email, pass FROM BEEKEEPERS WHERE bk_id = ?";
+  const sqlQuery = "SELECT email, pass FROM BEEKEEPERS WHERE bk_id = ?";
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
@@ -284,21 +283,19 @@ app.get("/api/bk_pass", (req, res) => {
 
 // Fetches the Beekeeper ID based on the email/password unique pair
 app.get("/api/bk_get", (req, res) => {
-  const email = req.body.email;
-  const pass = req.body.pass;
+  const email = req.params.email; //something is wrong here and this is why i cant query the beekeeper id
+  const pass = req.params.pass; //something is also wrong with this value
 
-  const sqlQuery =
-    "SELECT bk_id FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
+  const sqlQuery = "SELECT bk_id FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
   db.query(sqlQuery, [email, pass], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    console.log(result);
+    console.log("result is " + email + " " + pass);
     res.send(result);
   });
 });
 
 // Fetch bee reports to display on the app
 app.get("/api/bk_appReports", (req, res) => {
-  
   const sqlQuery = "SELECT * FROM reports WHERE active = false;";
   db.query(sqlQuery, (err, result) => {
     if (err) return res.status(500).send(err.message);
@@ -311,7 +308,8 @@ app.get("/api/bk_appReports", (req, res) => {
 app.get("/api/bk_claimedReports", (req, res) => {
   const bk_id = req.body.bk_id;
 
-  const sqlQuery = "SELECT * FROM reports JOIN active_reports ON reports.r_id = active_reports.r_id WHERE reports.active = true AND active_reports.bk_id = ?;";
+  const sqlQuery =
+    "SELECT * FROM reports JOIN active_reports ON reports.r_id = active_reports.r_id WHERE reports.active = true AND active_reports.bk_id = ?;";
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);

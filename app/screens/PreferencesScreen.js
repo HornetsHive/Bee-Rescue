@@ -47,16 +47,24 @@ export default function PreferencesScreen({ navigation }) {
     ComfortaaBold: require("../assets/fonts/Comfortaa-Bold.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
+  const id = 0;
+  const email = "email@gmail.com";
 
   // Get the current bk_id for correct preferences
   const fetchBeekeeper = async () => {
     const res = await Axios
       //10.0.2.2 is a general IP address for the emulator
       .get("http://10.0.2.2:3001/api/bk_get", {
-        params: { email: "uniqueEmail@gmail.com", pass: "uniquePass#00" },
+        params: { email: "email@gmail.com", pass: "Password@123" },
       })
       .then((res) => {
+        console.log(res.data);
         setUser(res.data);
+
+        user.map((user) => {
+          id = user.bk_id;
+          console.log("ID = ", id);
+        });
       })
       .catch(function (error) {
         if (error.response) {
@@ -111,9 +119,9 @@ export default function PreferencesScreen({ navigation }) {
           ></Button>
           <Text>
             {user.map((user) => {
-              user.email, user.pass;
+              user.bk_id;
             })}
-            testing "{user.email}" and "{user.pass}"
+            testing "{user.bk_id}" or "{id}"
           </Text>
 
           <View
