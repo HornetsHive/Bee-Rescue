@@ -237,6 +237,25 @@ app.post("/api/abandon_report", (req, res) => {
   });
 });
 
+app.post("/api/claim_report", (req, res) => {
+  const r_id = req.body.r_id;
+  const bk_id = req.body.bk_id;
+
+  const sqlInsert = "INSERT INTO active_reports (bk_id, r_id) VALUES (?, ?)";
+  db.query(sqlInsert, [bk_id, r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(res);
+    res.send(result);
+  });
+
+  const sqlUpdate = "UPDATE reports SET active = true WHERE r_id = ?;";
+  db.query(sqlUpdate, [r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(res);
+    res.send(result);
+  });
+});
+
 //GET REALMS//
 
 // Fetches a user email from the Beekeepers table
@@ -250,14 +269,13 @@ app.get("/api/bk_user", (req, res) => {
   });
 });
 
-// Fetches the user email/password unique pair based on that pairing // why is this here, you already have the email and pass
+// Fetches the user email/password unique pair based on beekeepers ID 
 app.get("/api/bk_pass", (req, res) => {
-  const email = req.body.email;
-  const pass = req.body.pass;
+  const bk_id = req.body.bk_id;
 
   const sqlQuery =
-    "SELECT email, pass FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
-  db.query(sqlQuery, [email, pass], (err, result) => {
+    "SELECT email, pass FROM BEEKEEPERS WHERE bk_id = ?";
+  db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
     res.send(result);
@@ -280,29 +298,33 @@ app.get("/api/bk_get", (req, res) => {
 
 // Fetch bee reports to display on the app
 app.get("/api/bk_appReports", (req, res) => {
-  const active = req.body.active;
-
+  
   const sqlQuery = "SELECT * FROM reports WHERE active = false;";
-  db.query(sqlQuery, [active], (err, result) => {
+  db.query(sqlQuery, (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
     res.send(result);
   });
 });
 
-app.post("/api/claim_report", (req, res) => {
-  const r_id = req.body.r_id;
+// Feteches reports a beekeeper has claimed for MyReports for a report to show here active must be true
+app.get("/api/bk_claimedReports", (req, res) => {
   const bk_id = req.body.bk_id;
 
-  const sqlInsert = "INSERT INTO active_reports (bk_id, r_id) VALUES (?, ?)";
-  db.query(sqlInsert, [bk_id, r_id], (err, result) => {
+  const sqlQuery = "SELECT * FROM reports JOIN active_reports ON reports.r_id = active_reports.r_id WHERE reports.active = true AND active_reports.bk_id = ?;";
+  db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
     res.send(result);
   });
+});
 
-  const sqlUpdate = "UPDATE reports SET active = true WHERE r_id = ?;";
-  db.query(sqlUpdate, [r_id], (err, result) => {
+// Feteches reports a beekeeper has completed for MyReports
+app.get("/api/bk_completedReports", (req, res) => {
+  const bk_id = req.body.bk_id;
+
+  const sqlQuery = "SELECT * FROM report_archive WHERE bk_id = ?";
+  db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
     res.send(result);
