@@ -250,7 +250,7 @@ app.get("/api/bk_user", (req, res) => {
   });
 });
 
-// Fetches the user email/password unique pair based on that pairing
+// Fetches the user email/password unique pair based on that pairing // why is this here, you already have the email and pass
 app.get("/api/bk_pass", (req, res) => {
   const email = req.body.email;
   const pass = req.body.pass;
@@ -270,7 +270,7 @@ app.get("/api/bk_get", (req, res) => {
   const pass = req.body.pass;
 
   const sqlQuery =
-    "SELECT bk_id FROM BEEKEEPERS NATURAL JOIN QUALIFICATIONS WHERE email = ? AND pass = ?;";
+    "SELECT bk_id FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
   db.query(sqlQuery, [email, pass], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
