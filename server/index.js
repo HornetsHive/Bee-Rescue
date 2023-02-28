@@ -264,13 +264,13 @@ app.get("/api/bk_pass", (req, res) => {
   });
 });
 
-// Fetches the entire Beekeeper user entry based on the email/password unique pair
+// Fetches the Beekeeper ID based on the email/password unique pair
 app.get("/api/bk_get", (req, res) => {
   const email = req.body.email;
   const pass = req.body.pass;
 
   const sqlQuery =
-    "SELECT * FROM BEEKEEPERS NATURAL JOIN QUALIFICATIONS WHERE email = ? AND pass = ?;";
+    "SELECT bk_id FROM BEEKEEPERS NATURAL JOIN QUALIFICATIONS WHERE email = ? AND pass = ?;";
   db.query(sqlQuery, [email, pass], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
