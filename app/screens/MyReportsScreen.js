@@ -13,6 +13,10 @@ import {
 } from "react-native";
 
 export default function MyReportsScreen({ navigation }) {
+  const [claimedreports, setClaimedReports] = React.useState([]);
+  const [completedreports, setCompletedReports] = React.useState([]);
+  const clamReportArray = new Array();
+  const compReportArray = new Array();
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -23,20 +27,58 @@ export default function MyReportsScreen({ navigation }) {
   }
 
   //fetching info from database to display
-  showReports = () => {
-    Axios.get("http://localhost:3001/api/bk_appReports")
+  const showClaimedReports = async () => { //what does async do and can there be more than one?
+    const res = await Axios
+    .get("http://10.0.2.2:3001/api/bk_claimedReports")
       .then((res) => {
-        const data = res.data;
-        console.log("db data:");
-        console.log(data);
+        setClaimedReports(res.data);
       })
       .catch(function (error) {
-        //promise eror with Axios
-        console.log("There has been a problem with your fetch operation");
-        throw error;
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error: ", error.message);
+        }
+        console.log(error.config);
       });
+      return res;
   };
-  completeReport = () => {
+  var i = 0;
+  claimedreports.map((reports) => {
+    clamReportArray[i] = [reports.address, ", ", reports.city, " ", reports.rdate]; //not sure how this does what it does
+    i++;
+  });
+  const showCompletedReports = async () => {
+    const res = await Axios
+    .get("http://10.0.2.2:3001/api/bk_completedReports")
+      .then((res) => {
+        setCompletedReports(res.data);
+      })
+      .catch(function (error) {
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error: ", error.message);
+        }
+        console.log(error.config);
+      });
+      return res;
+  };
+  var j = 0;
+  completedreports.map((reports_archive) => {
+    compReportArray[j] = [reports_archive.address, ", ", reports_archive.city, " ", reports_archive.date]; //not sure how this does what it does
+    j++;
+  });
+  /* to be used in report info screen
+  const completeReport = () => {
     Axios.post("http://localhost:3001/api/complete_report", {
       r_id: 0, //dummy value must get the actual report id
     })
@@ -47,6 +89,9 @@ export default function MyReportsScreen({ navigation }) {
         console.log(error);
       });
   };
+  */
+
+  //-----------------this return needs rewritting to be more like home screen----------------------//
   return (
     <View style={styles.container}>
       <View style={styles.header}>
