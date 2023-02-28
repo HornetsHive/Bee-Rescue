@@ -55,7 +55,7 @@ app.post("/api/insert", (req, res) => {
 
   const propertyType = req.body.propertyType;
   const propertyLocation = req.body.propertyLoc;
-  const duration = req.body.duration; 
+  const duration = req.body.duration;
   const height = req.body.height;
   const size = req.body.size;
   const image = req.body.image;
@@ -118,16 +118,11 @@ app.post("/api/insert", (req, res) => {
 app.post("/api/bk_insert", (req, res) => {
   const email = req.body.email;
   const pass = req.body.pass;
-  const sqlINSERT =
-    "INSERT INTO BEEKEEPERS (email, pass) VALUES (?, ?);";
-  db.query(
-    sqlINSERT,
-    [email, pass],
-    (err, result) => {
-      if (err) return res.status(500).send(err.message);
-      console.log(result);
-    }
-  );
+  const sqlINSERT = "INSERT INTO BEEKEEPERS (email, pass) VALUES (?, ?);";
+  db.query(sqlINSERT, [email, pass], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(result);
+  });
 });
 
 // Update Beekeeper table with personal info
@@ -139,7 +134,7 @@ app.post("/api/bk_update", (req, res) => {
   const city = req.body.city;
   const zip = req.body.zip;
   const bk_id = req.body.bk_id;
-  
+
   const sqlUPDATE =
     "UPDATE BEEKEEPERS SET fname = ?, lname = ?, phone_no = ?, address = ?, city = ?, zip = ? WHERE bk_id = ?;";
   db.query(
@@ -168,11 +163,12 @@ app.post("/api/bk_qualif_update", (req, res) => {
   const cut_or_trap_out = req.body.cut_or_trap_out;
   const traffic_accidents = req.body.traffic_accidents;
   const bucket_w_pole = req.body.bucket_w_pole;
-  const ladder = req.body.ladder;  // LADDER IS OF TYPE INT
+  const ladder = req.body.ladder; // LADDER IS OF TYPE INT
   const mechanical_lift = req.body.mechanical_lift;
   const bk_id = req.body.bk_id;
   // TODO: Update query, consider refactoring tables to remove bk_id and only include email/pass as primary key, FROM THE DB TEAM: No
-  const sqlUPDATE = "UPDATE QUALIFICATIONS SET ground_swarms = ?, valve_or_water_main = ?, shrubs = ?, low_tree = ?, mid_tree = ?, tall_tree = ?, fences = ?, low_structure = ?, mid_structure = ?, chimney = ?, interior = ?, cut_or_trap_out = ?, traffic_accidents = ?, bucket_w_pole = ?, ladder = ?, mechanical_lift = ? WHERE bk_id = ?;";
+  const sqlUPDATE =
+    "UPDATE QUALIFICATIONS SET ground_swarms = ?, valve_or_water_main = ?, shrubs = ?, low_tree = ?, mid_tree = ?, tall_tree = ?, fences = ?, low_structure = ?, mid_structure = ?, chimney = ?, interior = ?, cut_or_trap_out = ?, traffic_accidents = ?, bucket_w_pole = ?, ladder = ?, mechanical_lift = ? WHERE bk_id = ?;";
   db.query(
     sqlUPDATE,
     [
@@ -192,7 +188,7 @@ app.post("/api/bk_qualif_update", (req, res) => {
       bucket_w_pole,
       ladder,
       mechanical_lift,
-      bk_id
+      bk_id,
     ],
     (err, result) => {
       if (err) return res.status(500).send(err.message);
@@ -262,7 +258,9 @@ app.get("/api/bk_pass", (req, res) => {
   const sqlQuery =
     "SELECT email, pass FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
   db.query(sqlQuery, [email, pass], (err, result) => {
+    if (err) return res.status(500).send(err.message);
     console.log(result);
+    res.send(result);
   });
 });
 
@@ -274,7 +272,9 @@ app.get("/api/bk_get", (req, res) => {
   const sqlQuery =
     "SELECT * FROM BEEKEEPERS NATURAL JOIN QUALIFICATIONS WHERE email = ? AND pass = ?;";
   db.query(sqlQuery, [email, pass], (err, result) => {
+    if (err) return res.status(500).send(err.message);
     console.log(result);
+    res.send(result);
   });
 });
 

@@ -2,10 +2,10 @@ import * as React from "react";
 
 import { useFonts } from "expo-font";
 import { useState } from "react";
+import Axios from "axios";
 import {
   Text,
   View,
-  Image,
   Switch,
   Button,
   TextInput,
@@ -13,12 +13,17 @@ import {
   StyleSheet,
   SafeAreaView,
   ImageBackground,
-  TouchableOpacity,
 } from "react-native";
 
 export default function PreferencesScreen({ navigation }) {
-  const [name, setName] = useState();
-  const [loc, setLocation] = useState();
+  const switchColor = { false: "#808080", true: "#d92978" };
+  const [user, setUser] = React.useState([]);
+  const [fname, setFName] = useState("");
+  const [lname, setLName] = useState("");
+  const [phone_no, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [zip, setZip] = useState("");
   const [maxHeight, setMaxHeight] = useState();
   const [cooperative, setCoop] = useState(false);
   const [ability1, setAbility1] = useState(false);
@@ -39,13 +44,54 @@ export default function PreferencesScreen({ navigation }) {
   const [equipment3, setEquip3] = useState(false);
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
+    ComfortaaBold: require("../assets/fonts/Comfortaa-Bold.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
+
+  // Get the current bk_id for correct preferences
+  const fetchBeekeeper = async () => {
+    const res = await Axios
+      //10.0.2.2 is a general IP address for the emulator
+      .get("http://10.0.2.2:3001/api/bk_get", {
+        params: { email: "uniqueEmail@gmail.com", pass: "uniquePass#00" },
+      })
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          //Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+        }
+        console.log(error.config);
+      });
+    return res;
+  };
+
+  //send beekeeper info and update SQL table
+  const updateNewUser = (e) => {
+    //validate
+    //axios.post
+    //navigae to homescreen
+  };
+  const validate = () => {
+    //check for errors and set them if found
+  };
 
   if (!loaded) {
     return null;
   }
-  // Get the current bk_id for correct preferences
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -53,247 +99,390 @@ export default function PreferencesScreen({ navigation }) {
         source={require("../assets/gradient4.png")}
         resizeMode="cover"
       >
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("AccountScreen", { screen: "AccountScreen" })
-            }
-          >
-            <Image
-              source={require("../assets/menuButton.png")}
-              style={{
-                resizeMode: "contain",
-                height: 30,
-                width: 30,
-              }}
-            />
-          </TouchableOpacity>
+        <View style={styles.headerTxt}>
           <Text style={styles.titleText}>Preferences</Text>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("SettingsScreen", {
-                screen: "SettingsScreen",
-              })
-            }
-          >
-            <Image
-              source={require("../assets/bell.png")}
-              style={{
-                resizeMode: "contain",
-                height: 30,
-                width: 30,
-              }}
-            />
-          </TouchableOpacity>
         </View>
 
         <ScrollView style={styles.middle}>
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ flexDirection: "column", width: 200 }}>
-              <Text style={styles.textRegular}>* First Name</Text>
-              <TextInput style={styles.input} />
+          <Button //This button and text is for testing!
+            color="#da628c"
+            title="Dummy Button"
+            onPress={fetchBeekeeper}
+          ></Button>
+          <Text>
+            {user.map((user) => {
+              user.email, user.pass;
+            })}
+            testing "{user.email}" and "{user.pass}"
+          </Text>
+
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "center",
+                width: 200,
+              }}
+            >
+              <Text style={styles.textRegular}>First Name</Text>
+              <TextInput
+                style={styles.input}
+                label="fname"
+                required
+                //isInvalid={Boolean(errors.fname)}
+                //validationMessage={errors.fname ? errors.fname : null}
+                type="text"
+                onChangeText={(fname) => {
+                  setFName(fname);
+                  //setErrors({ ...errors, fname: "" });
+                }}
+              />
             </View>
 
-            <View style={{ flexDirection: "column", width: 200 }}>
-              <Text style={styles.textRegular}>* Last Name</Text>
-              <TextInput style={styles.input} />
+            <View
+              style={{
+                flexDirection: "column",
+                alignItems: "center",
+                width: 200,
+              }}
+            >
+              <Text style={styles.textRegular}>Last Name</Text>
+              <TextInput
+                style={styles.input}
+                label="lname"
+                required
+                //isInvalid={Boolean(errors.lname)}
+                //validationMessage={errors.lname ? errors.lname : null}
+                type="text"
+                onChangeText={(lname) => {
+                  setLName(lname);
+                  //setErrors({ ...errors, lname: "" });
+                }}
+              />
             </View>
           </View>
-          <Text style={styles.textRegular}>* Phone Number</Text>
-          <TextInput style={styles.input} placeholder="(XXX) XXX - XXXX" />
-          <Text style={styles.textRegular}>* Location Zip Code</Text>
-          <TextInput style={styles.input} placeholder="e.g., 12345" />
+
+          <Text style={styles.textRegular}>Phone Number</Text>
+          <TextInput
+            style={styles.input}
+            label="phone_no"
+            required
+            //isInvalid={Boolean(errors.phone_no)}
+            //validationMessage={errors.phone_no ? errors.phone_no : null}
+            type="text"
+            placeholder="(XXX) XXX - XXXX"
+            onChangeText={(phone_no) => {
+              setPhone(phone_no);
+              //setErrors({ ...errors, phone_no: "" });
+            }}
+          />
+          <Text style={styles.textRegular}>Address</Text>
+          <TextInput
+            style={styles.input}
+            label="address"
+            required
+            //isInvalid={Boolean(errors.address)}
+            //validationMessage={errors.address ? errors.address : null}
+            type="text"
+            placeholder="(e.g., 9876 MapleWood Dr.)"
+            onChangeText={(address) => {
+              setAddress(address);
+              //setErrors({ ...errors, address: "" });
+            }}
+          />
+          <Text style={styles.textRegular}>City</Text>
+          <TextInput
+            style={styles.input}
+            label="city"
+            required
+            //isInvalid={Boolean(errors.city)}
+            //validationMessage={errors.city ? errors.city : null}
+            type="text"
+            placeholder="(e.g., Beesvile)"
+            onChangeText={(city) => {
+              setCity(city);
+              //setErrors({ ...errors, city: "" });
+            }}
+          />
+          <Text style={styles.textRegular}>Zip Code</Text>
+          <TextInput
+            style={styles.input}
+            label="zip"
+            required
+            //isInvalid={Boolean(errors.zip)}
+            //validationMessage={errors.zip ? errors.zip : null}
+            type="text"
+            placeholder="(e.g., 12345)"
+            onChangeText={(zip) => {
+              setZip(zip);
+              //setErrors({ ...errors, zip: "" });
+            }}
+          />
+
+          <View style={styles.divider}>{/*****************************/}</View>
+
           <Text style={styles.textRegular}>
-            * Please indicate the locations you are skilled at gathering swarm
-            clusters:
+            Please indicate the locations you are skilled at gathering swarm
+            clusters.
           </Text>
-          <View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>Ground Swarms</Text>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Ground Swarms</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability1 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability1}
+                trackColor={switchColor}
+                thumbColor={ability1 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility1(!ability1)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>Valve Box/Water Main</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Valve Box/Water Main</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability2 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability2}
+                trackColor={switchColor}
+                thumbColor={ability2 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility2(!ability2)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>Shrubs</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Shrubs</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability3 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability3}
+                trackColor={switchColor}
+                thumbColor={ability3 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility3(!ability3)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>Low Tree (Up to 10 feet)</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Low Tree (Up to 10 feet)</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability4 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability4}
+                trackColor={switchColor}
+                thumbColor={ability4 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility4(!ability4)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>
-                Mid Size Tree (Up to 20 feet)
-              </Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Mid Size Tree (Up to 20 feet)</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability5 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability5}
+                trackColor={switchColor}
+                thumbColor={ability5 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility5(!ability5)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>Tall Tree (Over 20 feet)</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Tall Tree (Over 20 feet)</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability6 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability6}
+                trackColor={switchColor}
+                thumbColor={ability6 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility6(!ability6)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>Fences</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Fences</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability7 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability7}
+                trackColor={switchColor}
+                thumbColor={ability7 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility7(!ability7)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>
-                Low Structure (Up to 10 feet)
-              </Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Low Structure (Up to 10 feet)</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability8 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability8}
+                trackColor={switchColor}
+                thumbColor={ability8 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility8(!ability8)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>
-                Medium Tall Structure (up to 20 feet)
-              </Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>
+              Medium Tall Structure (up to 20 feet)
+            </Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability9 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability9}
+                trackColor={switchColor}
+                thumbColor={ability9 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility9(!ability9)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>Chimney</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Chimney</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability10 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability10}
+                trackColor={switchColor}
+                thumbColor={ability10 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility10(!ability10)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>
-                Interior (Office, House, Shed, Garage, etc)
-              </Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>
+              Interior (House, Shed, Garage, etc.)
+            </Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability11 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability11}
+                trackColor={switchColor}
+                thumbColor={ability11 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility11(!ability11)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>Cut Out/Trap Out</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Cut Out/Trap Out</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability12 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability12}
+                trackColor={switchColor}
+                thumbColor={ability12 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility12(!ability12)}
               ></Switch>
             </View>
-            <View style={styles.aligned}>
-              <Text style={styles.textSmall}>Traffic Accidents</Text>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Traffic Accidents</Text>
+            <View style={styles.switch}>
               <Switch
-                style={styles.switch}
-                trackColor={{ false: "#808080", true: "#d92978" }}
-                thumbColor={ability13 ? "#FFFFFF" : "#f4f3f4"}
                 value={ability13}
+                trackColor={switchColor}
+                thumbColor={ability13 ? "#FFFFFF" : "#f4f3f4"}
                 onValueChange={() => setAbility13(!ability13)}
               ></Switch>
             </View>
           </View>
+
+          <View style={styles.divider}>{/*****************************/}</View>
+
           <Text style={styles.textRegular}>
-            * Check which special equipment do you have at your disposal to
-            gather swarm clusters?
+            What special equipment do you have at your disposal to gather swarm
+            clusters?
           </Text>
-          <View style={styles.textRegular}>
-            <Text>Bucket with pole</Text>
-            <Text>Ladders up to ____ feet </Text>
-            <Text>Mechanical Lift</Text>
-            <Text>None of the above</Text>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Bucket with pole</Text>
+            <View style={styles.switch}>
+              <Switch
+                value={equipment1}
+                trackColor={switchColor}
+                thumbColor={equipment1 ? "#FFFFFF" : "#f4f3f4"}
+                onValueChange={() => setEquip1(!equipment1)}
+              ></Switch>
+            </View>
           </View>
 
-          <Text style={styles.textRegular}>* Max swarm height preference</Text>
-          <TextInput style={styles.input} placeholder="e.g., 12in, 2ft" />
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Ladders</Text>
+            <View style={styles.switch}>
+              <Switch
+                value={equipment2}
+                trackColor={switchColor}
+                thumbColor={equipment2 ? "#FFFFFF" : "#f4f3f4"}
+                onValueChange={() => setEquip2(!equipment2)}
+              ></Switch>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <Text style={styles.textSmall}>Mechanical Lift</Text>
+            <View style={styles.switch}>
+              <Switch
+                value={equipment3}
+                trackColor={switchColor}
+                thumbColor={equipment3 ? "#FFFFFF" : "#f4f3f4"}
+                onValueChange={() => setEquip3(!equipment3)}
+              ></Switch>
+            </View>
+          </View>
+
+          <View style={styles.divider}>{/*****************************/}</View>
+
           <Text style={styles.textRegular}>
-            * Willing to work with other beekeepers?
+            What is your max swarm height preference?
           </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              paddingHorizontal: 20,
+          <TextInput
+            style={styles.input}
+            label="maxHeight"
+            required
+            //isInvalid={Boolean(errors.maxHeight)}
+            //validationMessage={errors.maxHeight ? errors.maxHeight : null}
+            type="text"
+            placeholder="e.g., 12in, 2ft"
+            onChangeText={(maxHeight) => {
+              setMaxHeight(maxHeight);
+              //setErrors({ ...errors, maxHeight: "" });
             }}
-          >
+          />
+
+          <View style={styles.divider}>{/*****************************/}</View>
+
+          <Text style={styles.textRegular}>
+            Are you willing to work with other beekeepers?
+          </Text>
+          <View style={styles.row}>
             {cooperative ? (
               <View>
-                <Text>Yes</Text>
+                <Text style={styles.textSmall}>Yes</Text>
               </View>
             ) : (
-              <Text>No</Text>
+              <Text style={styles.textSmall}>No</Text>
             )}
-            <Switch
-              style={styles.switch}
-              trackColor={{ false: "#767577", true: "#d92978" }}
-              thumbColor={cooperative ? "#f4f3f4" : "#f4f3f4"}
-              onValueChange={() => setCoop(!cooperative)}
-              value={cooperative}
-            />
+            <View style={styles.switch}>
+              <Switch
+                value={cooperative}
+                trackColor={switchColor}
+                thumbColor={cooperative ? "#f4f3f4" : "#f4f3f4"}
+                onValueChange={() => setCoop(!cooperative)}
+              ></Switch>
+            </View>
           </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "center",
-              padding: 20,
-            }}
-          >
-            <Button color="#16c56b" title="Save Changes"></Button>
+
+          <View style={styles.divider}>{/*****************************/}</View>
+
+          <View style={styles.saveButton}>
+            <Button
+              color="#da628c"
+              title="Save Changes & Continue"
+              onPress={() =>
+                navigation.navigate("HomeScreen", { screen: "HomeScreen" })
+              }
+            ></Button>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -307,17 +496,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "column",
   },
-  header: {
+  headerTxt: {
     flex: 0.1,
-    justifyContent: "space-between",
+    justifyContent: "center",
     flexDirection: "row",
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: "grey",
+    borderBottomColor: "white",
     marginBottom: 10,
+    backgroundColor: "white",
+    paddingHorizontal: 10,
   },
   middle: {
     flex: 1,
+    paddingTop: 10,
+    paddingHorizontal: 10,
     alignSelf: "center",
   },
   footer: {
@@ -332,17 +525,19 @@ const styles = StyleSheet.create({
   },
   textRegular: {
     fontSize: 18,
-    paddingLeft: 15,
-    paddingBottom: 10,
-    fontFamily: "Comfortaa",
+    paddingVertical: 5,
+    textAlign: "center",
+    fontFamily: "ComfortaaBold",
   },
   textSmall: {
     fontSize: 16,
     fontFamily: "Comfortaa",
   },
   input: {
+    flex: 1,
+    flexDirection: "row",
+    alignSelf: "center",
     height: 50,
-    left: 10,
     width: "80%",
     padding: 10,
     margin: 5,
@@ -357,10 +552,32 @@ const styles = StyleSheet.create({
   switch: {
     flex: 1,
     marginRight: 10,
+    flexDirection: "row",
+    justifyContent: "flex-end",
   },
-  aligned: {
+  row: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
+  },
+  saveButton: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 40,
+  },
+  assetButton: {
+    resizeMode: "contain",
+    height: 30,
+    width: 30,
+  },
+  divider: {
+    flex: 1,
+    flexDirection: "row",
+    alignSelf: "center",
+    width: "50%",
+    borderBottomWidth: 1,
+    borderBottomColor: "white",
+    marginVertical: 20,
   },
 });
