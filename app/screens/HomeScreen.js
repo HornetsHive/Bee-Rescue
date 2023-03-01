@@ -23,7 +23,7 @@ export default function HomeScreen({ navigation }) {
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
-
+  
   //fetching info from database to display
   const fetchReports = async () => {
     const res = await Axios
@@ -52,7 +52,7 @@ export default function HomeScreen({ navigation }) {
       });
     return res;
   };
-
+  
   var i = 0;
   reports.map((reports) => {
     reportArray[i] = [reports.address, ", ", reports.city];
@@ -190,11 +190,16 @@ export default function HomeScreen({ navigation }) {
         </View>
         <ScrollView>
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              var specificReport = reports.filter(obj => {
+                return obj.r_id === reports[0].r_id
+              })[0];
+
               navigation.navigate("ReportInfoScreen", {
                 screen: "ReportInfoScreen",
-              })
-            }
+                report: specificReport,
+              });
+            }}
           >
             <View style={styles.task}>
               <View style={styles.taskText}>
@@ -213,11 +218,16 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              var specificReport = reports.filter(obj => {
+                return obj.r_id === reports[1].r_id
+              })[0];
+
               navigation.navigate("ReportInfoScreen", {
                 screen: "ReportInfoScreen",
-              })
-            }
+                report: specificReport,
+              });
+            }}
           >
             <View style={styles.task}>
               <View style={styles.taskText}>
@@ -236,11 +246,16 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              var specificReport = reports.filter(obj => {
+                return obj.r_id === reports[2].r_id
+              })[0];
+
               navigation.navigate("ReportInfoScreen", {
                 screen: "ReportInfoScreen",
-              })
-            }
+                report: specificReport,
+              });
+            }}
           >
             <View style={styles.task}>
               <View style={styles.taskText}>
@@ -259,11 +274,16 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              var specificReport = reports.filter(obj => {
+                return obj.r_id === reports[3].r_id
+              })[0];
+
               navigation.navigate("ReportInfoScreen", {
                 screen: "ReportInfoScreen",
-              })
-            }
+                report: specificReport,
+              });
+            }}
           >
             <View style={styles.task}>
               <View style={styles.taskText}>
