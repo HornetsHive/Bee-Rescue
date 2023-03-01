@@ -18,6 +18,7 @@ function App(){
     city: "",
     zip: "",
     email: "",
+    phone_no: "",
     propertyType: "",
     propertyLoc: "",
     duration: "",
@@ -43,6 +44,7 @@ function App(){
       city: form.city,
       zip: form.zip,
       email: form.email,
+      phone_no: form.phone_no,
       propertyType: form.propertyType,
       propertyLoc: form.propertyLoc,
       duration: form.duration,
@@ -63,6 +65,7 @@ function App(){
     city: "",
     zip: "",
     email: "",
+    phone_no: "",
     propertyType: "",
     propertyLoc: "",
     duration: "",
@@ -96,6 +99,9 @@ function App(){
     }
     if(!form.email){
       newErrors.email = "This field is required"
+    }
+    if(!form.phone_no){
+      newErrors.phone_no = "This field is required"
     }
     if(!form.propertyType){
       newErrors.propertyType = "This field is required"
@@ -365,6 +371,24 @@ function App(){
                         email: e.target.value
                       }));
                       setErrors({...errors, email: ''});
+                    }} 
+                  />
+
+                  {/*phone*/}
+                  <TextInputField 
+                    label="Phone:"
+                    margin={majorScale(1)}
+                    required
+                    isInvalid={Boolean(errors.phone_no)}
+                    validationMessage={errors.phone_no ? errors.phone_no : null}
+                    type="text"
+                    name="phone_no"
+                    onChange={(e)=> {
+                      setForm(prevState => ({
+                        ...prevState,
+                        phone_no: e.target.value
+                      }));
+                      setErrors({...errors, phone_no: ''});
                     }} 
                   />
                 </Pane>
