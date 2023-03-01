@@ -13,7 +13,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default function ReportInfoScreen({ navigation }) {
+export default function ReportInfoScreen({ route, navigation }) {
+  const { report } = route.params
+
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -22,23 +24,6 @@ export default function ReportInfoScreen({ navigation }) {
   if (!loaded) {
     return null;
   }
-
-  //fetching info from database to display
-  /*
-  showReports = () => {
-    Axios.get("http://localhost:3001/api/bk_appReports")
-      .then((res) => {
-        const data = res.data;
-        console.log("db data:");
-        console.log(data);
-      })
-      .catch(function (error) {
-        //promise eror with Axios
-        console.log("There has been a problem with your fetch operation");
-        throw error;
-      });
-  };
-  */
 
   // Claims a dummy report. Just passes 1 for the r_id and 1 for the bk_id for now.
   const claimReport = () => {
@@ -121,7 +106,7 @@ export default function ReportInfoScreen({ navigation }) {
                 top: 7,
               }}
             >
-              123 Maple Street, Sacramento, CA 12345
+              { report.address }
             </Text>
           </View>
         </View>
@@ -143,7 +128,7 @@ export default function ReportInfoScreen({ navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              { report.duration } days
             </Text>
           </View>
         </View>
@@ -165,7 +150,7 @@ export default function ReportInfoScreen({ navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              { report.location }
             </Text>
           </View>
         </View>
@@ -187,7 +172,7 @@ export default function ReportInfoScreen({ navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              { report.height }
             </Text>
           </View>
         </View>
@@ -209,7 +194,7 @@ export default function ReportInfoScreen({ navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              { report.size }
             </Text>
           </View>
         </View>
