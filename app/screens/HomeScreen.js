@@ -13,6 +13,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+//import Report from "../components/report";
+
 export default function HomeScreen({ navigation }) {
   const [reports, setReports] = React.useState([]);
   const reportArray = new Array();
@@ -23,6 +25,9 @@ export default function HomeScreen({ navigation }) {
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
+
+  var location;
+  var date;
   
   //fetching info from database to display
   const fetchReports = async () => {
@@ -189,6 +194,7 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <ScrollView>
+{/*---------------Start of scroll---------------------------------*/}
           <TouchableOpacity
             onPress={() => {
               var specificReport = reports.filter(obj => {
@@ -245,7 +251,7 @@ export default function HomeScreen({ navigation }) {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/*<TouchableOpacity
             onPress={() => {
               var specificReport = reports.filter(obj => {
                 return obj.r_id === reports[2].r_id
@@ -259,7 +265,7 @@ export default function HomeScreen({ navigation }) {
           >
             <View style={styles.task}>
               <View style={styles.taskText}>
-                <Text value={{}} style={{ fontSize: 16 }}>
+                <Text style={{ fontSize: 16 }}>
                   A swarm has been reported at {reportArray[2]}
                 </Text>
                 <TouchableOpacity>
@@ -271,24 +277,15 @@ export default function HomeScreen({ navigation }) {
               </View>
               <Text>{dateTime[2]}</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity>*/}
+          
+          {/*<TouchableOpacity><Report /></TouchableOpacity>*/}
 
-          <TouchableOpacity
-            onPress={() => {
-              var specificReport = reports.filter(obj => {
-                return obj.r_id === reports[3].r_id
-              })[0];
-
-              navigation.navigate("ReportInfoScreen", {
-                screen: "ReportInfoScreen",
-                report: specificReport,
-              });
-            }}
-          >
+          {reportArray.map((report) => <TouchableOpacity>
             <View style={styles.task}>
               <View style={styles.taskText}>
-                <Text value={{}} style={{ fontSize: 16 }}>
-                  A swarm has been reported at {reportArray[3]}
+                <Text style={{ fontSize: 16 }} location={report.address}>
+                  A swarm has been reported at {location}
                 </Text>
                 <TouchableOpacity>
                   <Image
@@ -297,9 +294,11 @@ export default function HomeScreen({ navigation }) {
                   ></Image>
                 </TouchableOpacity>
               </View>
-              <Text>{dateTime[3]}</Text>
+              <Text date={report.dateTime}>{date}</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity>)}
+
+{/*--------------End of scroll-------------------------------*/}
         </ScrollView>
       </View>
 
