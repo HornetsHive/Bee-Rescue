@@ -145,3 +145,7 @@ BEGIN
 	END IF;
 END$
 delimiter ;
+
+-- default beekeeper for testing
+INSERT INTO BEEKEEPERS (email, pass) VALUES ("BobBeekeeper@gmail.com", "password");
+UPDATE BEEKEEPERS SET fname = "Bob", lname = "Beekeeper", phone_no = "12345678910", address = "123 Bee Street", city = "Sacramento", zip = "95819" WHERE bk_id = "1";

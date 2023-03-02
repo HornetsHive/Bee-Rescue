@@ -13,6 +13,7 @@ const db = mysql.createConnection({
   database: "beeDB",
 });
 
+//Set up nodemailer connection
 const transporter = nodemailer.createTransport({
   service: "hotmail",
   auth: {
