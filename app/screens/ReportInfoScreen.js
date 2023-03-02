@@ -25,9 +25,7 @@ export default function ReportInfoScreen({ route, navigation }) {
     return null;
   }
 
-  // Claims a dummy report. Just passes 1 for the r_id and 1 for the bk_id for now.
   const claimReport = () => {
-    //
     Axios.post("http://10.0.2.2:3001/api/claim_report", {
       r_id: report.r_id,
       //Hardcoded to BB
@@ -35,6 +33,7 @@ export default function ReportInfoScreen({ route, navigation }) {
     })
       .then(function (response) {
         console.log(response.data);
+        navigation.navigate("HomeScreen", { screen: "HomeScreen" })
       })
       .catch(function (error) {
         console.log(error);
