@@ -145,7 +145,24 @@ export default function HomeScreen({ navigation }) {
             }}
           />
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("MyReportsScreen", {
+              screen: "MyReportsScreen",
+            })
+          }
+        >
+          <Image
+            source={require("../assets/myReportButton.png")}
+            style={{
+              resizeMode: "contain",
+              height: 30,
+              width: 30,
+            }}
+          />
+        </TouchableOpacity>
       </View>
+      
 
       <View style={styles.middle}>
         <Image
