@@ -27,12 +27,12 @@ export default function ReportInfoScreen({ route, navigation }) {
 
   // Claims a dummy report. Just passes 1 for the r_id and 1 for the bk_id for now.
   const claimReport = () => {
-    Axios.post("http://localhost:3001/api/claim_report", {
-      r_id: 0,
-      bk_id: 0,
+    Axios.post("http://10.0.2.2:3001/api/claim_report", {
+      r_id: report.r_id,
+      bk_id: 1,
     })
       .then(function (response) {
-        console.log(response);
+        console.log(response.data);
       })
       .catch(function (error) {
         console.log(error);
