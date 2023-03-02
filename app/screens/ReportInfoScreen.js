@@ -217,7 +217,7 @@ export default function ReportInfoScreen({ route, navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              {report.category}
             </Text>
           </View>
         </View>
