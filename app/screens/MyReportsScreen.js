@@ -9,10 +9,12 @@ import {
   ScrollView,
   StyleSheet,
   SafeAreaView,
+  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 
-export default function MyReportsScreen({ navigation }) {
+export default function MyReportsScreen({ route, navigation }) {
+  const { report } = route.params;
   const [claimedreports, setClaimedReports] = React.useState([]);
   const [completedreports, setCompletedReports] = React.useState([]);
   const clamReportArray = new Array();
@@ -25,7 +27,7 @@ export default function MyReportsScreen({ navigation }) {
   if (!loaded) {
     return null;
   }
-
+  /*
   //fetching info from database to display
   const showClaimedReports = async () => { //what does async do and can there be more than one?
     const res = await Axios
@@ -77,33 +79,37 @@ export default function MyReportsScreen({ navigation }) {
     compReportArray[j] = [reports_archive.address, ", ", reports_archive.city, " ", reports_archive.date]; //not sure how this does what it does
     j++;
   });
-  /* to be used in report info screen
+  */
+  // to be used in report info screen
   const completeReport = () => {
-    Axios.post("http://localhost:3001/api/complete_report", {
-      r_id: 0, //dummy value must get the actual report id
+    Axios.post("http://10.0.2.2:3001/api/complete_report", {
+      r_id: report.r_id, //dummy value must get the actual report id
     })
       .then(function (response) {
         console.log(response);
+        navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen" })
       })
       .catch(function (error) {
         console.log(error);
       });
   };
-  */
+  //*/
 
   // Abandon the report r_id -- right now its hardcoded to 1
-  abandonReport = () => {
+  const abandonReport = () => {
     console.log("Sent POST request to abandon report.");
-    Axios.post("http://10.0.2.2:3001/api/abandon_report", {r_id: 1})  // Dummy value for r_id
-    .then(function (response) {
-      // If successful, print out the server's response
-      console.log(response.data);
-    })
-    .catch(function (error) {
-      // If error, print the error
-      console.log(error);
-    });;
-  }
+    Axios.post("http://10.0.2.2:3001/api/abandon_report", { 
+      r_id: report.r_id }) // Dummy value for r_id
+      .then(function (response) {
+        // If successful, print out the server's response
+        console.log(response.data);
+        navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen" })
+      })
+      .catch(function (error) {
+        // If error, print the error
+        console.log(error);
+      });
+  };
 
   //-----------------this return needs rewritting to be more like home screen----------------------//
   return (
@@ -124,7 +130,7 @@ export default function MyReportsScreen({ navigation }) {
           />
         </TouchableOpacity>
         <Text style={{ fontFamily: "Comfortaa", fontSize: 17, width: 125 }}>
-          Report Info
+          My Report
         </Text>
         <TouchableOpacity
           onPress={() =>
@@ -188,7 +194,7 @@ export default function MyReportsScreen({ navigation }) {
                 top: 7,
               }}
             >
-              123 Maple Street, Sacramento, CA 12345
+              {report.address}
             </Text>
           </View>
         </View>
@@ -209,7 +215,7 @@ export default function MyReportsScreen({ navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              {report.duration} days
             </Text>
           </View>
         </View>
@@ -230,7 +236,7 @@ export default function MyReportsScreen({ navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              {report.location}
             </Text>
           </View>
         </View>
@@ -251,7 +257,7 @@ export default function MyReportsScreen({ navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              {report.height}
             </Text>
           </View>
         </View>
@@ -272,7 +278,7 @@ export default function MyReportsScreen({ navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              {report.size}
             </Text>
           </View>
         </View>
@@ -293,7 +299,7 @@ export default function MyReportsScreen({ navigation }) {
 
           <View style={styles.content}>
             <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              content
+              {report.category}
             </Text>
           </View>
         </View>

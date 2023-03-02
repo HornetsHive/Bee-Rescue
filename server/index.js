@@ -207,13 +207,11 @@ app.post("/api/complete_report", (req, res) => {
   db.query(sqlUpdate, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
-    res.send(result);
   });
   const sqlDelete = "DELETE FROM reports WHERE r_id = ?;";
   db.query(sqlDelete, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
-    res.send(result);
   });
 });
 
@@ -258,7 +256,7 @@ app.post("/api/claim_report", (req, res) => {
 
 // Fetches a user email from the Beekeepers table
 app.get("/api/bk_user", (req, res) => {
-  const email = req.body.email;
+  const email = req.query.email;
 
   const sqlQuery = "SELECT email FROM BEEKEEPERS WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
@@ -269,7 +267,7 @@ app.get("/api/bk_user", (req, res) => {
 
 // Fetches the user email/password unique pair based on beekeepers ID
 app.get("/api/bk_pass", (req, res) => {
-  const bk_id = req.body.bk_id;
+  const bk_id = req.query.bk_id;
 
   const sqlQuery = "SELECT email, pass FROM BEEKEEPERS WHERE bk_id = ?";
   db.query(sqlQuery, [bk_id], (err, result) => {
@@ -305,7 +303,7 @@ app.get("/api/bk_appReports", (req, res) => {
 
 // Feteches reports a beekeeper has claimed for MyReports for a report to show here active must be true
 app.get("/api/bk_claimedReports", (req, res) => {
-  const bk_id = req.body.bk_id;
+  const bk_id = req.query.bk_id;
 
   const sqlQuery =
     "SELECT * FROM reports JOIN active_reports ON reports.r_id = active_reports.r_id WHERE reports.active = true AND active_reports.bk_id = ?;";
@@ -318,7 +316,7 @@ app.get("/api/bk_claimedReports", (req, res) => {
 
 // Feteches reports a beekeeper has completed for MyReports
 app.get("/api/bk_completedReports", (req, res) => {
-  const bk_id = req.body.bk_id;
+  const bk_id = req.query.bk_id;
 
   const sqlQuery = "SELECT * FROM report_archive WHERE bk_id = ?";
   db.query(sqlQuery, [bk_id], (err, result) => {
