@@ -251,7 +251,6 @@ app.post("/api/claim_report", (req, res) => {
   db.query(sqlUpdate, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
-    res.send(result);
   });
 });
 
