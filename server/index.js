@@ -284,7 +284,7 @@ app.get("/api/bk_get", (req, res) => {
   const email = req.params.email; //something is wrong here and this is why i cant query the beekeeper id
   const pass = req.params.pass; //something is also wrong with this value
 
-  const sqlQuery = "SELECT bk_id FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
+  const sqlQuery = "SELECT * FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
   db.query(sqlQuery, [email, pass], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log("result is " + email + " " + pass);
