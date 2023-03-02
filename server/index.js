@@ -279,15 +279,16 @@ app.get("/api/bk_pass", (req, res) => {
   });
 });
 
-// Fetches the Beekeeper ID based on the email/password unique pair
+// Fetches ALL the Beekeeper information based on the email/password unique pair
 app.get("/api/bk_get", (req, res) => {
-  const email = req.params.email; //something is wrong here and this is why i cant query the beekeeper id
-  const pass = req.params.pass; //something is also wrong with this value
+  //MSUT use query wwhen making a get request to the database!
+  const email = req.query.email;
+  const pass = req.query.pass;
 
   const sqlQuery = "SELECT * FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
   db.query(sqlQuery, [email, pass], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    console.log("result is " + email + " " + pass);
+    console.log("result is " + email + ", " + pass);
     res.send(result);
   });
 });

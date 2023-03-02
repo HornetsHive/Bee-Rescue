@@ -57,6 +57,8 @@ export default function SignUpScreen({ navigation }) {
     //navigate to prefrences page
     navigation.navigate("PreferencesScreen", {
       screen: "PreferencesScreen",
+      email: email,
+      pass: pass,
     });
   };
 
