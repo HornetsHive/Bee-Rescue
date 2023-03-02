@@ -117,7 +117,7 @@ export default function MyReportsScreen({ route, navigation }) {
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("HomeScreen", { screen: "HomeScreen" })
+            navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen" })
           }
         >
           <Image
