@@ -91,6 +91,20 @@ export default function MyReportsScreen({ navigation }) {
   };
   */
 
+  // Abandon the report r_id -- right now its hardcoded to 1
+  abandonReport = () => {
+    console.log("Sent POST request to abandon report.");
+    Axios.post("http://10.0.2.2:3001/api/abandon_report", {r_id: 1})  // Dummy value for r_id
+    .then(function (response) {
+      // If successful, print out the server's response
+      console.log(response.data);
+    })
+    .catch(function (error) {
+      // If error, print the error
+      console.log(error);
+    });;
+  }
+
   //-----------------this return needs rewritting to be more like home screen----------------------//
   return (
     <View style={styles.container}>
