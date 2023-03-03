@@ -164,7 +164,7 @@ function App(){
             <Pane 
               elevation='1'
               borderRadius='1em'
-              backgroundColor="#D3D96F" 
+              backgroundColor="#FFFFFF" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)}
               padding={majorScale(2)} 
@@ -191,7 +191,7 @@ function App(){
             <Pane 
               elevation='1'
               borderRadius='1em'
-              backgroundColor="#D3D96F" 
+              backgroundColor="#FFFFFF" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)} 
               padding={majorScale(2)} 
@@ -224,7 +224,7 @@ function App(){
             <Pane 
               elevation='1'
               borderRadius='1em'
-              backgroundColor="#D3D96F" 
+              backgroundColor="#FFFFFF" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)}
               padding={majorScale(2)} 
@@ -249,7 +249,7 @@ function App(){
             <Pane 
               elevation='1'
               borderRadius='1em'
-              backgroundColor="#D3D96F" 
+              backgroundColor="#FFFFFF" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)}
               padding={majorScale(2)} 
@@ -273,7 +273,7 @@ function App(){
             <Pane 
               elevation='1'
               borderRadius='1em'
-              backgroundColor="#D3D96F" 
+              backgroundColor="#FFFFFF" 
               margin={majorScale(2)} 
               marginTop={majorScale(3)}
               padding={majorScale(2)} 
