@@ -83,10 +83,10 @@ export default function MyReportsScreen({ route, navigation }) {
   // to be used in report info screen
   const completeReport = () => {
     Axios.post("http://10.0.2.2:3001/api/complete_report", {
-      r_id: report.r_id, //dummy value must get the actual report id
+      r_id: report.r_id 
     })
       .then(function (response) {
-        console.log(response);
+        console.log(response.data);
         navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen" })
       })
       .catch(function (error) {
