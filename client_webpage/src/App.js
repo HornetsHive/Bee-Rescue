@@ -54,8 +54,8 @@ function App(){
       image: form.image
     }).then(() => {
       alert('successful insert');
+      toaster.success("Your form has been submitted!");
     });
-    toaster.success("Your form has been submitted!");
   }
 
   const [errors, setErrors] = useState({

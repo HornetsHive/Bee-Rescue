@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import Axios from "axios";
 import {
@@ -13,21 +13,24 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-//import Report from "../components/report";
+import ReportRibbon from "../components/ReportRibbon";
 
 export default function HomeScreen({ navigation }) {
-  const [reports, setReports] = React.useState([]);
-  const reportArray = new Array();
-  const dateArray = new Array();
-  const timeArray = new Array();
-  const dateTime = new Array();
+  const [reportRawData, setReportRawData] = React.useState([]);
+  const [formattedReportArray, updateReportArray] = React.useState(new Array());
+
+
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  var location;
-  var date;
+
+  function formattedReport(id, location, date){
+    this.reportID = id;
+    this.formattedLocation = location;
+    this.formattedDate = date;
+  };
   
   //fetching info from database to display
   const fetchReports = async () => {
@@ -35,8 +38,13 @@ export default function HomeScreen({ navigation }) {
       //10.0.2.2 is a general IP address for the emulator
       .get("http://10.0.2.2:3001/api/bk_appReports")
       .then((res) => {
-        setReports(res.data);
+        setReportRawData(res.data);
       })
+      .then(() => {
+        updateReportArray(extractReportInfo(reportRawData));
+        console.log(formattedReportArray);
+      })
+       //Error handling below here
       .catch(function (error) {
         if (error.response) {
           // The request was made and the server responded with a status code
@@ -58,43 +66,50 @@ export default function HomeScreen({ navigation }) {
     return res;
   };
   
-  var i = 0;
-  reports.map((reports) => {
-    reportArray[i] = [reports.address, ", ", reports.city];
-    dateArray[i] = [reports.rdate];
-    i++;
-  });
+  function extractReportInfo(reportData){
+    var formatted = new Array();
+    reportData.map((reports) => {
+      var formattedLocation = reports.address + ", " + reports.city;
+      var rawDate = reports.rdate;
+      var formattedDate = makeReadableDate(rawDate);
 
-  //dateTime conversions for homescreen display
-  for (var j = 0; j < reportArray.length; j++) {
-    //stringinfy the array with the date and time
-    dateArray[j] = JSON.stringify(dateArray[j]);
+      var toPush = new formattedReport(
+        reports.r_id,
+        formattedLocation,
+        formattedDate
+      );
+      //console.log("To Push: " + toPush);
+      formatted.push(toPush);
+    });
 
-    //split between date and time
-    dateArray[j] = dateArray[j].split("T");
-    var time = dateArray[j][1];
+    return(formatted);
+  };
 
-    //separate the date and its parts
-    dateArray[j] = dateArray[j][0].split('"');
-    dateArray[j] = dateArray[j][1].split("-");
+  function makeReadableDate(dateString){
+    //split date and time
+    var date = dateString.split("T")[0];
+    var time = dateString.split("T")[1];
 
-    //extract time from the date array
-    timeArray[j] = time.split(".");
-    //separate hours, minutes, seconds
-    timeArray[j] = timeArray[j][0];
-    timeArray[j] = timeArray[j].split(":");
-    ///////////////////////////////////////
+    //length 3 array, 0 = year, 1 = month, 2 = day
+    date = date.split("-");
 
-    //convert the date array to logical format of integers
-    var month = parseInt(dateArray[j][1]);
-    var day = parseInt(dateArray[j][2]);
-    dateArray[j] = [month, "/", day];
+    var year = date[0];
+    //remove trailing zeros
+    var month = parseInt(date[1]);
+    var day = parseInt(date[2]);
 
-    //convert time array to logical format of integers with am and pm
-    var hour = parseInt(timeArray[j][0]);
-    var minute = parseInt(timeArray[j][1]);
+    var formattedDate = month + "/" + day + "/" + year.slice(2);
+
+    //length 3 array, 0 = hour, 1 = minute, 2 = second
+    time = time.split(":");
+    var hour = parseInt(time[0]);
+    var minute = parseInt(time[1]);
+
+    //translate from UTC to west coast time; <------ Should probably change this later to be accurate to timezone
+    hour -= 8;
+    //determine AM or PM
     var am_pm = "am";
-    if (hour <= 12) {
+    if (hour >= 12) {
       am_pm = "pm";
     }
 
@@ -102,14 +117,9 @@ export default function HomeScreen({ navigation }) {
     if (hour == 0) {
       hour = 12;
     }
-    timeArray[j] = [hour, ":", minute, " ", am_pm];
-
-    //put date and time into one array to use for display
-    dateTime[j] = [dateArray[j], " at ", timeArray[j]];
-  }
-
-  if (!loaded) {
-    return null;
+    var formattedTime = hour + ":" + minute + " " + am_pm;
+    
+    return(formattedDate + " at " + formattedTime);
   }
 
   return (
@@ -198,7 +208,16 @@ export default function HomeScreen({ navigation }) {
           <TouchableOpacity style={styles.textContainer}>
             <Text style={styles.textBox}>Change location</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => fetchReports()}>
+          <TouchableOpacity 
+            onPress={() => 
+              updateReportArray(
+                fetchReports().
+                  then(
+                    console.log("Updating reports...")
+                  )
+                )
+              }
+            >
             <Image
               source={require("../assets/refresh.png")}
               style={{
@@ -211,109 +230,36 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <ScrollView>
-{/*---------------Start of scroll---------------------------------*/}
-          <TouchableOpacity
-            onPress={() => {
-              var specificReport = reports.filter(obj => {
-                return obj.r_id === reports[0].r_id
-              })[0];
+{/*---------------Start of scroll---------------*/}
+          {formattedReportArray[0] === null && (
+            <TouchableOpacity
+              onPress={() => {
+                var specificReport = reportRawData.filter(obj => {
+                  return obj.r_id === formattedReportArray.r_id
+                })[0];
 
-              navigation.navigate("ReportInfoScreen", {
-                screen: "ReportInfoScreen",
-                report: specificReport,
-              });
-            }}
-          >
-            <View style={styles.task}>
-              <View style={styles.taskText}>
-                <Text value={{}} style={{ fontSize: 16 }}>
-                  A swarm has been reported at {reportArray[0]}
-                </Text>
-                <TouchableOpacity>
-                  <Image
-                    source={require("../assets/x.png")}
-                    style={styles.xButton}
-                  ></Image>
-                </TouchableOpacity>
+                navigation.navigate("ReportInfoScreen", {
+                  screen: "ReportInfoScreen",
+                  report: specificReport,
+                });
+              }}
+            >
+              <View style={styles.task}>
+                <View style={styles.taskText}>
+                  <Text value={{}} style={{ fontSize: 16 }}>
+                    A swarm has been reported at {formattedReportArray[0].formattedLocation}
+                  </Text>
+                  <TouchableOpacity>
+                    <Image
+                      source={require("../assets/x.png")}
+                      style={styles.xButton}
+                    ></Image>
+                  </TouchableOpacity>
+                </View>
+                <Text>{formattedReportArray[0].formattedDate}</Text>
               </View>
-              <Text>{dateTime[0]}</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              var specificReport = reports.filter(obj => {
-                return obj.r_id === reports[1].r_id
-              })[0];
-
-              navigation.navigate("ReportInfoScreen", {
-                screen: "ReportInfoScreen",
-                report: specificReport,
-              });
-            }}
-          >
-            <View style={styles.task}>
-              <View style={styles.taskText}>
-                <Text style={{ fontSize: 16 }}>
-                  A swarm has been reported at {reportArray[1]}
-                </Text>
-                <TouchableOpacity>
-                  <Image
-                    source={require("../assets/x.png")}
-                    style={styles.xButton}
-                  ></Image>
-                </TouchableOpacity>
-              </View>
-              <Text>{dateTime[1]}</Text>
-            </View>
-          </TouchableOpacity>
-
-          {/*<TouchableOpacity
-            onPress={() => {
-              var specificReport = reports.filter(obj => {
-                return obj.r_id === reports[2].r_id
-              })[0];
-
-              navigation.navigate("ReportInfoScreen", {
-                screen: "ReportInfoScreen",
-                report: specificReport,
-              });
-            }}
-          >
-            <View style={styles.task}>
-              <View style={styles.taskText}>
-                <Text style={{ fontSize: 16 }}>
-                  A swarm has been reported at {reportArray[2]}
-                </Text>
-                <TouchableOpacity>
-                  <Image
-                    source={require("../assets/x.png")}
-                    style={styles.xButton}
-                  ></Image>
-                </TouchableOpacity>
-              </View>
-              <Text>{dateTime[2]}</Text>
-            </View>
-          </TouchableOpacity>*/}
-          
-          {/*<TouchableOpacity><Report /></TouchableOpacity>*/}
-
-          {reportArray.map((report) => <TouchableOpacity>
-            <View style={styles.task}>
-              <View style={styles.taskText}>
-                <Text style={{ fontSize: 16 }} location={report.address}>
-                  A swarm has been reported at {location}
-                </Text>
-                <TouchableOpacity>
-                  <Image
-                    source={require("../assets/x.png")}
-                    style={styles.xButton}
-                  ></Image>
-                </TouchableOpacity>
-              </View>
-              <Text date={report.dateTime}>{date}</Text>
-            </View>
-          </TouchableOpacity>)}
+            </TouchableOpacity>
+          )}
 
 {/*--------------End of scroll-------------------------------*/}
         </ScrollView>
