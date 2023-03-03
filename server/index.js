@@ -286,7 +286,6 @@ app.get("/api/bk_get", (req, res) => {
   const sqlQuery = "SELECT * FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
   db.query(sqlQuery, [email, pass], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    console.log("result is " + email + ", " + pass);
     res.send(result);
   });
 });

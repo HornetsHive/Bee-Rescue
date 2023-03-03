@@ -83,7 +83,7 @@ export default function SignUpScreen({ navigation }) {
     setErrors(newErrors);
 
     return !Object.values(newErrors).every((error) => error === "");
-  }; /////////////////////////////////////////////////////////////////////////////
+  }; //////////////////////////////////////////////////////////////////////////
 
   if (!loaded) {
     return null;

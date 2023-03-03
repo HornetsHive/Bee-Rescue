@@ -1,6 +1,7 @@
 import * as React from "react";
-import { useEffect } from "react";
+
 import { useFonts } from "expo-font";
+import { useEffect } from "react";
 import Axios from "axios";
 import {
   Text,
@@ -15,24 +16,23 @@ import {
 
 import ReportRibbon from "../components/ReportRibbon";
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen({ route, navigation }) {
+  const userID = route.params.bk_id;
   const [reportRawData, setReportRawData] = React.useState([]);
   const [formattedReportArray, updateReportArray] = React.useState([]);
-
 
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-
-  function formattedReport(id, location, date){
+  function formattedReport(id, location, date) {
     this.reportID = id;
     this.formattedLocation = location;
     this.formattedDate = date;
-  };
-  
-  //fetching info from database to display
+  }
+
+  //fetching reports from database to display
   const fetchReports = async () => {
     const res = await Axios
       //10.0.2.2 is a general IP address for the emulator
@@ -41,7 +41,7 @@ export default function HomeScreen({ navigation }) {
         setReportRawData(res.data);
         updateReportArray(extractReportInfo(res.data));
       })
-       //Error handling below here
+      //Error handling below here
       .catch(function (error) {
         if (error.response) {
           // The request was made and the server responded with a status code
@@ -62,8 +62,8 @@ export default function HomeScreen({ navigation }) {
       });
     return res;
   };
-  
-  function extractReportInfo(reportData){
+
+  function extractReportInfo(reportData) {
     var formatted = new Array();
     reportData.map((reports) => {
       var formattedLocation = reports.address + ", " + reports.city;
@@ -78,10 +78,10 @@ export default function HomeScreen({ navigation }) {
 
       formatted.push(toPush);
     });
-    return(formatted);
-  };
+    return formatted;
+  }
 
-  function makeReadableDate(dateString){
+  function makeReadableDate(dateString) {
     //split date and time
     var date = dateString.split("T")[0];
     var time = dateString.split("T")[1];
@@ -114,14 +114,15 @@ export default function HomeScreen({ navigation }) {
       hour = 12;
     }
     var formattedTime = hour + ":" + minute + " " + am_pm;
-    
-    return(formattedDate + " at " + formattedTime);
+
+    return formattedDate + " at " + formattedTime;
   }
 
   //get reports on page load
   useEffect(() => {
     // Run this function once on page load
     fetchReports();
+    console.log("beekeeper ID: " + userID);
   }, []);
 
   return (
@@ -140,7 +141,6 @@ export default function HomeScreen({ navigation }) {
           <Image
             source={require("../assets/person.png")}
             style={{
-              
               resizeMode: "contain",
               height: 25,
               width: 30,
@@ -180,7 +180,6 @@ export default function HomeScreen({ navigation }) {
           />
         </TouchableOpacity>
       </View>
-      
 
       <View style={styles.middle}>
         <Image
@@ -208,24 +207,21 @@ export default function HomeScreen({ navigation }) {
               }}
             ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.textContainer}
+          <TouchableOpacity
+            style={styles.textContainer}
             onPress={() => {
               console.log("Going to info: " + 1);
               navigation.navigate("ReportInfoScreen", {
                 screen: "ReportInfoScreen",
                 report: 1,
               });
-            }}>
+            }}
+          >
             <Text style={styles.textBox}>Change location</Text>
           </TouchableOpacity>
-          <TouchableOpacity 
-            onPress={() => 
-                fetchReports().
-                  then(
-                    console.log("Updated reports")
-                  )
-              }
-            >
+          <TouchableOpacity
+            onPress={() => fetchReports().then(console.log("Updated reports"))}
+          >
             <Image
               source={require("../assets/refresh.png")}
               style={{
@@ -238,8 +234,8 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <ScrollView>
-{/*---------------Start of scroll---------------*/}
-          {formattedReportArray.map((report, key) =>
+          {/*---------------Start of scroll---------------*/}
+          {formattedReportArray.map((report, key) => (
             <ReportRibbon
               key={key}
               id={report.reportID}
@@ -248,8 +244,8 @@ export default function HomeScreen({ navigation }) {
               nav={navigation}
               rawSQL={reportRawData}
             />
-          )}
-{/*--------------End of scroll-----------------*/}
+          ))}
+          {/*--------------End of scroll-----------------*/}
         </ScrollView>
       </View>
 
