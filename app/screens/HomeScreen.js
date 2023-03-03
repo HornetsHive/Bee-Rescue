@@ -162,8 +162,8 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("MyReportsScreen", {
-              screen: "MyReportsScreen",
+            navigation.navigate("MyReportsHomeScreen", {
+              screen: "MyReportsHomeScreen",
             })
           }
         >

@@ -15,7 +15,11 @@ import {
   ImageBackground,
 } from "react-native";
 
-export default function PreferencesScreen({ navigation }) {
+export default function PreferencesScreen({ route, navigation }) {
+  const userEmail = route.params.email;
+  const userPass = route.params.pass;
+  var userID = 0;
+
   const switchColor = { false: "#808080", true: "#d92978" };
   const [user, setUser] = React.useState([]);
   const [fname, setFName] = useState("");
@@ -47,24 +51,16 @@ export default function PreferencesScreen({ navigation }) {
     ComfortaaBold: require("../assets/fonts/Comfortaa-Bold.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
-  const id = 0;
-  const email = "email@gmail.com";
 
   // Get the current bk_id for correct preferences
-  const fetchBeekeeper = async () => {
+  async function fetchBeekeeper() {
     const res = await Axios
       //10.0.2.2 is a general IP address for the emulator
       .get("http://10.0.2.2:3001/api/bk_get", {
-        params: { email: "email@gmail.com", pass: "Password@123" },
+        params: { email: userEmail, pass: userPass },
       })
       .then((res) => {
-        console.log(res.data);
         setUser(res.data);
-
-        user.map((user) => {
-          id = user.bk_id;
-          console.log("ID = ", id);
-        });
       })
       .catch(function (error) {
         if (error.response) {
@@ -85,10 +81,17 @@ export default function PreferencesScreen({ navigation }) {
         console.log(error.config);
       });
     return res;
-  };
+  }
 
   //send beekeeper info and update SQL table
   const updateNewUser = (e) => {
+    //pull beekeeper id, email and password then map those values
+    fetchBeekeeper();
+    {
+      user.map((user) => {
+        userID = user.bk_id;
+      });
+    }
     //validate
     //axios.post
     //navigae to homescreen
@@ -100,6 +103,9 @@ export default function PreferencesScreen({ navigation }) {
   if (!loaded) {
     return null;
   }
+
+  //updateNewUser();
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -112,17 +118,7 @@ export default function PreferencesScreen({ navigation }) {
         </View>
 
         <ScrollView style={styles.middle}>
-          <Button //This button and text is for testing!
-            color="#da628c"
-            title="Dummy Button"
-            onPress={fetchBeekeeper}
-          ></Button>
-          <Text>
-            {user.map((user) => {
-              user.bk_id;
-            })}
-            testing "{user.bk_id}" or "{id}"
-          </Text>
+          <Text>user ID = {userID}</Text>
 
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -487,9 +483,9 @@ export default function PreferencesScreen({ navigation }) {
             <Button
               color="#da628c"
               title="Save Changes & Continue"
-              onPress={() =>
-                navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-              }
+              onPress={navigation.navigate("HomeScreen", {
+                screen: "HomeScreen",
+              })}
             ></Button>
           </View>
         </ScrollView>

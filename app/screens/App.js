@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import AccountScreen from "./AccountScreen";
 import HomeScreen from "./HomeScreen";
 import LoginScreen from "./LoginScreen";
+import MyReportsHomeScreen from "./MyReportsHomeScreen";
 import MyReportsScreen from "./MyReportsScreen";
 import PreferencesScreen from "./PreferencesScreen";
 import ReportInfoScreen from "./ReportInfoScreen";
@@ -26,6 +27,7 @@ export default function App() {
 
         <Stack.Screen name="AccountScreen" component={AccountScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="MyReportsHomeScreen" component={MyReportsHomeScreen} />
         <Stack.Screen name="MyReportsScreen" component={MyReportsScreen} />
         <Stack.Screen name="PreferencesScreen" component={PreferencesScreen} />
         <Stack.Screen name="ReportInfoScreen" component={ReportInfoScreen} />
