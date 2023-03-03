@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 
 import { useFonts } from "expo-font";
 import Axios from "axios";
@@ -107,6 +108,13 @@ export default function MyReportsHomeScreen({ navigation }) {
     
     return(formattedDate + " at " + formattedTime);
   }
+
+  //get reports on page load
+  useEffect(() => {
+    // Run this function once on page load
+    showClaimedReports();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>

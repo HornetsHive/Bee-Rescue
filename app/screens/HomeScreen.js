@@ -118,6 +118,12 @@ export default function HomeScreen({ navigation }) {
     return(formattedDate + " at " + formattedTime);
   }
 
+  //get reports on page load
+  useEffect(() => {
+    // Run this function once on page load
+    fetchReports();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
