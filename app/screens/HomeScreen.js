@@ -17,7 +17,7 @@ import ReportRibbon from "../components/ReportRibbon";
 
 export default function HomeScreen({ navigation }) {
   const [reportRawData, setReportRawData] = React.useState([]);
-  const [formattedReportArray, updateReportArray] = React.useState(new Array());
+  const [formattedReportArray, updateReportArray] = React.useState([]);
 
 
   const [loaded] = useFonts({
@@ -39,10 +39,7 @@ export default function HomeScreen({ navigation }) {
       .get("http://10.0.2.2:3001/api/bk_appReports")
       .then((res) => {
         setReportRawData(res.data);
-      })
-      .then(() => {
-        updateReportArray(extractReportInfo(reportRawData));
-        console.log(formattedReportArray);
+        updateReportArray(extractReportInfo(res.data));
       })
        //Error handling below here
       .catch(function (error) {
@@ -78,10 +75,9 @@ export default function HomeScreen({ navigation }) {
         formattedLocation,
         formattedDate
       );
-      //console.log("To Push: " + toPush);
+
       formatted.push(toPush);
     });
-
     return(formatted);
   };
 
@@ -205,17 +201,17 @@ export default function HomeScreen({ navigation }) {
               }}
             ></Image>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.textContainer}>
+          <TouchableOpacity style={styles.textContainer}
+            onPress={() => console.log(formattedReportArray)}
+          >
             <Text style={styles.textBox}>Change location</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             onPress={() => 
-              updateReportArray(
                 fetchReports().
                   then(
-                    console.log("Updating reports...")
+                    console.log("Updated reports")
                   )
-                )
               }
             >
             <Image
