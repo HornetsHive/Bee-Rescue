@@ -24,7 +24,7 @@ export default class ReportRibbon extends React.Component {
                 console.log("Going to info: " + this.props.id);
                 this.props.nav.navigate("ReportInfoScreen", {
                   screen: "ReportInfoScreen",
-                  report: this.props.id,
+                  report: this.props.rawSQL[this.props.id],
                 });
               }}
             >

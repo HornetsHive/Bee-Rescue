@@ -239,6 +239,7 @@ export default function HomeScreen({ navigation }) {
               location={report.formattedLocation}
               date={report.formattedDate}
               nav={navigation}
+              rawSQL={reportRawData}
             />
           )}
 {/*--------------End of scroll-----------------*/}
