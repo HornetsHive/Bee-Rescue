@@ -202,8 +202,13 @@ export default function HomeScreen({ navigation }) {
             ></Image>
           </TouchableOpacity>
           <TouchableOpacity style={styles.textContainer}
-            onPress={() => console.log(formattedReportArray)}
-          >
+            onPress={() => {
+              console.log("Going to info: " + 1);
+              navigation.navigate("ReportInfoScreen", {
+                screen: "ReportInfoScreen",
+                report: 1,
+              });
+            }}>
             <Text style={styles.textBox}>Change location</Text>
           </TouchableOpacity>
           <TouchableOpacity 
@@ -227,37 +232,16 @@ export default function HomeScreen({ navigation }) {
         </View>
         <ScrollView>
 {/*---------------Start of scroll---------------*/}
-          {formattedReportArray[0] === null && (
-            <TouchableOpacity
-              onPress={() => {
-                var specificReport = reportRawData.filter(obj => {
-                  return obj.r_id === formattedReportArray.r_id
-                })[0];
-
-                navigation.navigate("ReportInfoScreen", {
-                  screen: "ReportInfoScreen",
-                  report: specificReport,
-                });
-              }}
-            >
-              <View style={styles.task}>
-                <View style={styles.taskText}>
-                  <Text value={{}} style={{ fontSize: 16 }}>
-                    A swarm has been reported at {formattedReportArray[0].formattedLocation}
-                  </Text>
-                  <TouchableOpacity>
-                    <Image
-                      source={require("../assets/x.png")}
-                      style={styles.xButton}
-                    ></Image>
-                  </TouchableOpacity>
-                </View>
-                <Text>{formattedReportArray[0].formattedDate}</Text>
-              </View>
-            </TouchableOpacity>
+          {formattedReportArray.map((report, key) =>
+            <ReportRibbon
+              key={key}
+              id={report.reportID}
+              location={report.formattedLocation}
+              date={report.formattedDate}
+              nav={navigation}
+            />
           )}
-
-{/*--------------End of scroll-------------------------------*/}
+{/*--------------End of scroll-----------------*/}
         </ScrollView>
       </View>
 

@@ -16,9 +16,18 @@ export default class ReportRibbon extends React.Component {
         super(props);
     };
 
+
     render(){
         return(
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("Going to info: " + this.props.id);
+                this.props.nav.navigate("ReportInfoScreen", {
+                  screen: "ReportInfoScreen",
+                  report: this.props.id,
+                });
+              }}
+            >
                 <View style={styles.task}>
                 <View style={styles.taskText}>
                     <Text value={{}} style={{ fontSize: 16 }}>
@@ -31,7 +40,7 @@ export default class ReportRibbon extends React.Component {
                     ></Image>
                     </TouchableOpacity>
                 </View>
-                <Text>{this.props.time}</Text>
+                <Text>{this.props.date}</Text>
                 </View>
             </TouchableOpacity>
         );
