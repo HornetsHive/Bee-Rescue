@@ -31,7 +31,7 @@ export default function MyReportsHomeScreen({ navigation }) {
     })
       .then((res) => {
         setReportRawData(res.data);
-        updateReportArray(extractReportInfo(reportRawData));
+        updateReportArray(extractReportInfo(res.data));
       })
       .catch(function (error) {
         if (error.response) {

@@ -35,7 +35,7 @@ export default class MyReportRibbon extends React.Component {
                 <View style={styles.task}>
                 <View style={styles.taskText}>
                     <Text value={{}} style={{ fontSize: 16 }}>
-                    A swarm has been reported at {this.props.location}
+                    Swarm at {this.props.location}
                     </Text>
                     <TouchableOpacity>
                     <Image
