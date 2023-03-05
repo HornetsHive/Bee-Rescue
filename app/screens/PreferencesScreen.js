@@ -483,9 +483,11 @@ export default function PreferencesScreen({ route, navigation }) {
             <Button
               color="#da628c"
               title="Save Changes & Continue"
-              onPress={navigation.navigate("HomeScreen", {
-                screen: "HomeScreen",
-              })}
+              onPress={() =>
+                navigation.navigate("HomeScreen", {
+                  screen: "HomeScreen",
+                })
+              }
             ></Button>
           </View>
         </ScrollView>
