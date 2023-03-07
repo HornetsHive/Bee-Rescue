@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Pane, Paragraph, Heading, SelectField, TextInputField, majorScale, toaster, UnorderedList, ListItem } from 'evergreen-ui';
+import { Pane, Paragraph, Heading, majorScale, toaster, UnorderedList, ListItem } from 'evergreen-ui';
 import './fonts.css';
 import './App.css';
 import InfoCard from './components/InfoCard';
-import FormTextEntry from './components/FormTextEntry';
-import FormDropDown from './components/FormDropDown';
 import BRForm from './components/BRForm'
 
 import Axios from 'axios';
