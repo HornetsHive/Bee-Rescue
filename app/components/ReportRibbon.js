@@ -3,11 +3,7 @@ import React from "react";
 import {
   Text,
   View,
-  Image,
-  ScrollView,
   StyleSheet,
-  SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 
