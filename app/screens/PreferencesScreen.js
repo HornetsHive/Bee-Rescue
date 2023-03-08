@@ -15,13 +15,34 @@ import {
   ImageBackground,
 } from "react-native";
 
+//set the format for the phone number text entry
+function formatPhoneNumber(value) {
+  if (!value) return value;
+
+  // clean and format phone number input
+  const phoneNumber = value.replace(/[^\d]/g, "");
+  const phoneNumberLength = phoneNumber.length;
+  if (phoneNumberLength < 4) return phoneNumber;
+  if (phoneNumberLength < 7) {
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+  }
+  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
+    3,
+    6
+  )}-${phoneNumber.slice(6, 10)}`;
+}
+// -------------------- start of preference screen -----------------------
+
 export default function PreferencesScreen({ route, navigation }) {
   const userEmail = route.params.email;
   const userPass = route.params.pass;
-  var userID = 0;
 
   const switchColor = { false: "#808080", true: "#d92978" };
   const [user, setUser] = React.useState([]);
+  const [errors, setErrors] = useState("");
+  const newErrors = { ...errors };
+  var bk_id;
+
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
   const [phone_no, setPhone] = useState("");
@@ -52,7 +73,75 @@ export default function PreferencesScreen({ route, navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  // Get the current bk_id for correct preferences
+  //send beekeeper info and update SQL table
+  const updateNewUser = () => {
+    //fetch beekeeper id using email and password
+    fetchBeekeeper();
+
+    //map id to send to homescreen
+    user.map((user) => {
+      bk_id = user.bk_id;
+    });
+
+    //validate preference input
+    const err = validate();
+    if (err) {
+      console.log(newErrors);
+      return;
+    }
+
+    //axios.post to update beekeeper personal info
+    Axios.post("http://10.0.2.2:3001/api/bk_update", {
+      fname: fname,
+      lname: lname,
+      phone_no: phone_no,
+      address: address,
+      city: city,
+      zip: zip,
+      bk_id: bk_id,
+    })
+      .then(() => {
+        console.log("successful insert");
+      })
+      .catch(function (error) {
+        if (error) console.log(error);
+      });
+
+    //axios post again to update beekeeper qualifications
+    //axios.post to update beekeeper personal info
+    Axios.post("http://10.0.2.2:3001/api/bk_qualif_update", {
+      ground_swarms: ability1,
+      valve_or_water_main: ability2,
+      shrubs: ability3,
+      low_tree: ability4,
+      mid_tree: ability5,
+      tall_tree: ability6,
+      fences: ability7,
+      low_structure: ability8,
+      mid_structure: ability9,
+      chimney: ability10,
+      interior: ability11,
+      cut_or_trap_out: ability12,
+      traffic_accidents: ability13,
+      bucket_w_pole: equipment1,
+      ladder: equipment2,
+      mechanical_lift: equipment3,
+      bk_id: bk_id,
+    })
+      .then(() => {
+        console.log("successful insert");
+      })
+      .catch(function (error) {
+        if (error) console.log(error);
+      });
+    //navigae to homescreen and pass bk_id
+    navigation.navigate("HomeScreen", {
+      screen: "HomeScreen",
+      bk_id: bk_id,
+    });
+  };
+
+  // Get the beekeeper id that matches entered email and pass to verify login
   async function fetchBeekeeper() {
     const res = await Axios
       //10.0.2.2 is a general IP address for the emulator
@@ -63,48 +152,48 @@ export default function PreferencesScreen({ route, navigation }) {
         setUser(res.data);
       })
       .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          //Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
-        console.log(error.config);
+        if (error) console.log(error);
       });
     return res;
   }
 
-  //send beekeeper info and update SQL table
-  const updateNewUser = (e) => {
-    //pull beekeeper id, email and password then map those values
-    fetchBeekeeper();
-    {
-      user.map((user) => {
-        userID = user.bk_id;
-      });
-    }
-    //validate
-    //axios.post
-    //navigae to homescreen
-  };
   const validate = () => {
     //check for errors and set them if found
+    if (!fname) {
+      newErrors.fname = "This field is required";
+    }
+    if (!lname) {
+      newErrors.lname = "This field is required";
+    }
+    if (!phone_no) {
+      newErrors.phone_no = "This field is required";
+    }
+    if (!address) {
+      newErrors.address = "This field is required";
+    }
+    if (!city) {
+      newErrors.city = "This field is required";
+    }
+    if (!zip) {
+      newErrors.zip = "This field is required";
+    }
+    if (isNaN(zip) || zip.length < 3 || zip.length > 5) {
+      newErrors.zip = "Please enter a valid zip";
+    }
+    setErrors(newErrors);
+
+    return !Object.values(newErrors).every((error) => error === "");
+  };
+
+  //dynamically reformat phone number input
+  const handleInput = (e) => {
+    const formattedPhoneNumber = formatPhoneNumber(e);
+    setPhone(formattedPhoneNumber);
   };
 
   if (!loaded) {
     return null;
   }
-
-  //updateNewUser();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -118,8 +207,6 @@ export default function PreferencesScreen({ route, navigation }) {
         </View>
 
         <ScrollView style={styles.middle}>
-          <Text>user ID = {userID}</Text>
-
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -135,12 +222,11 @@ export default function PreferencesScreen({ route, navigation }) {
                 style={styles.input}
                 label="fname"
                 required
-                //isInvalid={Boolean(errors.fname)}
-                //validationMessage={errors.fname ? errors.fname : null}
+                isInvalid={Boolean(errors.fname)}
                 type="text"
                 onChangeText={(fname) => {
                   setFName(fname);
-                  //setErrors({ ...errors, fname: "" });
+                  setErrors({ ...errors, fname: "" });
                 }}
               />
             </View>
@@ -157,12 +243,11 @@ export default function PreferencesScreen({ route, navigation }) {
                 style={styles.input}
                 label="lname"
                 required
-                //isInvalid={Boolean(errors.lname)}
-                //validationMessage={errors.lname ? errors.lname : null}
+                isInvalid={Boolean(errors.lname)}
                 type="text"
                 onChangeText={(lname) => {
                   setLName(lname);
-                  //setErrors({ ...errors, lname: "" });
+                  setErrors({ ...errors, lname: "" });
                 }}
               />
             </View>
@@ -173,27 +258,24 @@ export default function PreferencesScreen({ route, navigation }) {
             style={styles.input}
             label="phone_no"
             required
-            //isInvalid={Boolean(errors.phone_no)}
-            //validationMessage={errors.phone_no ? errors.phone_no : null}
+            isInvalid={Boolean(errors.phone_no)}
             type="text"
-            placeholder="(XXX) XXX - XXXX"
-            onChangeText={(phone_no) => {
-              setPhone(phone_no);
-              //setErrors({ ...errors, phone_no: "" });
+            placeholder="+1 (XXX) XXX - XXXX"
+            onChangeText={(e) => {
+              handleInput(e), setErrors({ ...errors, phone_no: "" });
             }}
+            value={phone_no}
           />
           <Text style={styles.textRegular}>Address</Text>
           <TextInput
             style={styles.input}
             label="address"
             required
-            //isInvalid={Boolean(errors.address)}
-            //validationMessage={errors.address ? errors.address : null}
+            isInvalid={Boolean(errors.address)}
             type="text"
-            placeholder="(e.g., 9876 MapleWood Dr.)"
             onChangeText={(address) => {
               setAddress(address);
-              //setErrors({ ...errors, address: "" });
+              setErrors({ ...errors, address: "" });
             }}
           />
           <Text style={styles.textRegular}>City</Text>
@@ -201,13 +283,11 @@ export default function PreferencesScreen({ route, navigation }) {
             style={styles.input}
             label="city"
             required
-            //isInvalid={Boolean(errors.city)}
-            //validationMessage={errors.city ? errors.city : null}
+            isInvalid={Boolean(errors.city)}
             type="text"
-            placeholder="(e.g., Beesvile)"
             onChangeText={(city) => {
               setCity(city);
-              //setErrors({ ...errors, city: "" });
+              setErrors({ ...errors, city: "" });
             }}
           />
           <Text style={styles.textRegular}>Zip Code</Text>
@@ -215,13 +295,12 @@ export default function PreferencesScreen({ route, navigation }) {
             style={styles.input}
             label="zip"
             required
-            //isInvalid={Boolean(errors.zip)}
-            //validationMessage={errors.zip ? errors.zip : null}
+            isInvalid={Boolean(errors.zip)}
             type="text"
             placeholder="(e.g., 12345)"
             onChangeText={(zip) => {
               setZip(zip);
-              //setErrors({ ...errors, zip: "" });
+              setErrors({ ...errors, zip: "" });
             }}
           />
 
@@ -483,11 +562,7 @@ export default function PreferencesScreen({ route, navigation }) {
             <Button
               color="#da628c"
               title="Save Changes & Continue"
-              onPress={() =>
-                navigation.navigate("HomeScreen", {
-                  screen: "HomeScreen",
-                })
-              }
+              onPress={() => updateNewUser()}
             ></Button>
           </View>
         </ScrollView>

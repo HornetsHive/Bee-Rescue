@@ -193,6 +193,7 @@ app.post("/api/bk_qualif_update", (req, res) => {
     ],
     (err, result) => {
       if (err) return res.status(500).send(err.message);
+      console.log("qualifications updated");
       console.log(result);
     }
   );
