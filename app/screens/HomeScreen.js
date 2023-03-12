@@ -155,11 +155,11 @@ export default function HomeScreen({ route, navigation }) {
           }
         >
           <Image
-            source={require("../assets/bell.png")}
+            source={require("../assets/gear.png")}
             style={{
               resizeMode: "contain",
-              height: 30,
-              width: 30,
+              height: 35,
+              width: 35,
             }}
           />
         </TouchableOpacity>
@@ -207,13 +207,14 @@ export default function HomeScreen({ route, navigation }) {
               }}
             ></Image>
           </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.textContainer}
             onPress={() => {
-              console.log("Going to info: " + 1);
-              navigation.navigate("ReportInfoScreen", {
-                screen: "ReportInfoScreen",
-                report: 1,
+              console.log("account id: " + userID);
+              navigation.navigate("AccountScreen", {
+                screen: "AccountScreen",
+                bk_id: userID,
               });
             }}
           >

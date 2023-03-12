@@ -49,7 +49,7 @@ export default function PreferencesScreen({ route, navigation }) {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
-  const [maxHeight, setMaxHeight] = useState();
+  const [maxHeight, setMaxHeight] = useState("");
   const [cooperative, setCoop] = useState(false);
   const [ability1, setAbility1] = useState(false);
   const [ability2, setAbility2] = useState(false);
@@ -108,7 +108,6 @@ export default function PreferencesScreen({ route, navigation }) {
       });
 
     //axios post again to update beekeeper qualifications
-    //axios.post to update beekeeper personal info
     Axios.post("http://10.0.2.2:3001/api/bk_qualif_update", {
       ground_swarms: ability1,
       valve_or_water_main: ability2,
@@ -523,13 +522,11 @@ export default function PreferencesScreen({ route, navigation }) {
             style={styles.input}
             label="maxHeight"
             required
-            //isInvalid={Boolean(errors.maxHeight)}
-            //validationMessage={errors.maxHeight ? errors.maxHeight : null}
             type="text"
             placeholder="e.g., 12in, 2ft"
             onChangeText={(maxHeight) => {
               setMaxHeight(maxHeight);
-              //setErrors({ ...errors, maxHeight: "" });
+              setErrors({ ...errors, maxHeight: "" });
             }}
           />
 

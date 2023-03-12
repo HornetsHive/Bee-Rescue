@@ -31,6 +31,7 @@ export default function SignUpScreen({ navigation }) {
   const [errors, setErrors] = useState("");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [passConfirm, confirmPass] = useState("");
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -80,6 +81,10 @@ export default function SignUpScreen({ navigation }) {
       newErrors.email = "Please enter a valid email";
       console.log("Please enter a valid email");
     }
+    if (pass != passConfirm) {
+      newErrors.passConfirm = "passwords don't match";
+      console.log("passwords don't match");
+    }
     setErrors(newErrors);
 
     return !Object.values(newErrors).every((error) => error === "");
@@ -126,7 +131,6 @@ export default function SignUpScreen({ navigation }) {
                 isInvalid={Boolean(errors.email)}
                 validationMessage={errors.email ? errors.email : null}
                 type="text"
-                name="email"
                 onChangeText={(email) => {
                   setEmail(email);
                   setErrors({ ...errors, email: "" });
@@ -154,10 +158,24 @@ export default function SignUpScreen({ navigation }) {
                 isInvalid={Boolean(errors.pass)}
                 validationMessage={errors.pass ? errors.pass : null}
                 type="text"
-                name="password"
                 onChangeText={(pass) => {
                   setPass(pass);
                   setErrors({ ...errors, pass: "" });
+                }}
+              />
+
+              <Text style={styles.textRegular}>confirm password</Text>
+              {/*confirm password input*/}
+              <TextInput
+                style={styles.input}
+                label="confirmPassword"
+                placeholder="password"
+                required
+                secureTextEntry={true}
+                type="text"
+                onChangeText={(passConfirm) => {
+                  confirmPass(passConfirm);
+                  setErrors({ ...errors, passConfirm: "" });
                 }}
               />
 
