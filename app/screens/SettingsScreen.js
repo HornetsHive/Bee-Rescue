@@ -14,6 +14,7 @@ import {
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 
 export default function SettingsScreen({ navigation }) {
@@ -162,13 +163,14 @@ export default function SettingsScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
     flexDirection: "column",
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
     flex: 0.2,
-    top: 10,
     flexDirection: "row",
     backgroundColor: "white",
     borderColor: "darkgray",

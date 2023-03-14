@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 
 import MyReportRibbon from "../components/MyReportRibbon";
@@ -48,11 +49,13 @@ export default function MyReportsHomeScreen({ navigation }) {
       });
     return res;
   };
+
   function formattedReport(id, location, date){
     this.reportID = id;
     this.formattedLocation = location;
     this.formattedDate = date;
   };
+
   function extractReportInfo(reportData){
     var formatted = new Array();
     reportData.map((reports) => {
@@ -116,7 +119,7 @@ export default function MyReportsHomeScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() =>
@@ -172,7 +175,7 @@ export default function MyReportsHomeScreen({ navigation }) {
         </ScrollView>
       </View>
 
-      <SafeAreaView>
+      <View>
         <ImageBackground
           source={require("../assets/gradient1.png")}
           style={styles.footer}
@@ -192,21 +195,20 @@ export default function MyReportsHomeScreen({ navigation }) {
             />
           </TouchableOpacity>
         </ImageBackground>
-      </SafeAreaView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //alignSelf: "center",
     flexDirection: "column",
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
     flex: 0.2,
-    top: 10,
     flexDirection: "row",
     backgroundColor: "white",
     borderColor: "darkgray",

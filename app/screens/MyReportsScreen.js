@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 
 export default function MyReportsScreen({ route, navigation }) {
@@ -333,14 +334,14 @@ export default function MyReportsScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
-    //alignSelf: "center",
     flexDirection: "column",
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
     flex: 0.2,
-    top: 10,
     flexDirection: "row",
     backgroundColor: "white",
     borderColor: "darkgray",

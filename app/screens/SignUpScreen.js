@@ -96,20 +96,11 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        style={styles.container}
-        source={require("../assets/gradient1.png")}
-        resizeMode="cover"
-      >
+      <ImageBackground source={require("../assets/gradient1.png")}>
         <KeyboardAwareScrollView>
           <View style={styles.header}>
             <Image
-              style={{
-                alignSelf: "center",
-                resizeMode: "contain",
-                height: 145,
-                width: 500,
-              }}
+              style={styles.img}
               source={require("../assets/LoginBeePicture.png")}
               resizeMode="contain"
             />

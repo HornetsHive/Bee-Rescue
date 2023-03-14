@@ -12,6 +12,7 @@ import {
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 
 import ReportRibbon from "../components/ReportRibbon";
@@ -126,7 +127,7 @@ export default function HomeScreen({ route, navigation }) {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={{ fontFamily: "Comfortaa", fontSize: 16 }}>
           Location: Orangevale
@@ -250,7 +251,7 @@ export default function HomeScreen({ route, navigation }) {
         </ScrollView>
       </View>
 
-      <SafeAreaView>
+      <View>
         <ImageBackground
           source={require("../assets/gradient1.png")}
           style={styles.footer}
@@ -270,21 +271,21 @@ export default function HomeScreen({ route, navigation }) {
             />
           </TouchableOpacity>
         </ImageBackground>
-      </SafeAreaView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
-    //alignSelf: "center",
     flexDirection: "column",
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
     flex: 0.2,
-    top: 10,
     flexDirection: "row",
     backgroundColor: "white",
     borderColor: "darkgray",

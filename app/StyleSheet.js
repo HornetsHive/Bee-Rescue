@@ -1,9 +1,10 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
+    display: "flex",
     flex: 1,
-    top: 10,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     flexDirection: "column",
     alignSelf: "center",
   },
@@ -58,6 +59,12 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 10,
   },
+  img: {
+    alignSelf: "center",
+    resizeMode: "contain",
+    height: 145,
+    width: 500,
+  }
 });
 
 export { styles };
