@@ -7,10 +7,10 @@ const mysql = require("mysql");
 
 const db = mysql.createConnection({
   //to be changed later
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "beeDB",
+  host: "45.33.104.176",
+  user: "brdb-dev",
+  password: "beesrock",
+  database: "brdb",
 });
 
 //Set up nodemailer connection
@@ -119,7 +119,7 @@ app.post("/api/insert", (req, res) => {
 app.post("/api/bk_insert", (req, res) => {
   const email = req.body.email;
   const pass = req.body.pass;
-  const sqlINSERT = "INSERT INTO BEEKEEPERS (email, pass) VALUES (?, ?);";
+  const sqlINSERT = "INSERT INTO beekeepers (email, pass) VALUES (?, ?);";
   db.query(sqlINSERT, [email, pass], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
@@ -137,7 +137,7 @@ app.post("/api/bk_update", (req, res) => {
   const bk_id = req.body.bk_id;
 
   const sqlUPDATE =
-    "UPDATE BEEKEEPERS SET fname = ?, lname = ?, phone_no = ?, address = ?, city = ?, zip = ? WHERE bk_id = ?;";
+    "UPDATE beekeepers SET fname = ?, lname = ?, phone_no = ?, address = ?, city = ?, zip = ? WHERE bk_id = ?;";
   db.query(
     sqlUPDATE,
     [fname, lname, phone_no, address, city, zip, bk_id],
@@ -169,7 +169,7 @@ app.post("/api/bk_qualif_update", (req, res) => {
   const bk_id = req.body.bk_id;
   // TODO: Update query, consider refactoring tables to remove bk_id and only include email/pass as primary key, FROM THE DB TEAM: No
   const sqlUPDATE =
-    "UPDATE QUALIFICATIONS SET ground_swarms = ?, valve_or_water_main = ?, shrubs = ?, low_tree = ?, mid_tree = ?, tall_tree = ?, fences = ?, low_structure = ?, mid_structure = ?, chimney = ?, interior = ?, cut_or_trap_out = ?, traffic_accidents = ?, bucket_w_pole = ?, ladder = ?, mechanical_lift = ? WHERE bk_id = ?;";
+    "UPDATE qualifications SET ground_swarms = ?, valve_or_water_main = ?, shrubs = ?, low_tree = ?, mid_tree = ?, tall_tree = ?, fences = ?, low_structure = ?, mid_structure = ?, chimney = ?, interior = ?, cut_or_trap_out = ?, traffic_accidents = ?, bucket_w_pole = ?, ladder = ?, mechanical_lift = ? WHERE bk_id = ?;";
   db.query(
     sqlUPDATE,
     [
@@ -259,7 +259,7 @@ app.post("/api/claim_report", (req, res) => {
 app.get("/api/bk_user", (req, res) => {
   const email = req.query.email;
 
-  const sqlQuery = "SELECT email FROM BEEKEEPERS WHERE email = ?;";
+  const sqlQuery = "SELECT email FROM beekeepers WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
     console.log(result);
     res.send(result);
@@ -270,7 +270,7 @@ app.get("/api/bk_user", (req, res) => {
 app.get("/api/bk_pass", (req, res) => {
   const bk_id = req.query.bk_id;
 
-  const sqlQuery = "SELECT email, pass FROM BEEKEEPERS WHERE bk_id = ?";
+  const sqlQuery = "SELECT email, pass FROM beekeepers WHERE bk_id = ?";
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
@@ -284,7 +284,7 @@ app.get("/api/bk_get", (req, res) => {
   const email = req.query.email;
   const pass = req.query.pass;
 
-  const sqlQuery = "SELECT * FROM BEEKEEPERS WHERE email = ? AND pass = ?;";
+  const sqlQuery = "SELECT * FROM beekeepers WHERE email = ? AND pass = ?;";
   db.query(sqlQuery, [email, pass], (err, result) => {
     if (err) return res.status(500).send(err.message);
     res.send(result);

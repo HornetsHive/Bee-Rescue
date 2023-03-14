@@ -1,0 +1,3 @@
+-- ATTENTION: THIS WILL DROP THE ENTIRETY OF THE DATABASE. DO NOT USE IN PRODUCTION.
+DROP TRIGGER IF EXISTS qualificationsInsert, insertReports, updateReports, deleteReports;
+DROP TABLE IF EXISTS qualifications, report_tags, active_reports, beekeepers, reports, report_archive;

@@ -39,7 +39,7 @@ create table report_tags (
     foreign key(r_id) references reports(r_id)
 );
 
-create table BEEKEEPERS (
+create table beekeepers (
 	bk_id int NOT NULL PRIMARY KEY auto_increment,
     fname varchar(255),
     lname varchar(255),
@@ -50,7 +50,7 @@ create table BEEKEEPERS (
     zip varchar(255),
     pass varchar(255)
 );
-create table QUALIFICATIONS (
+create table qualifications (
 	bk_id int NOT NULL,
     ground_swarms boolean,
     valve_or_water_main boolean,
@@ -69,13 +69,13 @@ create table QUALIFICATIONS (
     ladder int,
     mechanical_lift boolean,
     primary key(bk_id),
-    foreign key(bk_id) references BEEKEEPERS(bk_id)
+    foreign key(bk_id) references beekeepers(bk_id)
 );
 CREATE TABLE active_reports (
 	bk_id	int,
 	r_id	int,
     PRIMARY KEY(bk_id,r_id),
-    foreign key(bk_id) references BEEKEEPERS(bk_id),
+    foreign key(bk_id) references beekeepers(bk_id),
     foreign key(r_id) references reports(r_id)
 );
 
@@ -102,11 +102,11 @@ CREATE TABLE report_archive (
 
 -- Triggers
 DELIMITER //
-create trigger QUALIFICATIONS_INSERT
-after insert on Beekeepers
+create trigger qualificationsInsert
+after insert on beekeepers
 for each row
 begin
-	insert into QUALIFICATIONS(bk_id, ground_swarms, valve_or_water_main, shrubs, low_tree, mid_tree, tall_tree, fences, low_structure, mid_structure, chimney, interior, cut_or_trap_out, traffic_accidents, bucket_w_pole, ladder, mechanical_lift)
+	insert into qualifications(bk_id, ground_swarms, valve_or_water_main, shrubs, low_tree, mid_tree, tall_tree, fences, low_structure, mid_structure, chimney, interior, cut_or_trap_out, traffic_accidents, bucket_w_pole, ladder, mechanical_lift)
 	values(new.bk_id, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 END //
 delimiter ;
@@ -120,15 +120,15 @@ END$
 DELIMITER ;
 -- DATA WARNING THIS WILL DUPLICATE COMPLETED REPORTS INTO ARCHIVE TABLE, DELETE REPORTS TO SAVE SPACE
 DELIMITER $
-CREATE TRIGGER updateReports 
+CREATE TRIGGER updateReports
 BEFORE UPDATE ON reports
 FOR EACH ROW
 BEGIN
 	IF new.complete is TRUE THEN 
     -- archive report
 			INSERT INTO report_archive(r_id, date, category, r_fname, r_lname, address, city, p_type, location, duration, height, size, weight, bk_id, bk_fname, bk_lname, need_help, success)
-            SELECT reports.r_id, curdate(), reports.category, reports.fname, reports.lname, reports.address, reports.city, reports.p_type, reports.location, reports.duration, reports.height, reports.size, reports.weight, active_reports.bk_id, BEEKEEPERS.fname, BEEKEEPERS.lname, report_tags.need_help, report_tags.success
-            FROM reports JOIN active_reports ON old.r_id = active_reports.r_id JOIN BEEKEEPERS ON active_reports.bk_id = beekeepers.bk_id JOIN report_tags ON old.r_id = report_tags.r_id
+            SELECT reports.r_id, curdate(), reports.category, reports.fname, reports.lname, reports.address, reports.city, reports.p_type, reports.location, reports.duration, reports.height, reports.size, reports.weight, active_reports.bk_id, beekeepers.fname, beekeepers.lname, report_tags.need_help, report_tags.success
+            FROM reports JOIN active_reports ON old.r_id = active_reports.r_id JOIN beekeepers ON active_reports.bk_id = beekeepers.bk_id JOIN report_tags ON old.r_id = report_tags.r_id
             WHERE reports.r_id = old.r_id;
             DELETE FROM active_reports WHERE r_id = old.r_id;
     END IF;
@@ -147,5 +147,5 @@ END$
 delimiter ;
 
 -- default beekeeper for testing
-INSERT INTO BEEKEEPERS (email, pass) VALUES ("BobBeekeeper@gmail.com", "password");
-UPDATE BEEKEEPERS SET fname = "Bob", lname = "Beekeeper", phone_no = "12345678910", address = "123 Bee Street", city = "Sacramento", zip = "95819" WHERE bk_id = "1";
+INSERT INTO beekeepers (email, pass) VALUES ("BobBeekeeper@gmail.com", "password");
+UPDATE beekeepers SET fname = "Bob", lname = "Beekeeper", phone_no = "12345678910", address = "123 Bee Street", city = "Sacramento", zip = "95819" WHERE bk_id = "1";
