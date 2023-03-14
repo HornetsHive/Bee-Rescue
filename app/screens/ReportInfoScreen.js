@@ -94,7 +94,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                 bottom: 7,
               }}
             >
-              Address
+              General Area{/*Address*/}
             </Text>
           </View>
           <View style={styles.divider}></View>
@@ -107,7 +107,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                 top: 7,
               }}
             >
-              { report.address }
+              { report.city + ": " + report.zip /*report.address*/ }
             </Text>
           </View>
         </View>

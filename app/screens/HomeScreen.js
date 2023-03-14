@@ -27,10 +27,11 @@ export default function HomeScreen({ route, navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  function formattedReport(id, location, date) {
+  function formattedReport(id, location, date, area) {
     this.reportID = id;
     this.formattedLocation = location;
     this.formattedDate = date;
+    this.formattedArea = area
   }
 
   //fetching reports from database to display
@@ -70,11 +71,13 @@ export default function HomeScreen({ route, navigation }) {
       var formattedLocation = reports.address + ", " + reports.city;
       var rawDate = reports.rdate;
       var formattedDate = makeReadableDate(rawDate);
+      var formattedArea = reports.city + ": (" + reports.zip + ")";
 
       var toPush = new formattedReport(
         reports.r_id,
         formattedLocation,
-        formattedDate
+        formattedDate,
+        formattedArea
       );
 
       formatted.push(toPush);
@@ -242,6 +245,7 @@ export default function HomeScreen({ route, navigation }) {
               key={key}
               id={report.reportID}
               location={report.formattedLocation}
+              area={report.formattedArea}
               date={report.formattedDate}
               nav={navigation}
               rawSQL={reportRawData}
