@@ -152,9 +152,11 @@ export default function LoginScreen({ navigation }) {
 
             <View style={styles.footer}>
               <TouchableOpacity
-              //onPress={() =>
-              //navigation.navigate("", { screen: "" })
-              //}
+                onPress={() =>
+                  navigation.navigate("ForgotPassScreen", {
+                    screen: "ForgotPassScreen",
+                  })
+                }
               >
                 <Text style={styles.hyperLinkText}>Forgot Password?</Text>
               </TouchableOpacity>
