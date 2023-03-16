@@ -223,7 +223,17 @@ app.post("/api/bk_qualif_update", (req, res) => {
   );
 });
 
-//updates bk password using the confirmed email
+//updates bk password using the confirmed id
+app.post("/api/bk_pass_update", (req, res) => {
+  const pass = req.body.pass;
+  const bk_id = req.body.bk_id;
+
+  const sqlUpdate = "UPDATE beekeepers SET pass = ? WHERE bk_id = ?;";
+  db.query(sqlUpdate, [pass, bk_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(result);
+  });
+});
 
 //Posts update to mark report as complete TRIGGER WARNING this will delete this report from reports, if you want to find it again it will be in report_archive
 app.post("/api/complete_report", (req, res) => {
@@ -281,13 +291,13 @@ app.post("/api/claim_report", (req, res) => {
 
 //GET REALMS//
 
-// Fetches a user email from the Beekeepers table
+// Fetches a user email and bk_id from the Beekeepers table
 app.get("/api/bk_user", (req, res) => {
   const email = req.query.email;
 
-  const sqlQuery = "SELECT email FROM beekeepers WHERE email = ?;";
+  const sqlQuery = "SELECT email, bk_id FROM beekeepers WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
-    console.log(result);
+    if (err) return res.status(500).send(err.message);
     res.send(result);
   });
 });

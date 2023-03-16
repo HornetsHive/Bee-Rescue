@@ -16,6 +16,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+function isValidPassword(pass) {
+  var strongRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*_])(?=.{8,})/;
+  return strongRegex.test(pass);
+}
+
 //set the format for the phone number text entry
 function formatCodeInput(value) {
   if (!value) return value;
@@ -32,11 +38,21 @@ function formatCodeInput(value) {
 
 export default function ForgotPassScreen({ navigation }) {
   const [shouldShow, setShouldShow] = useState(true);
+  const [shouldShow2, setShouldShow2] = useState(true);
+  const [shouldShow3, setShouldShow3] = useState(true);
+
   const [enteredEmail, setEmail] = useState("");
   const [user, setUser] = React.useState([]);
+
   const [actualCode, setActualCode] = useState("");
   const [enteredCode, setCode] = useState("");
-  var email, code;
+  const [errors, setErrors] = useState("");
+  const [pass, setPass] = useState("");
+  const [passConfirm, confirmPass] = useState("");
+
+  const [userID, setID] = useState("");
+  var email, bk_id, code;
+
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -51,18 +67,22 @@ export default function ForgotPassScreen({ navigation }) {
       setUser(res.data);
     });
 
-    //map email from database if found
+    //map email and id from database if found
     user.map((user) => {
       email = user.email;
+      bk_id = user.bk_id;
+      setID(bk_id);
     });
 
-    if (email != null) {
+    //SMALL ERROR: this doesn't work on first press, but will work on second button press
+    if (bk_id != null) {
       sendEmail();
+      setShouldShow2(!shouldShow2);
+      setShouldShow(!shouldShow);
       console.log("email sent");
     } else {
       console.log("not a registered email");
     }
-    setShouldShow(!shouldShow);
   };
 
   const sendEmail = () => {
@@ -95,16 +115,58 @@ export default function ForgotPassScreen({ navigation }) {
     if (enteredCode != actualCode) {
       console.log("invalid code");
       return;
-    } else {
-      //make another axios post to update pasword
-      console.log("code confirmed!");
     }
+    setShouldShow2(!shouldShow2);
+    setShouldShow3(!shouldShow3);
+    console.log("code confirmed!");
+  };
+
+  const updatePass = () => {
+    //validate password
+    const err = validate();
+    if (err) {
+      return;
+    }
+    console.log("pass confirmed!");
+
+    //update pasword in database with axios then navigate to login
+    //maybe check if password is not the same as it was before?
+    Axios.post("http://10.0.2.2:3001/api/bk_pass_update", {
+      pass: pass,
+      bk_id: userID,
+    }).then(() => {
+      console.log("password updated");
+    });
+
+    navigation.navigate("LoginScreen", {
+      screen: "LoginScreen",
+    });
   };
 
   //dynamically reformat code input
   const handleInput = (e) => {
     const formattedCode = formatCodeInput(e);
     setCode(formattedCode);
+  };
+
+  //validate entered pasword
+  const validate = () => {
+    const newErrors = { ...errors };
+    if (!pass) {
+      newErrors.pass = "This field is required";
+      console.log("Please enter pasword");
+    }
+    if (!isValidPassword(pass)) {
+      newErrors.pass = "Please enter a valid password";
+      console.log("Please enter a valid password");
+    }
+    if (pass != passConfirm) {
+      newErrors.passConfirm = "passwords don't match";
+      console.log("passwords don't match");
+    }
+    setErrors(newErrors);
+
+    return !Object.values(newErrors).every((error) => error === "");
   };
 
   if (!loaded) {
@@ -125,33 +187,39 @@ export default function ForgotPassScreen({ navigation }) {
 
           <View style={styles.middle}>
             <Text style={styles.titleText}>Bee Rescue</Text>
-            <Text style={styles.text}>Reset Pasword</Text>
+            <Text style={styles.text}>Forgot Password?</Text>
 
             <View style={{ width: 300, paddingTop: 10 }}>
-              <Text style={styles.textRegular}>verify email</Text>
-              {/*email input*/}
-              <TextInput
-                style={styles.input}
-                label="email"
-                placeholder="email"
-                required
-                type="text"
-                name="email"
-                onChangeText={(enteredEmail) => {
-                  setEmail(enteredEmail);
-                }}
-              />
-
               {shouldShow ? (
-                <View style={styles.button}>
-                  <Button
-                    color="#d92978"
-                    title="Submit"
-                    onPress={() => {
-                      submitEmail();
+                <View>
+                  <Text style={styles.textRegular}>verify email</Text>
+                  <TextInput
+                    style={styles.input}
+                    label="email"
+                    placeholder="email"
+                    required
+                    type="text"
+                    name="email"
+                    onChangeText={(enteredEmail) => {
+                      setEmail(enteredEmail);
                     }}
                   />
+                  <View style={styles.button}>
+                    <Button
+                      color="#d92978"
+                      title="Submit"
+                      onPress={() => {
+                        submitEmail();
+                      }}
+                    />
+                  </View>
                 </View>
+              ) : (
+                <View></View>
+              )}
+
+              {shouldShow2 ? (
+                <View></View>
               ) : (
                 <View>
                   <View>
@@ -198,7 +266,61 @@ export default function ForgotPassScreen({ navigation }) {
                       onPress={() => {
                         resetPass();
                         setCode("");
-                        //navigate to another screen to reset the password??
+                      }}
+                    />
+                  </View>
+                </View>
+              )}
+              {shouldShow3 ? (
+                <View></View>
+              ) : (
+                <View>
+                  <Text style={styles.textRegular}>new password</Text>
+                  <Text style={styles.textSmall}>
+                    * must have a minimum of 8 chars
+                  </Text>
+                  <Text style={styles.textSmall}>
+                    * must have at least one special character
+                  </Text>
+                  <Text style={styles.textSmall}>
+                    * must have at least one number
+                  </Text>
+
+                  {/*password input*/}
+                  <TextInput
+                    style={styles.input}
+                    label="password"
+                    placeholder="password"
+                    required
+                    secureTextEntry={true}
+                    type="text"
+                    onChangeText={(pass) => {
+                      setPass(pass);
+                      setErrors({ ...errors, pass: "" });
+                    }}
+                  />
+
+                  <Text style={styles.textRegular}>confirm new password</Text>
+                  {/*confirm password input*/}
+                  <TextInput
+                    style={styles.input}
+                    label="confirmPassword"
+                    placeholder="password"
+                    required
+                    secureTextEntry={true}
+                    type="text"
+                    onChangeText={(passConfirm) => {
+                      confirmPass(passConfirm);
+                      setErrors({ ...errors, passConfirm: "" });
+                    }}
+                  />
+
+                  <View style={styles.button}>
+                    <Button
+                      color="#d92978"
+                      title="Confirm"
+                      onPress={() => {
+                        updatePass();
                       }}
                     />
                   </View>
