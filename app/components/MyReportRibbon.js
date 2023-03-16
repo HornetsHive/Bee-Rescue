@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
   task: {
     backgroundColor: "white",
     padding: 15,
-    borderTopWidth: 1,
-    borderColor: "darkgray",
+    borderBottomWidth: 1,
+    borderColor: "gray",
   },
   taskText: {
     flexDirection: "row",

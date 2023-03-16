@@ -16,6 +16,7 @@ import {
 } from "react-native";
 
 import ReportRibbon from "../components/ReportRibbon";
+import HomeButtonFooter from "../components/HomeButtonFooter";
 
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -144,11 +145,7 @@ export default function HomeScreen({ route, navigation }) {
         >
           <Image
             source={require("../assets/person.png")}
-            style={{
-              resizeMode: "contain",
-              height: 25,
-              width: 30,
-            }}
+            style={styles.iconButton}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -160,11 +157,7 @@ export default function HomeScreen({ route, navigation }) {
         >
           <Image
             source={require("../assets/gear.png")}
-            style={{
-              resizeMode: "contain",
-              height: 35,
-              width: 35,
-            }}
+            style={styles.iconButton}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -176,16 +169,12 @@ export default function HomeScreen({ route, navigation }) {
         >
           <Image
             source={require("../assets/myReportButton.png")}
-            style={{
-              resizeMode: "contain",
-              height: 30,
-              width: 30,
-            }}
+            style={styles.iconButton}
           />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.middle}>
+      <View style={styles.body}>
         <Image
           source={require("../assets/map.png")}
           style={{
@@ -197,18 +186,17 @@ export default function HomeScreen({ route, navigation }) {
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            borderBottomWidth: 1,
+            borderTopWidth: 1,
+            borderColor: "gray",
           }}
         >
           <TouchableOpacity>
             <Image
               source={require("../assets/sort.png")}
-              style={{
-                resizeMode: "contain",
-                margin: 10,
-                height: 30,
-                width: 30,
-              }}
+              style={styles.iconButton}
             ></Image>
           </TouchableOpacity>
 
@@ -229,12 +217,7 @@ export default function HomeScreen({ route, navigation }) {
           >
             <Image
               source={require("../assets/refresh.png")}
-              style={{
-                resizeMode: "contain",
-                margin: 10,
-                height: 30,
-                width: 30,
-              }}
+              style={styles.iconButton}
             ></Image>
           </TouchableOpacity>
         </View>
@@ -255,26 +238,8 @@ export default function HomeScreen({ route, navigation }) {
         </ScrollView>
       </View>
 
-      <View>
-        <ImageBackground
-          source={require("../assets/gradient1.png")}
-          style={styles.footer}
-        >
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-            }
-          >
-            <Image
-              source={require("../assets/home.png")}
-              style={{
-                resizeMode: "contain",
-                height: 40,
-                width: 40,
-              }}
-            />
-          </TouchableOpacity>
-        </ImageBackground>
+      <View style={styles.footer}>
+        <HomeButtonFooter nav={navigation} />
       </View>
     </SafeAreaView>
   );
@@ -289,29 +254,24 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
-    flex: 0.2,
+    flex: 1,
     flexDirection: "row",
     backgroundColor: "white",
     borderColor: "darkgray",
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: 10,
+    justifyContent: "space-evenly",
   },
-  middle: {
-    flex: 1.5,
-    borderColor: "lightgray",
-    borderWidth: 1,
+  body: {
+    flex: 8,
+    borderColor: "gray",
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   footer: {
-    flex: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    resizeMode: "cover",
-    height: 65,
-    width: "100%",
+    flex: 1,
   },
   textBox: {
+    marginHorizontal: 40,
     textAlign: "center",
     fontFamily: "Comfortaa",
   },
@@ -339,4 +299,8 @@ const styles = StyleSheet.create({
     height: 10,
     width: 10,
   },
+  iconButton: {
+      height: 30,
+      width: 30,
+  }, 
 });

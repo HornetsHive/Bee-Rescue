@@ -16,6 +16,7 @@ import {
 } from "react-native";
 
 import MyReportRibbon from "../components/MyReportRibbon";
+import HomeButtonFooter from "../components/HomeButtonFooter";
 
 export default function MyReportsHomeScreen({ navigation }) {
   const [reportRawData, setReportRawData] = React.useState([]);
@@ -122,43 +123,34 @@ export default function MyReportsHomeScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("HomeScreen", {
-              screen: "HomeScreen",
-            })
-          }
+          onPress={() => {
+            navigation.navigate("AccountScreen", {
+              screen: "AccountScreen",
+            });
+          }}
         >
           <Image
             source={require("../assets/menuButton.png")}
-            style={{
-              resizeMode: "contain",
-              height: 30,
-              width: 30,
-            }}
+            style={styles.iconButton}
           />
         </TouchableOpacity>
-        <Text style={{ fontFamily: "Comfortaa", fontSize: 17, width: 125 }}>
-          My Reports
-        </Text>
-        <TouchableOpacity 
-        onPress={() => 
+        <Text style={styles.title}>My Reports</Text>
+        <TouchableOpacity
+          onPress={() =>
             showClaimedReports().
               then(
                 console.log("Updating reports...")
               )
-          }>
-            <Image
-              source={require("../assets/refresh.png")}
-              style={{
-                resizeMode: "contain",
-                height: 30,
-                width: 30,
-              }}
-            ></Image>
-            </TouchableOpacity>
+          }
+        >
+          <Image
+            source={require("../assets/refresh.png")}
+            style={styles.iconButton}
+          />
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.middle}>
+      <View style={styles.body}>
         <ScrollView>
           {/*---------------Start of scroll---------------------------------*/}
           {formattedReportArray.map((report, key) =>
@@ -175,26 +167,8 @@ export default function MyReportsHomeScreen({ navigation }) {
         </ScrollView>
       </View>
 
-      <View>
-        <ImageBackground
-          source={require("../assets/gradient1.png")}
-          style={styles.footer}
-        >
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-            }
-          >
-            <Image
-              source={require("../assets/home.png")}
-              style={{
-                resizeMode: "contain",
-                height: 40,
-                width: 40,
-              }}
-            />
-          </TouchableOpacity>
-        </ImageBackground>
+      <View style={styles.footer}>
+        <HomeButtonFooter nav={navigation} />
       </View>
     </SafeAreaView>
   );
@@ -208,27 +182,19 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
-    flex: 0.2,
+    flex: 1,
     flexDirection: "row",
-    backgroundColor: "white",
-    borderColor: "darkgray",
+    justifyContent: "space-around",
     alignItems: "center",
-    justifyContent: "space-between",
-    padding: 10,
   },
-  middle: {
-    flex: 1.5,
-    borderColor: "lightgray",
-    borderWidth: 1,
+  body: {
+    flex: 8,
+    borderColor: "gray",
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   footer: {
-    flex: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    resizeMode: "cover",
-    height: 65,
-    width: "100%",
+    flex: 1,
   },
   textBox: {
     textAlign: "center",
@@ -258,4 +224,13 @@ const styles = StyleSheet.create({
     height: 10,
     width: 10,
   },
+  iconButton: {
+    height: 30,
+    width: 30,
+  }, 
+  title: {
+    marginHorizontal: 40,
+    fontSize: 30,
+    fontFamily: "Comfortaa",
+  }
 });

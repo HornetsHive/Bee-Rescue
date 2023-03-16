@@ -16,6 +16,8 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
+import AccountHeader from "../components/AccountHeader";
+import HomeButtonFooter from "../components/HomeButtonFooter";
 
 export default function SettingsScreen({ navigation }) {
   const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
@@ -38,39 +40,11 @@ export default function SettingsScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("AccountScreen", { screen: "AccountScreen" })
-          }
-        >
-          <Image
-            source={require("../assets/menuButton.png")}
-            style={{
-              resizeMode: "contain",
-              height: 30,
-              width: 30,
-            }}
-          />
-        </TouchableOpacity>
-        <Text style={styles.titleText}>Settings</Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
-          }
-        >
-          <Image
-            source={require("../assets/bell.png")}
-            style={{
-              resizeMode: "contain",
-              height: 30,
-              width: 30,
-            }}
-          />
-        </TouchableOpacity>
+        <AccountHeader nav={navigation} titleText="Settings"/>
       </View>
 
-      <ScrollView>
-        <View style={styles.middle}>
+      <View style={styles.middle}>
+        <ScrollView>
           <Text style={styles.subTitle}>Security</Text>
           <View style={{ alignItems: "center" }}>
             <Text style={styles.text}>email:</Text>
@@ -114,48 +88,32 @@ export default function SettingsScreen({ navigation }) {
             </View>
           )}
 
-          <Text style={styles.subTitle}>Notifications</Text>
-          <View>
-            <Text style={styles.notificationText}>Swarm Reports</Text>
-            <Switch
-              style={styles.switch}
-              name="swarmReport"
-              trackColor={{ false: "#767577", true: "#d92978" }}
-              thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
-              onValueChange={toggleSwitch1}
-              value={isEnabled1}
-            />
-            <Text style={styles.notificationText}>Report Dropped</Text>
-            <Switch
-              style={styles.switch}
-              name="reportDropped"
-              trackColor={{ false: "#767577", true: "#d92978" }}
-              thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
-              onValueChange={toggleSwitch2}
-              value={isEnabled2}
-            />
-          </View>
+            <Text style={styles.subTitle}>Notifications</Text>
+            <View>
+              <Text style={styles.notificationText}>Swarm Reports</Text>
+              <Switch
+                style={styles.switch}
+                name="swarmReport"
+                trackColor={{ false: "#767577", true: "#d92978" }}
+                thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
+                onValueChange={toggleSwitch1}
+                value={isEnabled1}
+              />
+              <Text style={styles.notificationText}>Report Dropped</Text>
+              <Switch
+                style={styles.switch}
+                name="reportDropped"
+                trackColor={{ false: "#767577", true: "#d92978" }}
+                thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
+                onValueChange={toggleSwitch2}
+                value={isEnabled2}
+              />
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
 
-      <View>
-        <ImageBackground
-          source={require("../assets/gradient1.png")}
-          style={styles.footer}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("HomeScreen", {
-                screen: "HomeScreen",
-              });
-            }}
-          >
-            <Image
-              source={require("../assets/home.png")}
-              style={styles.homeButton}
-            />
-          </TouchableOpacity>
-        </ImageBackground>
+      <View style={styles.footer}>
+        <HomeButtonFooter nav={navigation}/>
       </View>
     </SafeAreaView>
   );
@@ -170,28 +128,19 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
-    flex: 0.2,
-    flexDirection: "row",
-    backgroundColor: "white",
-    borderColor: "darkgray",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: 10,
+    flex: 1
   },
   middle: {
-    flex: 1,
+    flex: 8,
     width: "100%",
     paddingHorizontal: 20,
     alignSelf: "center",
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderColor: "gray",  
   },
   footer: {
-    flex: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    resizeMode: "cover",
-    height: 65,
-    width: "100%",
+    flex: 1,
   },
   titleText: {
     fontSize: 26,

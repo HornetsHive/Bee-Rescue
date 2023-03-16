@@ -15,6 +15,8 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
+import HomeButtonFooter from "../components/HomeButtonFooter";
+import AccountHeader from "../components/AccountHeader"
 
 export default function AccountScreen({ navigation }) {
   const [image, setImage] = useState("default");
@@ -76,29 +78,7 @@ export default function AccountScreen({ navigation }) {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("AccountScreen", {
-              screen: "AccountScreen",
-            });
-          }}
-        >
-          <Image
-            source={require("../assets/menuButton.png")}
-            style={styles.iconButton}
-          />
-        </TouchableOpacity>
-        <Text style={styles.titleText}>Account</Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
-          }
-        >
-          <Image
-            source={require("../assets/bell.png")}
-            style={styles.iconButton}
-          />
-        </TouchableOpacity>
+        <AccountHeader nav={navigation} titleText="Account"/>
       </View>
 
       {/* Body */}
@@ -398,21 +378,9 @@ export default function AccountScreen({ navigation }) {
       </View>
 
       {/* Footer */}
-      <ImageBackground
-        source={require("../assets/gradient1.png")}
-        style={styles.footer}
-      >
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-          }
-        >
-          <Image
-            source={require("../assets/home.png")}
-            style={styles.homeButton}
-          />
-        </TouchableOpacity>
-      </ImageBackground>
+      <View style={styles.footer}>
+        <HomeButtonFooter nav={navigation}/>
+      </View>
     </SafeAreaView>
   );
 }
@@ -422,16 +390,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     flexDirection: "column",
-    alignSelf: "center",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
     flex: 1,
-    justifyContent: "space-around",
-    flexDirection: "row",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "gray",
   },
   pfp: {
     margin: "1%",
@@ -442,13 +404,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
   },
-  titleText: {
-    marginHorizontal: 40,
-    fontSize: 30,
-    fontFamily: "Comfortaa",
-  },
   bigText: {
-    //marginTop: "1%",
     borderTopWidth: 1,
     borderTopColor: "grey",
     textAlign: "center",
@@ -457,7 +413,6 @@ const styles = StyleSheet.create({
   },
   smallText: {
     margin: "1%",
-    //alignSelf: "center",
     color: "#d92978",
     fontSize: 14,
     fontFamily: "Comfortaa",
@@ -510,23 +465,13 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
   },
-  iconButton: {
-    width: 30,
-    height: 30,
-  },
-  homeButton: {
-    width: 40,
-    height: 40,
-  },
   body: {
     flex: 8,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: "gray",
   },
   footer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    resizeMode: "cover",
-    borderTopColor: "gray",
-    borderTopWidth: 1,
   }
 });

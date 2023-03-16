@@ -11,7 +11,10 @@ import {
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
+  StatusBar
 } from "react-native";
+import HomeButtonFooter from "../components/HomeButtonFooter";
+import AccountHeader from "../components/AccountHeader";
 
 export default function ReportInfoScreen({ route, navigation }) {
   const { report } = route.params
@@ -43,207 +46,170 @@ export default function ReportInfoScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-          }
-        >
-          <Image
-            source={require("../assets/menuButton.png")}
-            style={{
-              resizeMode: "contain",
-              height: 30,
-              width: 30,
-            }}
-          />
-        </TouchableOpacity>
-        <Text style={{ fontFamily: "Comfortaa", fontSize: 17, width: 125 }}>
-          Report Info
-        </Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
-          }
-        ></TouchableOpacity>
+        <AccountHeader nav={navigation} titleText="Report Info" />
       </View>
 
-      <ScrollView style={styles.middle}>
-        <View style={{ height: 57, top: 10, bottom: 100 }}>
-          <TouchableOpacity
-            style={{
-              padding: 8,
-              margin: 10,
-              borderRadius: 10,
-              backgroundColor: "#d3e954",
-            }}
-            onPress={() => claimReport()} // change this to actually claim a report
-          >
-            <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
-              Claim Report
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.itemTall}>
-          <View style={styles.label}>
-            <Text
+      <View style={styles.body}>
+        <ScrollView>
+          <View style={{ height: 57, top: 10, bottom: 100 }}>
+            <TouchableOpacity
               style={{
-                fontFamily: "Comfortaa",
-                fontSize: 17,
-                fontWeight: "bold",
-                bottom: 7,
+                padding: 8,
+                margin: 10,
+                borderRadius: 10,
+                backgroundColor: "#d3e954",
               }}
+              onPress={() => claimReport()} // change this to actually claim a report
             >
-              General Area{/*Address*/}
-            </Text>
-          </View>
-          <View style={styles.divider}></View>
-          <View style={styles.content}>
-            <Text
-              style={{
-                fontFamily: "Comfortaa",
-                fontSize: 15,
-                width: "80%",
-                top: 7,
-              }}
-            >
-              { report.city + ": " + report.zip /*report.address*/ }
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.item}>
-          <View style={styles.label}>
-            <Text
-              style={{
-                fontFamily: "Comfortaa",
-                fontSize: 17,
-                fontWeight: "bold",
-              }}
-            >
-              Duration
-            </Text>
+              <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
+                Claim Report
+              </Text>
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.divider}></View>
-
-          <View style={styles.content}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              { report.duration } days
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.item}>
-          <View style={styles.label}>
-            <Text
-              style={{
-                fontFamily: "Comfortaa",
-                fontSize: 17,
-                fontWeight: "bold",
-              }}
-            >
-              Location
-            </Text>
-          </View>
-
-          <View style={styles.divider}></View>
-
-          <View style={styles.content}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              { report.location }
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.item}>
-          <View style={styles.label}>
-            <Text
-              style={{
-                fontFamily: "Comfortaa",
-                fontSize: 17,
-                fontWeight: "bold",
-              }}
-            >
-              Height
-            </Text>
+          <View style={styles.itemTall}>
+            <View style={styles.label}>
+              <Text
+                style={{
+                  fontFamily: "Comfortaa",
+                  fontSize: 17,
+                  fontWeight: "bold",
+                  bottom: 7,
+                }}
+              >
+                General Area{/*Address*/}
+              </Text>
+            </View>
+            <View style={styles.divider}></View>
+            <View style={styles.content}>
+              <Text
+                style={{
+                  fontFamily: "Comfortaa",
+                  fontSize: 15,
+                  width: "80%",
+                  top: 7,
+                }}
+              >
+                { report.city + ": " + report.zip /*report.address*/ }
+              </Text>
+            </View>
           </View>
 
-          <View style={styles.divider}></View>
+          <View style={styles.item}>
+            <View style={styles.label}>
+              <Text
+                style={{
+                  fontFamily: "Comfortaa",
+                  fontSize: 17,
+                  fontWeight: "bold",
+                }}
+              >
+                Duration
+              </Text>
+            </View>
 
-          <View style={styles.content}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              { report.height }
-            </Text>
-          </View>
-        </View>
+            <View style={styles.divider}></View>
 
-        <View style={styles.item}>
-          <View style={styles.label}>
-            <Text
-              style={{
-                fontFamily: "Comfortaa",
-                fontSize: 17,
-                fontWeight: "bold",
-              }}
-            >
-              Size
-            </Text>
-          </View>
-
-          <View style={styles.divider}></View>
-
-          <View style={styles.content}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              { report.size }
-            </Text>
-          </View>
-        </View>
-
-        <View style={styles.item}>
-          <View style={styles.label}>
-            <Text
-              style={{
-                fontFamily: "Comfortaa",
-                fontSize: 17,
-                fontWeight: "bold",
-              }}
-            >
-              Category
-            </Text>
+            <View style={styles.content}>
+              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
+                { report.duration } days
+              </Text>
+            </View>
           </View>
 
-          <View style={styles.divider}></View>
+          <View style={styles.item}>
+            <View style={styles.label}>
+              <Text
+                style={{
+                  fontFamily: "Comfortaa",
+                  fontSize: 17,
+                  fontWeight: "bold",
+                }}
+              >
+                Location
+              </Text>
+            </View>
 
-          <View style={styles.content}>
-            <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-              {report.category}
-            </Text>
+            <View style={styles.divider}></View>
+
+            <View style={styles.content}>
+              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
+                { report.location }
+              </Text>
+            </View>
           </View>
-        </View>
-      </ScrollView>
 
-      <SafeAreaView>
-        <ImageBackground
-          source={require("../assets/gradient1.png")}
-          style={styles.footer}
-        >
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-            }
-          >
-            <Image
-              source={require("../assets/home.png")}
-              style={{
-                resizeMode: "contain",
-                height: 40,
-                width: 40,
-              }}
-            />
-          </TouchableOpacity>
-        </ImageBackground>
-      </SafeAreaView>
+          <View style={styles.item}>
+            <View style={styles.label}>
+              <Text
+                style={{
+                  fontFamily: "Comfortaa",
+                  fontSize: 17,
+                  fontWeight: "bold",
+                }}
+              >
+                Height
+              </Text>
+            </View>
+
+            <View style={styles.divider}></View>
+
+            <View style={styles.content}>
+              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
+                { report.height }
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.item}>
+            <View style={styles.label}>
+              <Text
+                style={{
+                  fontFamily: "Comfortaa",
+                  fontSize: 17,
+                  fontWeight: "bold",
+                }}
+              >
+                Size
+              </Text>
+            </View>
+
+            <View style={styles.divider}></View>
+
+            <View style={styles.content}>
+              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
+                { report.size }
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.item}>
+            <View style={styles.label}>
+              <Text
+                style={{
+                  fontFamily: "Comfortaa",
+                  fontSize: 17,
+                  fontWeight: "bold",
+                }}
+              >
+                Category
+              </Text>
+            </View>
+
+            <View style={styles.divider}></View>
+
+            <View style={styles.content}>
+              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
+                {report.category}
+              </Text>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+
+      <View style={styles.footer}>
+        <HomeButtonFooter nav={navigation} />
+      </View>
     </View>
   );
 }
@@ -254,10 +220,10 @@ const styles = StyleSheet.create({
     //alignSelf: "center",
     flexDirection: "column",
     backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
-    flex: 0.2,
-    top: 10,
+    flex: 1,
     flexDirection: "row",
     backgroundColor: "white",
     borderColor: "darkgray",
@@ -265,21 +231,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 10,
   },
-  middle: {
-    flex: 2.5,
-    borderColor: "lightgray",
-    borderWidth: 1,
+  body: {
+    flex: 8,
+    borderColor: "gray",
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
     padding: 10,
     overflow: "scroll",
   },
   footer: {
-    flex: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    resizeMode: "cover",
-    height: 65,
-    width: "100%",
+    flex: 1,
   },
   item: {
     flexDirection: "row",
