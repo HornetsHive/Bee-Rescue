@@ -115,6 +115,30 @@ app.post("/api/insert", (req, res) => {
   );
 });
 
+//send unique code for password reset
+app.post("/api/sendCode", (req, res) => {
+  const email = req.body.email;
+  const code = req.body.code;
+
+  //send email with code
+  const messagebody =
+    "Here is a one time use code to reset your password: " + code;
+  const messageHeader = {
+    from: "BeeRescuePostmaster@outlook.com",
+    to: email,
+    subject: "Bee Rescue - Pasword Reset Code",
+    text: messagebody,
+  };
+
+  transporter.sendMail(messageHeader, function (err, info) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log("Sent: " + info.response);
+  });
+});
+
 //Inserts a new Beekeeper
 app.post("/api/bk_insert", (req, res) => {
   const email = req.body.email;
@@ -199,6 +223,8 @@ app.post("/api/bk_qualif_update", (req, res) => {
   );
 });
 
+//updates bk password using the confirmed email
+
 //Posts update to mark report as complete TRIGGER WARNING this will delete this report from reports, if you want to find it again it will be in report_archive
 app.post("/api/complete_report", (req, res) => {
   const r_id = req.body.r_id;
@@ -280,7 +306,7 @@ app.get("/api/bk_pass", (req, res) => {
 
 // Fetches ALL the Beekeeper information based on the email/password unique pair
 app.get("/api/bk_get", (req, res) => {
-  //MSUT use query wwhen making a get request to the database!
+  //MSUT use query when making a get request to the database!
   const email = req.query.email;
   const pass = req.query.pass;
 

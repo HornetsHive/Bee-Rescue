@@ -43,6 +43,12 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontFamily: "Comfortaa",
   },
+  textSmallTwo: {
+    fontSize: 14,
+    paddingLeft: 10,
+    textAlign: "center",
+    fontFamily: "Comfortaa",
+  },
   hyperLinkText: {
     fontFamily: "Comfortaa",
     color: "#d92978",
@@ -55,6 +61,17 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderColor: "white",
   },
+  inputCode: {
+    height: 50,
+    margin: 10,
+    padding: 10,
+    fontSize: 18,
+    width: "50%",
+    alignSelf: "center",
+    textAlign: "center",
+    backgroundColor: "white",
+    borderColor: "white",
+  },
   button: {
     height: 50,
     margin: 10,
@@ -64,7 +81,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     height: 145,
     width: 500,
-  }
+  },
 });
 
 export { styles };
