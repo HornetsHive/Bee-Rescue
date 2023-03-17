@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.0",
+    "@react-google-maps/api": "^2.18.1",
     "@react-native-community/checkbox": "^0.5.14",
     "@react-navigation/drawer": "^6.6.2",
     "@react-navigation/native": "^6.1.6",
