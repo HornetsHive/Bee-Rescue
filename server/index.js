@@ -4,6 +4,11 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const mysql = require("mysql");
+const crypto = require('crypto');
+
+function generateConfirmationCode() {
+  return crypto.randomBytes(20).toString('hex');
+}
 
 const db = mysql.createConnection({
   //to be changed later
@@ -62,9 +67,10 @@ app.post("/api/insert", (req, res) => {
   const image = req.body.image;
 
   const phone_no = req.body.phone_no;
+  const conf_code = generateConfirmationCode();
 
   const sqlINSERT =
-    "INSERT INTO reports (address, city, zip, phone_no, fname, lname, email, duration, p_type, location, height, size, category, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    "INSERT INTO reports (address, city, zip, phone_no, fname, lname, email, duration, p_type, location, height, size, category, image, conf_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sqlINSERT,
     [
@@ -82,6 +88,7 @@ app.post("/api/insert", (req, res) => {
       size,
       "normal",
       image,
+      conf_code
     ],
     (err, result) => {
       if (err) {
@@ -92,15 +99,17 @@ app.post("/api/insert", (req, res) => {
         console.log(result);
 
         //send confirmation email
+        //################################# Change this link later! #########################################
+        const confirmationLink = "localhost:3001/confirm-email?code=" + conf_code;
         const messagebody =
           "Hi " +
           fname +
-          "!\n" +
-          "Thank you for submitting your report! We have notified the beekeepers in your area, you will recieve a follow-up email when an available beekeeper claims your report. Please keep a close eye on your inbox.";
+          ",\n" +
+          "Thank you for submitting your report. We will notifiy the beekeepers in your area, and you will recieve a follow-up email when an available beekeeper claims your report.\n\n Important! Please click this link to confirm your report:\n" + confirmationLink;
         const confirmReportOptions = {
           from: "BeeRescuePostmaster@outlook.com",
           to: email,
-          subject: "Your Bee Rescue report is confirmed!",
+          subject: "Bee Rescue - Please Confirm Your Report",
           text: messagebody,
         };
 
@@ -115,6 +124,28 @@ app.post("/api/insert", (req, res) => {
     }
   );
   res.status(200).send('Insert Succesful');
+});
+
+// Handle the confirmation link
+app.get('/confirm-email', (req, res) => {
+  const code = req.query.code;
+  db.query('SELECT * FROM reports WHERE conf_code = ?', [code], (err, rows) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send('Internal Server Error');
+    }
+    if (rows.length === 0) {
+      return res.status(400).send('Invalid confirmation code');
+    }
+    const report = rows[0];
+    db.query('UPDATE reports SET confirmed = true WHERE r_id = ?', [report.r_id], (err, result) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send('Internal Server Error');
+      }
+      res.send('Email confirmed');
+    });
+  });
 });
 
 //send unique code for password reset
@@ -386,7 +417,7 @@ app.get("/api/bk_get", (req, res) => {
 
 // Fetch bee reports to display on the app
 app.get("/api/bk_appReports", (req, res) => {
-  const sqlQuery = "SELECT * FROM reports WHERE active = false;";
+  const sqlQuery = "SELECT * FROM reports WHERE active = false AND confirmed = true;";
   db.query(sqlQuery, (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
@@ -421,7 +452,7 @@ app.get("/api/bk_completedReports", (req, res) => {
 
 app.get("/", (req, res) => {
   console.log("received get");
-  //res.send("Hello World, this is the Bee Rescue server");
+  res.send("Hello World, this is the Bee Rescue server");
 });
 
 //server port, change later

@@ -17,7 +17,9 @@ create table reports (
     phone_no	varchar(256), -- consider regions  (areacode)-###-####
     weight		int,
     rdate		datetime DEFAULT now(), -- consider UTC time
-    active		boolean DEFAULT FALSE, 
+    conf_code varchar(256),
+    confirmed boolean DEFAULT FALSE, -- if a reporter has confirmed through their email
+    active		boolean DEFAULT FALSE, -- if a report is claimed
     complete	boolean DEFAULT FALSE
 );
 
@@ -147,5 +149,5 @@ END$
 delimiter ;
 
 -- default beekeeper for testing
-INSERT INTO beekeepers (email, pass) VALUES ("BobBeekeeper@gmail.com", "password");
+INSERT INTO beekeepers (email, pass) VALUES ("bb@b.com", "password");
 UPDATE beekeepers SET fname = "Bob", lname = "Beekeeper", phone_no = "12345678910", address = "123 Bee Street", city = "Sacramento", zip = "95819" WHERE bk_id = "1";
