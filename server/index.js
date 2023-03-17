@@ -12,10 +12,10 @@ function generateConfirmationCode() {
 
 const db = mysql.createConnection({
   //to be changed later
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "beedb",
+  host: "45.33.104.176",
+  user: "brdb-dev",
+  password: "beesrock",
+  database: "brdb",
 });
 
 //Set up nodemailer connection
