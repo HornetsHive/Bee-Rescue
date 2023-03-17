@@ -13,6 +13,8 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
+import HomeButtonFooter from "../components/HomeButtonFooter";
+import AccountHeader from "../components/AccountHeader";
 
 export default function MyReportsScreen({ route, navigation }) {
   const { report } = route.params;
@@ -116,31 +118,10 @@ export default function MyReportsScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen" })
-          }
-        >
-          <Image
-            source={require("../assets/menuButton.png")}
-            style={{
-              resizeMode: "contain",
-              height: 30,
-              width: 30,
-            }}
-          />
-        </TouchableOpacity>
-        <Text style={{ fontFamily: "Comfortaa", fontSize: 17, width: 125 }}>
-          My Report
-        </Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("SettingsScreen", { screen: "SettingsScreen" })
-          }
-        ></TouchableOpacity>
+        <AccountHeader nav={navigation} titleText="My Report" />
       </View>
 
-      <ScrollView style={styles.middle}>
+      <View style={styles.body}>
         <View style={{ height: 57, top: 10, bottom: 100 }}>
           <TouchableOpacity
             style={{
@@ -304,30 +285,11 @@ export default function MyReportsScreen({ route, navigation }) {
             </Text>
           </View>
         </View>
-      </ScrollView>
+      </View>
 
-      <SafeAreaView>
-        <Image
-          source={require("../assets/gradient1.png")}
-          style={styles.footer}
-        />
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("HomeScreen", { screen: "HomeScreen" })
-          }
-        >
-          <Image
-            source={require("../assets/home.png")}
-            style={{
-              alignSelf: "center",
-              bottom: 15,
-              resizeMode: "contain",
-              height: 40,
-              width: 40,
-            }}
-          />
-        </TouchableOpacity>
-      </SafeAreaView>
+      <View style={styles.footer}>
+        <HomeButtonFooter nav={navigation} />
+      </View>
     </View>
   );
 }
@@ -341,7 +303,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
-    flex: 0.2,
+    flex: 1,
     flexDirection: "row",
     backgroundColor: "white",
     borderColor: "darkgray",
@@ -349,20 +311,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 10,
   },
-  middle: {
-    flex: 2.5,
-    borderColor: "lightgray",
-    borderWidth: 1,
+  body: {
+    flex: 8,
+    borderColor: "gray",
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
     padding: 10,
     overflow: "scroll",
   },
   footer: {
-    flex: 0,
-    bottom: -40,
-    alignItems: "center",
-    resizeMode: "cover",
-    height: 70,
-    width: "100%",
+    flex: 1,
   },
   item: {
     flexDirection: "row",
