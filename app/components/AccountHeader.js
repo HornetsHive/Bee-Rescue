@@ -16,19 +16,8 @@ export default class AccountHeader extends React.Component {
   render() {
     return (        
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            this.props.nav.navigate("AccountScreen", {
-              screen: "AccountScreen",
-            });
-          }}
-        >
-          <Image
-            source={require("../assets/menuButton.png")}
-            style={styles.iconButton}
-          />
-        </TouchableOpacity>
         <Text style={styles.title}>{this.props.titleText}</Text>
+        {this.props.titleText === "Account" ?
         <TouchableOpacity
           onPress={() =>
             this.props.nav.navigate("SettingsScreen", { screen: "SettingsScreen" })
@@ -39,6 +28,19 @@ export default class AccountHeader extends React.Component {
             style={styles.iconButton}
           />
         </TouchableOpacity>
+        :<></>}
+        {this.props.titleText === "My Report" ?
+        <TouchableOpacity
+          onPress={() =>
+            this.props.nav.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen" })
+          }
+        >
+          <Image
+            source={require("../assets/myReportButton.png")}
+            style={styles.iconButton}
+          />
+        </TouchableOpacity>
+        :<></>}
       </View>
     );
   }
@@ -48,15 +50,17 @@ const styles = StyleSheet.create({
     header: {
         flex: 1,
         flexDirection: "row",
-        justifyContent: "space-around",
+        justifyContent: "space-between",
         alignItems: "center",
       },
     iconButton: {
+        margin: 20,
         height: 30,
         width: 30,
     }, 
     title: {
-      marginHorizontal: 40,
+      align: "left",
+      marginHorizontal: 20,
       fontSize: 30,
       fontFamily: "Comfortaa",
     }

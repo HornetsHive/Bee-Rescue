@@ -455,6 +455,30 @@ app.get("/", (req, res) => {
   res.send("Hello World, this is the Bee Rescue server");
 });
 
+app.get("/api/debug-report", (req, res) => {
+  const sqlINSERT = 'INSERT INTO reports (address, city, zip, phone_no, fname, lname, email, duration, p_type, location, height, size, category, confirmed)\
+   VALUES (\
+    "123 Debug St",\
+    "Debug",\
+    "12345",\
+    "1234567890",\
+    "Dee",\
+    "Bug",\
+    "BeeRescuePostmaster@outlook.com",\
+    "0",\
+    "res_detached",\
+    "ext_wall",\
+    "low",\
+    "small",\
+    "normal",\
+    true)';
+  db.query(sqlINSERT, (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    console.log(result);
+    res.status(200).send('Insert Succesful');
+  });
+})
+
 //server port, change later
 app.listen(3001, () => {
   console.log("Running on port 3001");

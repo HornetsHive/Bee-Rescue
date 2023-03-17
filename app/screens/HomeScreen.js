@@ -16,7 +16,6 @@ import {
 } from "react-native";
 
 import ReportRibbon from "../components/ReportRibbon";
-import HomeButtonFooter from "../components/HomeButtonFooter";
 import MapScreen from "../components/MapScreen";
 
 export default function HomeScreen({ route, navigation }) {
@@ -158,7 +157,7 @@ export default function HomeScreen({ route, navigation }) {
         >
           <Image
             source={require("../assets/gear.png")}
-            style={styles.iconButton}
+            style={styles.iconButtonL}
           />
         </TouchableOpacity>
         <TouchableOpacity
@@ -241,10 +240,6 @@ export default function HomeScreen({ route, navigation }) {
           {/*--------------End of scroll-----------------*/}
         </ScrollView>
       </View>
-
-      <View style={styles.footer}>
-        <HomeButtonFooter nav={navigation} />
-      </View>
     </SafeAreaView>
   );
 }
@@ -306,5 +301,9 @@ const styles = StyleSheet.create({
   iconButton: {
       height: 30,
       width: 30,
-  }, 
+  },
+  iconButtonL: {
+    height: 38,
+    width: 38,
+}, 
 });

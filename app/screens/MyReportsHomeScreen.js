@@ -122,18 +122,6 @@ export default function MyReportsHomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("AccountScreen", {
-              screen: "AccountScreen",
-            });
-          }}
-        >
-          <Image
-            source={require("../assets/menuButton.png")}
-            style={styles.iconButton}
-          />
-        </TouchableOpacity>
         <Text style={styles.title}>My Reports</Text>
         <TouchableOpacity
           onPress={() =>
@@ -184,7 +172,7 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   body: {
@@ -225,11 +213,12 @@ const styles = StyleSheet.create({
     width: 10,
   },
   iconButton: {
+    margin: 20,
     height: 30,
     width: 30,
   }, 
   title: {
-    marginHorizontal: 40,
+    marginHorizontal: 20,
     fontSize: 30,
     fontFamily: "Comfortaa",
   }
