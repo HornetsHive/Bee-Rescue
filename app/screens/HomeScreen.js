@@ -17,6 +17,7 @@ import {
 
 import ReportRibbon from "../components/ReportRibbon";
 import HomeButtonFooter from "../components/HomeButtonFooter";
+import MapScreen from "../components/MapScreen";
 
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -175,14 +176,17 @@ export default function HomeScreen({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
-        <Image
+        <View height="40%">
+          <MapScreen />
+        </View>
+        {/*<Image
           source={require("../assets/map.png")}
           style={{
             alignSelf: "center",
             resizeMode: "contain",
             height: 180,
           }}
-        />
+        />*/}
         <View
           style={{
             flexDirection: "row",
