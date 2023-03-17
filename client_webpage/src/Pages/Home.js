@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Pane, Paragraph, Heading, majorScale, toaster, UnorderedList, ListItem } from 'evergreen-ui';
+import { useNavigate } from "react-router-dom";
+
 import '../fonts.css';
 import '../App.css';
 import InfoCard from '../components/InfoCard';
@@ -13,6 +15,8 @@ function isValidEmail(email) {
 }
 
 function Home(){
+
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     address: "",
@@ -57,6 +61,7 @@ function Home(){
       image: form.image
     }).then(response => {
       toaster.success("Your form has been submitted!");
+      navigate('/confirm');
     }).catch(error => {
       console.error(error);
     });
