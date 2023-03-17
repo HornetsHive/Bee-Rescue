@@ -242,11 +242,40 @@ app.post("/api/complete_report", (req, res) => {
   const r_id = req.body.r_id;
   //const active = req.body.active;
 
+  //mark report as complete
   const sqlUpdate = "UPDATE reports SET complete = true WHERE r_id = ?;";
   db.query(sqlUpdate, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
   });
+
+  //get report details for email
+  const sqlReportInfo = "SELECT email, address FROM reports WHERE r_id = ?;"
+  db.query(sqlReportInfo, [r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    const details = result[0]; // assuming only one row is returned
+    console.log("Details: " + details);
+
+    //send email update
+    const messagebody =
+      "Your beekeeper has marked your report at " + details.address + " as complete.\n\n Thank you for using Bee Rescue and supporting our beekeepers and local ecosystem. If you enjoyed your experience using Bee Rescue, please recommend us to your friends.";
+    const messageHeader = {
+      from: "BeeRescuePostmaster@outlook.com",
+      to: details.email,
+      subject: "Bee Rescue - Your Report Has Been Completed",
+      text: messagebody,
+    };
+
+    transporter.sendMail(messageHeader, function (err, info) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log("Sent: " + info.response);
+    });
+  });
+
+  //remove completed report from active reports
   const sqlDelete = "DELETE FROM reports WHERE r_id = ?;";
   db.query(sqlDelete, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
@@ -288,6 +317,32 @@ app.post("/api/claim_report", (req, res) => {
   db.query(sqlUpdate, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
+  });
+
+  //get report details for email
+  const sqlReportInfo = "SELECT email, address FROM reports WHERE r_id = ?;"
+  db.query(sqlReportInfo, [r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    const details = result[0]; // assuming only one row is returned
+    console.log("Details: " + details);
+
+    //send email update
+    const messagebody =
+      "A beekeeper has claimed your report at " + details.address + ".\n\n Expect them to arrive soon!";
+    const messageHeader = {
+      from: "BeeRescuePostmaster@outlook.com",
+      to: details.email,
+      subject: "Bee Rescue - Your Report Has Been Claimed",
+      text: messagebody,
+    };
+
+    transporter.sendMail(messageHeader, function (err, info) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log("Sent: " + info.response);
+    });
   });
 });
 

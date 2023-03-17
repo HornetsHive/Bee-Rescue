@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
 
 function MapScreen() {
   const initialRegion = {
-    latitude: 37.78825,
-    longitude: -122.4324,
+    latitude: 38.56,
+    longitude: -121.42,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
@@ -25,7 +25,7 @@ function MapScreen() {
   return (
     <View style={styles.container}>
       <MapView style={styles.map} initialRegion={initialRegion}>
-        <Marker coordinate={{ latitude: 37.78825, longitude: -122.4324 }} />
+        <Marker coordinate={{ latitude: 38.56, longitude: -121.42 }} />
       </MapView>
     </View>
   );
