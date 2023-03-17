@@ -1,2 +1,43 @@
-node_modules
-node_modules
+/node_modules
+.env
+/build
+*.log
+*.swp
+
+./app/node_modules
+./app/.expo/
+./app/dist/
+./app/npm-debug.*
+./app/*.jks
+./app/*.p8
+./app/*.p12
+./app/*.key
+./app/*.mobileprovision
+./app/*.orig.*
+./app/web-build/
+./app/.DS_Store
+
+# dependencies
+./client_webpage/node_modules
+./client_webpage/.pnp
+./client_webpage/.pnp.js
+
+# testing
+./client_webpage/coverage
+
+# production
+./client_webpage/build
+
+# misc
+./client_webpage.DS_Store
+./client_webpage.env.local
+./client_webpage.env.development.local
+./client_webpage.env.test.local
+./client_webpage.env.production.local
+
+./client_webpagenpm-debug.log*
+./client_webpageyarn-debug.log*
+./client_webpageyarn-error.log*
+./client_webpageThe Bee Space.code-workspace
+
+./server/node_modules

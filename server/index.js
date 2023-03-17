@@ -7,10 +7,10 @@ const mysql = require("mysql");
 
 const db = mysql.createConnection({
   //to be changed later
-  host: "45.33.104.176",
-  user: "brdb-dev",
-  password: "beesrock",
-  database: "brdb",
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "beedb",
 });
 
 //Set up nodemailer connection
@@ -86,6 +86,7 @@ app.post("/api/insert", (req, res) => {
     (err, result) => {
       if (err) {
         console.log(err);
+        res.status(500).send("Failed to submit to database");
       } else {
         console.log("Successfully inserted record");
         console.log(result);
@@ -106,13 +107,14 @@ app.post("/api/insert", (req, res) => {
         transporter.sendMail(confirmReportOptions, function (err, info) {
           if (err) {
             console.log(err);
-            return;
+          }else{
+            console.log("Sent: " + info.response);
           }
-          console.log("Sent: " + info.response);
         });
       }
     }
   );
+  res.status(200).send('Insert Succesful');
 });
 
 //send unique code for password reset
