@@ -44,7 +44,7 @@ function Home(){
       return;
     }
 
-    Axios.post("http://localhost:3001/api/insert", {
+    Axios.post("http://45.33.104.176:3001/api/insert", {
       address: form.address,
       fname: form.fname,
       lname: form.lname,
