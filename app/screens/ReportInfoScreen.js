@@ -184,7 +184,9 @@ export default function ReportInfoScreen({ route, navigation }) {
             </View>
           </ScrollView>
       </View>
-
+      
+      
+      
       <View style={styles.footer}>
         <HomeButtonFooter nav={navigation} />
       </View>

@@ -272,6 +272,8 @@ export default function MyReportsScreen({ route, navigation }) {
           </ScrollView>
       </View>
 
+      
+
       <View style={styles.footer}>
         <HomeButtonFooter nav={navigation} />
       </View>
