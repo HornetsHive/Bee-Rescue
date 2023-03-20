@@ -20,7 +20,7 @@ export default function LoginScreen({ navigation }) {
   const [enteredEmail, setEmail] = useState("");
   const [enteredPass, setPass] = useState("");
   const [user, setUser] = React.useState([]);
-  var email, pass, bk_id;
+  var email, bk_id;
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -34,11 +34,10 @@ export default function LoginScreen({ navigation }) {
     user.map((user) => {
       bk_id = user.bk_id;
       email = user.email;
-      pass = user.pass;
     });
 
-    //validate email and password by matching entry in database
-    validate(email, pass);
+    //validate email and id
+    validate(email, bk_id);
   };
 
   // Get the beekeeper id that matches entered email and pass to verify login
@@ -58,7 +57,7 @@ export default function LoginScreen({ navigation }) {
   }
 
   //check if email and password have been entered
-  const validate = (email, pass) => {
+  const validate = (email, bk_id) => {
     if (!enteredEmail) {
       console.log("Please enter email");
       return;
@@ -67,7 +66,7 @@ export default function LoginScreen({ navigation }) {
       console.log("Please enter pasword");
       return;
     }
-    if (email === enteredEmail && pass === enteredPass) {
+    if (email === enteredEmail && bk_id != null) {
       console.log("credentials matched!");
       //navigate to homescreen and pass beekeeper ID
       navigation.navigate("HomeScreen", {
@@ -75,7 +74,9 @@ export default function LoginScreen({ navigation }) {
         bk_id: bk_id,
       });
     } else {
-      console.log("no match");
+      console.log(
+        "wrong email or password | or you may need to hit login once more and it will work"
+      );
       return;
     }
   }; //////////////////////////////////////////////////////////////////////////

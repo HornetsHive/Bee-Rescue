@@ -4,10 +4,11 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const mysql = require("mysql");
-const crypto = require('crypto');
+const crypto = require("crypto");
+const bcrypt = require("bcryptjs");
 
 function generateConfirmationCode() {
-  return crypto.randomBytes(20).toString('hex');
+  return crypto.randomBytes(20).toString("hex");
 }
 
 const db = mysql.createConnection({
@@ -88,7 +89,7 @@ app.post("/api/insert", (req, res) => {
       size,
       "normal",
       image,
-      conf_code
+      conf_code,
     ],
     (err, result) => {
       if (err) {
@@ -100,12 +101,14 @@ app.post("/api/insert", (req, res) => {
 
         //send confirmation email
         //################################# Change this link later! #########################################
-        const confirmationLink = "localhost:3001/confirm-email?code=" + conf_code;
+        const confirmationLink =
+          "localhost:3001/confirm-email?code=" + conf_code;
         const messagebody =
           "Hi " +
           fname +
           ",\n" +
-          "Thank you for submitting your report. We will notifiy the beekeepers in your area, and you will recieve a follow-up email when an available beekeeper claims your report.\n\n Important! Please click this link to confirm your report:\n" + confirmationLink;
+          "Thank you for submitting your report. We will notifiy the beekeepers in your area, and you will recieve a follow-up email when an available beekeeper claims your report.\n\n Important! Please click this link to confirm your report:\n" +
+          confirmationLink;
         const confirmReportOptions = {
           from: "BeeRescuePostmaster@outlook.com",
           to: email,
@@ -116,35 +119,39 @@ app.post("/api/insert", (req, res) => {
         transporter.sendMail(confirmReportOptions, function (err, info) {
           if (err) {
             console.log(err);
-          }else{
+          } else {
             console.log("Sent: " + info.response);
           }
         });
       }
     }
   );
-  res.status(200).send('Insert Succesful');
+  res.status(200).send("Insert Succesful");
 });
 
 // Handle the confirmation link
-app.get('/confirm-email', (req, res) => {
+app.get("/confirm-email", (req, res) => {
   const code = req.query.code;
-  db.query('SELECT * FROM reports WHERE conf_code = ?', [code], (err, rows) => {
+  db.query("SELECT * FROM reports WHERE conf_code = ?", [code], (err, rows) => {
     if (err) {
       console.log(err);
-      return res.status(500).send('Internal Server Error');
+      return res.status(500).send("Internal Server Error");
     }
     if (rows.length === 0) {
-      return res.status(400).send('Invalid confirmation code');
+      return res.status(400).send("Invalid confirmation code");
     }
     const report = rows[0];
-    db.query('UPDATE reports SET confirmed = true WHERE r_id = ?', [report.r_id], (err, result) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).send('Internal Server Error');
+    db.query(
+      "UPDATE reports SET confirmed = true WHERE r_id = ?",
+      [report.r_id],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).send("Internal Server Error");
+        }
+        res.send("Email confirmed");
       }
-      res.send('Email confirmed');
-    });
+    );
   });
 });
 
@@ -176,10 +183,23 @@ app.post("/api/sendCode", (req, res) => {
 app.post("/api/bk_insert", (req, res) => {
   const email = req.body.email;
   const pass = req.body.pass;
-  const sqlINSERT = "INSERT INTO beekeepers (email, pass) VALUES (?, ?);";
-  db.query(sqlINSERT, [email, pass], (err, result) => {
-    if (err) return res.status(500).send(err.message);
-    console.log(result);
+
+  bcrypt.genSalt(10, function (err, salt) {
+    if (err) return console.log(err);
+    bcrypt.hash(pass, salt, function (err, hash) {
+      if (err) return console.log(err);
+      console.log(pass); //only for testing!
+      console.log(hash); //only for testing!
+      console.log(salt); //only for testing!
+
+      //insert hashed password and salt into database
+      const sqlINSERT =
+        "INSERT INTO beekeepers (email, pass, salt) VALUES (?, ?, ?);";
+      db.query(sqlINSERT, [email, hash, salt], (err, result) => {
+        if (err) return res.status(500).send(err.message);
+        console.log(result);
+      });
+    });
   });
 });
 
@@ -205,7 +225,7 @@ app.post("/api/bk_update", (req, res) => {
   );
 });
 
-// Updates a Beekeeper user's Qualifications where the bk_id is equal to the email/pass combo corresponding to the bk_id of the Beekeepers
+// Updates a Beekeeper user's Qualifications based on the bk_id
 app.post("/api/bk_qualif_update", (req, res) => {
   const ground_swarms = req.body.ground_swarms;
   const valve_or_water_main = req.body.valve_or_water_main;
@@ -224,7 +244,6 @@ app.post("/api/bk_qualif_update", (req, res) => {
   const ladder = req.body.ladder; // LADDER IS OF TYPE INT
   const mechanical_lift = req.body.mechanical_lift;
   const bk_id = req.body.bk_id;
-  // TODO: Update query, consider refactoring tables to remove bk_id and only include email/pass as primary key, FROM THE DB TEAM: No
   const sqlUPDATE =
     "UPDATE qualifications SET ground_swarms = ?, valve_or_water_main = ?, shrubs = ?, low_tree = ?, mid_tree = ?, tall_tree = ?, fences = ?, low_structure = ?, mid_structure = ?, chimney = ?, interior = ?, cut_or_trap_out = ?, traffic_accidents = ?, bucket_w_pole = ?, ladder = ?, mechanical_lift = ? WHERE bk_id = ?;";
   db.query(
@@ -256,15 +275,28 @@ app.post("/api/bk_qualif_update", (req, res) => {
   );
 });
 
-//updates bk password using the confirmed id
+//updates bk password and salt using the confirmed id
 app.post("/api/bk_pass_update", (req, res) => {
   const pass = req.body.pass;
   const bk_id = req.body.bk_id;
 
-  const sqlUpdate = "UPDATE beekeepers SET pass = ? WHERE bk_id = ?;";
-  db.query(sqlUpdate, [pass, bk_id], (err, result) => {
-    if (err) return res.status(500).send(err.message);
-    console.log(result);
+  bcrypt.genSalt(10, function (err, salt) {
+    if (err) return console.log(err);
+    bcrypt.hash(pass, salt, function (err, hash) {
+      if (err) return console.log(err);
+
+      console.log(pass); //only for testing!
+      console.log(hash); //only for testing!
+      console.log(salt); //only for testing!
+
+      //update hashed password and salt into database
+      const sqlUpdate =
+        "UPDATE beekeepers SET pass = ?, salt = ? WHERE bk_id = ?;";
+      db.query(sqlUpdate, [hash, salt, bk_id], (err, result) => {
+        if (err) return res.status(500).send(err.message);
+        console.log(result);
+      });
+    });
   });
 });
 
@@ -281,7 +313,7 @@ app.post("/api/complete_report", (req, res) => {
   });
 
   //get report details for email
-  const sqlReportInfo = "SELECT email, address FROM reports WHERE r_id = ?;"
+  const sqlReportInfo = "SELECT email, address FROM reports WHERE r_id = ?;";
   db.query(sqlReportInfo, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     const details = result[0]; // assuming only one row is returned
@@ -289,7 +321,9 @@ app.post("/api/complete_report", (req, res) => {
 
     //send email update
     const messagebody =
-      "Your beekeeper has marked your report at " + details.address + " as complete.\n\n Thank you for using Bee Rescue and supporting our beekeepers and local ecosystem. If you enjoyed your experience using Bee Rescue, please recommend us to your friends.";
+      "Your beekeeper has marked your report at " +
+      details.address +
+      " as complete.\n\n Thank you for using Bee Rescue and supporting our beekeepers and local ecosystem. If you enjoyed your experience using Bee Rescue, please recommend us to your friends.";
     const messageHeader = {
       from: "BeeRescuePostmaster@outlook.com",
       to: details.email,
@@ -351,7 +385,7 @@ app.post("/api/claim_report", (req, res) => {
   });
 
   //get report details for email
-  const sqlReportInfo = "SELECT email, address FROM reports WHERE r_id = ?;"
+  const sqlReportInfo = "SELECT email, address FROM reports WHERE r_id = ?;";
   db.query(sqlReportInfo, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     const details = result[0]; // assuming only one row is returned
@@ -359,7 +393,9 @@ app.post("/api/claim_report", (req, res) => {
 
     //send email update
     const messagebody =
-      "A beekeeper has claimed your report at " + details.address + ".\n\n Expect them to arrive soon!";
+      "A beekeeper has claimed your report at " +
+      details.address +
+      ".\n\n Expect them to arrive soon!";
     const messageHeader = {
       from: "BeeRescuePostmaster@outlook.com",
       to: details.email,
@@ -391,6 +427,7 @@ app.get("/api/bk_user", (req, res) => {
 });
 
 // Fetches the user email/password unique pair based on beekeepers ID
+//not being used as of now
 app.get("/api/bk_pass", (req, res) => {
   const bk_id = req.query.bk_id;
 
@@ -403,21 +440,41 @@ app.get("/api/bk_pass", (req, res) => {
 });
 
 // Fetches ALL the Beekeeper information based on the email/password unique pair
+//uses: login screen and preferences
+//(for future make the login get call return jsut the bk_id
+//and another get call for preferences reurn everythihng BUT email and pass)
+
+//TODO: small bug where if user hits login it does not get confirmed on the app until button is pressed again
 app.get("/api/bk_get", (req, res) => {
   //MSUT use query when making a get request to the database!
   const email = req.query.email;
   const pass = req.query.pass;
 
-  const sqlQuery = "SELECT * FROM beekeepers WHERE email = ? AND pass = ?;";
-  db.query(sqlQuery, [email, pass], (err, result) => {
+  //select the bk using the email then check the hashed password
+  const sqlQuery = "SELECT * FROM beekeepers WHERE email = ?";
+  db.query(sqlQuery, [email], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    res.send(result);
+    try {
+      //validate password
+      //rehashes pasword using stored salt value and compares to hashed password in database
+      bcrypt.hash(pass, result[0]["salt"], function (err, hash) {
+        if (result[0]["pass"] == hash) {
+          console.log("password verified");
+          res.send(result);
+        } else return console.log("wrong password");
+        //catch errors
+        if (err) return console.log(err);
+      });
+    } catch (err) {
+      console.log("email not found");
+    }
   });
 });
 
 // Fetch bee reports to display on the app
 app.get("/api/bk_appReports", (req, res) => {
-  const sqlQuery = "SELECT * FROM reports WHERE active = false AND confirmed = true;";
+  const sqlQuery =
+    "SELECT * FROM reports WHERE active = false AND confirmed = true;";
   db.query(sqlQuery, (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
@@ -456,7 +513,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/api/debug-report", (req, res) => {
-  const sqlINSERT = 'INSERT INTO reports (address, city, zip, phone_no, fname, lname, email, duration, p_type, location, height, size, category, confirmed)\
+  const sqlINSERT =
+    'INSERT INTO reports (address, city, zip, phone_no, fname, lname, email, duration, p_type, location, height, size, category, confirmed)\
    VALUES (\
     "123 Debug St",\
     "Debug",\
@@ -475,9 +533,9 @@ app.get("/api/debug-report", (req, res) => {
   db.query(sqlINSERT, (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
-    res.status(200).send('Insert Succesful');
+    res.status(200).send("Insert Succesful");
   });
-})
+});
 
 //server port, change later
 app.listen(3001, () => {
