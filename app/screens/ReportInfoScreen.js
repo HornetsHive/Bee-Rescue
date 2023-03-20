@@ -43,6 +43,68 @@ export default function ReportInfoScreen({ route, navigation }) {
       });
   };
 
+  function convertPropertyLocation(propertyLocation) {
+    switch (propertyLocation) {
+      case "indoors":
+        return "Indoors";
+      case "ext_wall":
+        return "Exterior structure";
+      case "ext_tree":
+        return "Exterior tree/plant/fixture";
+      case "chimney":
+        return "Chimney";
+      case "infested":
+        return "Inside of a wall/Other inaccessible area";
+      case "ground":
+        return "Ground";
+      case "other":
+        return "Other";
+      default:
+        return "null";
+    }
+  };
+
+  function convertHeight(height) {
+    switch(height) {
+      case "low":
+        return "Low: Less than 10'";
+      case "med":
+        return "Medium: 10' to 20'";
+      case "high":
+        return "High: Greater than 20'";
+      default:
+        return "null";
+    }
+  };
+
+  function convertSize(size) {
+    switch(size) {
+      case "small":
+        return "Small (Size of grapefruit or smaller)";
+      case "med":
+        return "Medium (Size of basketball or smaller)";
+      case "large":
+        return "Large (Larger than a basketball)";
+      default:
+        return "null";
+    }
+  };
+
+  function convertPropertyType(propertyType) {
+    switch(propertyType) {
+      case "res_detached":
+        return "Residential detached home";
+      case "res_apartment":
+        return "Residential apartment";
+      case "commercial":
+        return "Commercial";
+      case "rural":
+        return "Rural";
+      default:
+        return "null";
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -50,7 +112,6 @@ export default function ReportInfoScreen({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
-        <ScrollView>
           <View style={{ height: 57, top: 10, bottom: 100 }}>
             <TouchableOpacity
               style={{
@@ -67,146 +128,65 @@ export default function ReportInfoScreen({ route, navigation }) {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.itemTall}>
-            <View style={styles.label}>
-              <Text
-                style={{
-                  fontFamily: "Comfortaa",
-                  fontSize: 17,
-                  fontWeight: "bold",
-                  bottom: 7,
-                }}
-              >
-                General Area{/*Address*/}
-              </Text>
-            </View>
-            <View style={styles.divider}></View>
-            <View style={styles.content}>
-              <Text
-                style={{
-                  fontFamily: "Comfortaa",
-                  fontSize: 15,
-                  width: "80%",
-                  top: 7,
-                }}
-              >
-                { report.city + ": " + report.zip /*report.address*/ }
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.label}>
-              <Text
-                style={{
-                  fontFamily: "Comfortaa",
-                  fontSize: 17,
-                  fontWeight: "bold",
-                }}
-              >
-                Duration
-              </Text>
+          <ScrollView>
+            <View style={styles.row}>
+                <View style={styles.nameContainer}>
+                  <Text style={styles.nameTxt}>General Area{/*Address*/}</Text>
+                </View>
+                <View>
+                  <Text style={styles.text}>{ report.city + ": " + report.zip /*report.address*/ }</Text>
+                </View>
             </View>
 
-            <View style={styles.divider}></View>
-
-            <View style={styles.content}>
-              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-                { report.duration } days
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.label}>
-              <Text
-                style={{
-                  fontFamily: "Comfortaa",
-                  fontSize: 17,
-                  fontWeight: "bold",
-                }}
-              >
-                Location
-              </Text>
+            <View style={styles.row}>
+                <View style={styles.nameContainer}>
+                  <Text style={styles.nameTxt}>Duration</Text>
+                </View>
+                <View>
+                  <Text style={styles.text}>{ report.duration } days</Text>
+                </View>
             </View>
 
-            <View style={styles.divider}></View>
-
-            <View style={styles.content}>
-              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-                { report.location }
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.label}>
-              <Text
-                style={{
-                  fontFamily: "Comfortaa",
-                  fontSize: 17,
-                  fontWeight: "bold",
-                }}
-              >
-                Height
-              </Text>
+            <View style={styles.row}>
+                <View style={styles.nameContainer}>
+                  <Text style={styles.nameTxt}>Location</Text>
+                </View>
+                <View>
+                  <Text style={styles.text}>{ convertPropertyLocation(report.location) }</Text>
+                </View>
             </View>
 
-            <View style={styles.divider}></View>
-
-            <View style={styles.content}>
-              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-                { report.height }
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.label}>
-              <Text
-                style={{
-                  fontFamily: "Comfortaa",
-                  fontSize: 17,
-                  fontWeight: "bold",
-                }}
-              >
-                Size
-              </Text>
+            <View style={styles.row}>
+                <View style={styles.nameContainer}>
+                  <Text style={styles.nameTxt}>Height</Text>
+                </View>
+                <View>
+                  <Text style={styles.text}>{ convertHeight(report.height) }</Text>
+                </View>
             </View>
 
-            <View style={styles.divider}></View>
-
-            <View style={styles.content}>
-              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-                { report.size }
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.item}>
-            <View style={styles.label}>
-              <Text
-                style={{
-                  fontFamily: "Comfortaa",
-                  fontSize: 17,
-                  fontWeight: "bold",
-                }}
-              >
-                Category
-              </Text>
+            <View style={styles.row}>
+                <View style={styles.nameContainer}>
+                  <Text style={styles.nameTxt}>Size</Text>
+                </View>
+                <View>
+                  <Text style={styles.text}>{ convertSize(report.size) }</Text>
+                </View>
             </View>
 
-            <View style={styles.divider}></View>
-
-            <View style={styles.content}>
-              <Text style={{ fontFamily: "Comfortaa", fontSize: 15 }}>
-                {report.category}
-              </Text>
+            <View style={styles.row}>
+                <View style={styles.nameContainer}>
+                  <Text style={styles.nameTxt}>Property Type</Text>
+                </View>
+                <View>
+                  <Text style={styles.text}>{ convertPropertyType(report.p_type) }</Text>
+                </View>
             </View>
-          </View>
-        </ScrollView>
+          </ScrollView>
       </View>
-
+      
+      
+      
       <View style={styles.footer}>
         <HomeButtonFooter nav={navigation} />
       </View>
@@ -234,10 +214,8 @@ const styles = StyleSheet.create({
   body: {
     flex: 8,
     borderColor: "gray",
-    borderBottomWidth: 1,
     borderTopWidth: 1,
-    padding: 10,
-    overflow: "scroll",
+    borderBottomWidth: 1,
   },
   footer: {
     flex: 1,
@@ -268,5 +246,33 @@ const styles = StyleSheet.create({
     flex: 0,
     padding: 15,
     flexWrap: "wrap",
+  },
+  row: {
+    flexDirection: 'column',
+    borderColor: '#dcdcdc',
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    padding: 10,
+    justifyContent: 'space-between',
+  },
+  nameContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 270,
+  },
+  nameTxt: {
+    marginLeft: 15,
+    fontWeight: '600',
+    color: '#222',
+    fontSize: 15,
+  },
+  details: {
+    fontWeight: '400',
+    color: '#666',
+    fontSize: 12,
+    marginLeft: 15,
+  },
+  text: {
+    paddingLeft: 15,
   },
 });
