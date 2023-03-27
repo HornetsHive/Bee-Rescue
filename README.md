@@ -35,43 +35,43 @@ To check package dependencies, type `npm list` in the `app`, `client_webpage`, o
 2. install mySQL workbench https://dev.mysql.com/downloads/workbench/
 
 3. Configure your SQL server
-   -to create the required server schema, copy and paste `SQLsetup.txt` into mySQL workbench and run. The current schema name is "brdb"
-   -To run locally, input host (localhost), user, password, and database name in `BEE_PROJECT/server/index.js`
+   - to create the required server schema, copy and paste `SQLsetup.txt` into mySQL workbench and run. The current schema name is "brdb"
+   - To run locally, input host (localhost), user, password, and database name in `BEE_PROJECT/server/index.js`
 
 3. install android studio https://developer.android.com/studio
-   -default settings
+   - default settings
    
 4. Configure an android VM
-   -more actions > virtual device manager > choose a device and android version
+   - more actions > virtual device manager > choose a device and android version
 
 5. clone the repo
    - `git clone https://github.com/HornetsHive/Bee_Project.git`
 
 6. Install dependencies
-   -in the terminal navigate to `BEE_PROJECT` folder
-   -run the following commands
-   `cd app`
-   `npm install`
-   `cd ..`
-   `cd client_webpage`
-   `npm install`
-   `cd ..`
-   `cd server`
-   `npm install`
+   - in the terminal navigate to `BEE_PROJECT` folder
+   - run the following commands
+   `cd app`  
+   `npm install`  
+   `cd ..`  
+   `cd client_webpage`  
+   `npm install`  
+   `cd ..`  
+   `cd server`  
+   `npm install`  
 
 ## Configuration
    - There are currently no configuration settings
 
 ## Usage
-- start webpage
+start webpage  
    1. navigate terminal to `client_webpage`
    2. run `npm run start`
 
-- start server
+start server  
    1. navigate terminal to `server`
    2. run `npm run devStart`
 
-- start mobile app
+start mobile app  
    1. start your Android VM through android studio
    2. navigate terminal to `app`
    3. run `expo start`. Your android VM should be detected automatically. 
