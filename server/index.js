@@ -7,10 +7,7 @@ const mysql = require("mysql");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
-function generateConfirmationCode() {
-  return crypto.randomBytes(20).toString("hex");
-}
-
+//SQL server connection
 const db = mysql.createConnection({
   //to be changed later
   host: "45.33.104.176",
@@ -27,6 +24,10 @@ const transporter = nodemailer.createTransport({
     pass: "CSC191testpass",
   },
 });
+
+function generateConfirmationCode() {
+  return crypto.randomBytes(20).toString("hex");
+}
 
 app.use(cors());
 app.use(express.json());

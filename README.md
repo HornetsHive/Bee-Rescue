@@ -6,7 +6,7 @@
  **Technology stack**: Standalone application and website
   - **Frontend**: Javascript/HTML/CSS, Visual Studio (IDE), React Native and React Native add ons (SDK)
   - **Backend**: MySQL - relational, NodeJS
-  - **API**: Google Maps static map *(not yet implemented)*
+  - **API**: Google Maps static map
   - **Server**: Testing: Local/Linode, Official product: AWS *(not finalized)*
   - **Status**: Working Beta
 
@@ -25,83 +25,56 @@
 
 ## Dependencies
 **Dependencies**:
-
-- **React** - https://github.com/facebook/react
-   -Javascript framework for developing web applications
-- **Evergreen UI** - https://evergreen.segment.com/
-   -React Native components and UI framework
-- **Axios** - https://github.com/axios/axios
-   -Easy API calls with NodeJS backend
-- **Exp** - https://www.npmjs.com/package/expo/v/42.0.0-alpha.1
-   -adds functionality for contacts, camera, and location
-
-- **MySQL** - https://www.mysql.com/
-   -SQL database implementation
-
-- **NodeJS**- https://nodejs.org/en/
-   -Asynchronous event-driven JavaScript runtime, Node.js is designed to build scalable network applications
-- **body-parser** https://www.npmjs.com/package/body-parser
-   -Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
-- **cors** - https://www.npmjs.com/package/cors
-   -CORS is a node.js package for providing a Connect/Express middleware
-- **express** - https://www.npmjs.com/package/express
-   -provide small, robust tooling for HTTP servers, making it a great solution for single page applications, websites, hybrids, or public HTTP APIs.
-- **install** - https://www.npmjs.com/package/install
-   -JS module installer and loader
-- **nodemon** - https://www.npmjs.com/package/nodemon
-   -tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected.
+To check package dependencies, type `npm list` in the `app`, `client_webpage`, or `server` directories.
 
 ## Installation
 
 1. install nodejs libraries https://nodejs.org/en/download/
    - download for your OS and install
 
-2. install chocolately windows package manager (if you're on windows) https://chocolatey.org/install
-   - open powershell as admin 
-   - then run `Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))` (this step may take a minute or two)
-   - open command prompt and confirm installation with `choco --version`
+2. install mySQL workbench https://dev.mysql.com/downloads/workbench/
 
-3. install nodejs
-   - open command prompt as admin and type `choco install nodejs`
+3. Configure your SQL server
+   -to create the required server schema, copy and paste `SQLsetup.txt` into mySQL workbench and run. The current schema name is "brdb"
+   -To run locally, input host (localhost), user, password, and database name in `BEE_PROJECT/server/index.js`
 
-4. restart VSCode
-5. navigate to or create an empty folder in your file explorer
-6. open that folder in VSCode
-7. in the VSCode terminal, run `npx create-react-app new_app` (this may take a few minutes)
-   - *new_app* is the name of your react app
-   - this will install a bunch of packages and dependencies.
-8. You can delete the folder when you're done
-   - (for the next steps continue to use the VScode terminal, instalation may take a few minutes)
-9. `npm install express`
-10. `npm install body-parser`
-11. `npm install mysql`
-12. `npm install axios`
-13. `npm install cors`
-14. `npm install react`
-15. `npm install nodemon`
-16. `npm install evergreen-ui`
+3. install android studio https://developer.android.com/studio
+   -default settings
+   
+4. Configure an android VM
+   -more actions > virtual device manager > choose a device and android version
 
-17. install mySQL workbench https://dev.mysql.com/downloads/file/?id=514051
-    - when the webpage opens, click "no thanks, just start my download"
-18. install mysql
-    - open command prompt as admin and run `choco install mysql`
-    - select yes to all by typing `A` (this will take a while) 
+5. clone the repo
+   - `git clone https://github.com/HornetsHive/Bee_Project.git`
+
+6. Install dependencies
+   -in the terminal navigate to `BEE_PROJECT` folder
+   -run the following commands
+   `cd app`
+   `npm install`
+   `cd ..`
+   `cd client_webpage`
+   `npm install`
+   `cd ..`
+   `cd server`
+   `npm install`
 
 ## Configuration
    - There are currently no configuration settings
 
 ## Usage
-   - start webpage
-1. navigate terminal to `client_webpage`
-2. run `npm run start`
+- start webpage
+   1. navigate terminal to `client_webpage`
+   2. run `npm run start`
 
-   - start server
-1. navigate terminal to `server`
-2. run `npm run devStart`
+- start server
+   1. navigate terminal to `server`
+   2. run `npm run devStart`
 
-   - start mobile app
-1. navigate terminal to `app`
-2. run 
+- start mobile app
+   1. start your Android VM through android studio
+   2. navigate terminal to `app`
+   3. run `expo start`. Your android VM should be detected automatically. 
 
 ## How to test the software
 WIP, To be updated
