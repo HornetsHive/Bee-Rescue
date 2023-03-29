@@ -21,6 +21,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
       flexDirection="row"
     >
       <Heading margin={majorScale(1)} size="600">Submit a new Bee Rescue report</Heading>
+      
       {/*------------ REPORTER INFO ------------*/}
       <Pane className="reporterInfo" elevation='2' margin='2em' padding='0.5em' borderRadius='1em'>
         {/*------------ NAME ------------*/}
@@ -30,7 +31,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
           float="center"
           display="flex"
           justifyContent="normal"
-          alignItems="center"
+          alignItems="flex-end"
           flexDirection="row"
         >
 
@@ -226,6 +227,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
         </Pane>
       </Pane>
       <Button
+        className="submitbutton"
         width="25%"
         margin={majorScale(1)}
         marginBottom={majorScale(2)}
