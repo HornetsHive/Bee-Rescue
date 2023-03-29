@@ -137,11 +137,13 @@ export default function HomeScreen({ route, navigation }) {
           Location: Orangevale
         </Text>
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
+            console.log("account id: " + userID);
             navigation.navigate("AccountScreen", {
               screen: "AccountScreen",
+              bk_id: userID,
             })
-          }
+          }}
         >
           <Image
             source={require("../assets/person.png")}
@@ -149,11 +151,13 @@ export default function HomeScreen({ route, navigation }) {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
+            console.log("account id: " + userID);
             navigation.navigate("SettingsScreen", {
               screen: "SettingsScreen",
+              bk_id: userID,
             })
-          }
+          }}
         >
           <Image
             source={require("../assets/gear.png")}
@@ -161,11 +165,13 @@ export default function HomeScreen({ route, navigation }) {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() =>
+          onPress={() => {
+            console.log("account id: " + userID);
             navigation.navigate("MyReportsHomeScreen", {
               screen: "MyReportsHomeScreen",
+              bk_id: userID,
             })
-          }
+          }}
         >
           <Image
             source={require("../assets/myReportButton.png")}
