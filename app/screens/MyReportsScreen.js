@@ -5,13 +5,11 @@ import Axios from "axios";
 import {
   Text,
   View,
-  Image,
   ScrollView,
   StyleSheet,
-  SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
   StatusBar,
+  Alert,
 } from "react-native";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
@@ -30,61 +28,10 @@ export default function MyReportsScreen({ route, navigation }) {
   if (!loaded) {
     return null;
   }
-  /*
-  //fetching info from database to display
-  const showClaimedReports = async () => { //what does async do and can there be more than one?
-    const res = await Axios
-    .get("http://10.0.2.2:3001/api/bk_claimedReports")
-      .then((res) => {
-        setClaimedReports(res.data);
-      })
-      .catch(function (error) {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log("Error: ", error.message);
-        }
-        console.log(error.config);
-      });
-      return res;
-  };
-  var i = 0;
-  claimedreports.map((reports) => {
-    clamReportArray[i] = [reports.address, ", ", reports.city, " ", reports.rdate]; //not sure how this does what it does
-    i++;
-  });
-  const showCompletedReports = async () => {
-    const res = await Axios
-    .get("http://10.0.2.2:3001/api/bk_completedReports")
-      .then((res) => {
-        setCompletedReports(res.data);
-      })
-      .catch(function (error) {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log("Error: ", error.message);
-        }
-        console.log(error.config);
-      });
-      return res;
-  };
-  var j = 0;
-  completedreports.map((reports_archive) => {
-    compReportArray[j] = [reports_archive.address, ", ", reports_archive.city, " ", reports_archive.date]; //not sure how this does what it does
-    j++;
-  });
-  */
-  // to be used in report info screen
+
+  // Complete the report
   const completeReport = () => {
+    console.log("Completing report.");
     Axios.post("http://10.0.2.2:3001/api/complete_report", {
       r_id: report.r_id 
     })
@@ -96,13 +43,12 @@ export default function MyReportsScreen({ route, navigation }) {
         console.log(error);
       });
   };
-  //*/
 
-  // Abandon the report r_id -- right now its hardcoded to 1
+  // Abandon the report
   const abandonReport = () => {
-    console.log("Sent POST request to abandon report.");
+    console.log("Abandoning report.");
     Axios.post("http://10.0.2.2:3001/api/abandon_report", { 
-      r_id: report.r_id }) // Dummy value for r_id
+      r_id: report.r_id })
       .then(function (response) {
         // If successful, print out the server's response
         console.log(response.data);
@@ -113,6 +59,63 @@ export default function MyReportsScreen({ route, navigation }) {
         console.log(error);
       });
   };
+
+  // Shows an alert asking the user confirmation for completing the report
+  const confirmComplete = () => {
+    Alert.alert('Confirm', 'Are you sure you want to complete this report?', [
+      {
+        // Cancel button
+        text: 'Cancel',
+        onPress: () => console.log('Complete confirmation cancelled.'),
+        style: 'cancel',
+      },
+      {
+        // Claim button
+        text: 'Complete', 
+        onPress: () => completeReport(),
+      },
+    ]);
+  }
+
+    // Shows an alert asking the user confirmation for abandoning the report
+    const confirmAbandon = () => {
+      Alert.alert('Confirm', 'Are you sure you want to complete this report?', [
+        {
+          // Cancel button
+          text: 'Cancel',
+          onPress: () => console.log('Abandon confirmation cancelled.'),
+          style: 'cancel',
+        },
+        {
+          // Claim button
+          text: 'Abandon', 
+          onPress: () => reasonForAbandon(),
+        },
+      ]);
+    }
+
+    // Shows an alert asking the reason for abandoning
+    const reasonForAbandon = () => {
+      Alert.alert('Abandoning report', 'Is there a specific reason for abandoning this report?', [
+        {
+          // No reason
+          text: 'No',
+          onPress: () => abandonReport(),
+          style: 'cancel',
+        },
+        {
+          // Exterminator
+          text: 'Needs exterminator', 
+          onPress: () => abandonReport(),
+        },
+        {
+          // No bees
+          text: 'No bee swarm', 
+          onPress: () => abandonReport(),
+        },
+      ]);
+    }
+  
 
   function convertPropertyLocation(propertyLocation) {
     switch (propertyLocation) {
@@ -192,7 +195,7 @@ export default function MyReportsScreen({ route, navigation }) {
               borderRadius: 10,
               backgroundColor: "#d3e954",
             }}
-            onPress={() => completeReport()} // NEED TO IMPLEMENT its kinda there now
+            onPress={() => confirmComplete()}
           >
             <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
               Complete
@@ -207,7 +210,7 @@ export default function MyReportsScreen({ route, navigation }) {
               borderRadius: 10,
               backgroundColor: "#d3e954",
             }}
-            onPress={() => abandonReport()} // NEED TO IMPLEMENT
+            onPress={() => confirmAbandon()}
           >
             <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
               Abandon
@@ -270,9 +273,7 @@ export default function MyReportsScreen({ route, navigation }) {
                 </View>
             </View>
           </ScrollView>
-      </View>
-
-      
+      </View>      
 
       <View style={styles.footer}>
         <HomeButtonFooter nav={navigation} />
