@@ -5,13 +5,11 @@ import Axios from "axios";
 import {
   Text,
   View,
-  Image,
   ScrollView,
   StyleSheet,
-  SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
-  StatusBar
+  StatusBar,
+  Alert
 } from "react-native";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
@@ -28,7 +26,9 @@ export default function ReportInfoScreen({ route, navigation }) {
     return null;
   }
 
+  // Sends claim_report post request to the server
   const claimReport = () => {
+    console.log('Claiming report.')
     Axios.post("http://10.0.2.2:3001/api/claim_report", {
       r_id: report.r_id,
       //Hardcoded to BB
@@ -42,6 +42,23 @@ export default function ReportInfoScreen({ route, navigation }) {
         console.log(error);
       });
   };
+
+  // Shows an alert asking the user to confirm or cancel
+  const confirmClaim = () => {
+    Alert.alert('Confirm', 'Are you sure you want to claim this report?', [
+      {
+        // Cancel button
+        text: 'Cancel',
+        onPress: () => console.log('Claim confirmation cancelled.'),
+        style: 'cancel',
+      },
+      {
+        // Claim button
+        text: 'Claim', 
+        onPress: () => claimReport(),
+      },
+    ]);
+  }
 
   function convertPropertyLocation(propertyLocation) {
     switch (propertyLocation) {
@@ -120,7 +137,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                 borderRadius: 10,
                 backgroundColor: "#d3e954",
               }}
-              onPress={() => claimReport()} // change this to actually claim a report
+              onPress={() => confirmClaim()} // change this to actually claim a report
             >
               <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
                 Claim Report
@@ -183,9 +200,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                 </View>
             </View>
           </ScrollView>
-      </View>
-      
-      
+      </View>      
       
       <View style={styles.footer}>
         <HomeButtonFooter nav={navigation} />
