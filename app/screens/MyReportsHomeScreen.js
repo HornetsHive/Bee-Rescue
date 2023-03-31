@@ -76,6 +76,7 @@ export default function MyReportsHomeScreen({ navigation }) {
     return(formatted);
   };
 
+  //TODO: This returns UTC time
   function makeReadableDate(dateString){
     //split date and time
     var date = dateString.split("T")[0];
@@ -96,8 +97,6 @@ export default function MyReportsHomeScreen({ navigation }) {
     var hour = parseInt(time[0]);
     var minute = parseInt(time[1]);
 
-    //translate from UTC to west coast time; <------ Should probably change this later to be accurate to timezone
-    hour -= 8;
     //determine AM or PM
     var am_pm = "am";
     if (hour >= 12) {

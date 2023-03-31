@@ -2,9 +2,14 @@ import { Pane, UnorderedList, ListItem } from 'evergreen-ui';
 import InfoCard from '../components/InfoCard';
 
 export default function About(){
+  const isMobile = /Mobile/.test(window.navigator.userAgent);
+
   return(
     <Pane flexDirection="row" alignContent="center" display="flex" justifyContent="center">
-      <Pane width="50%" flexDirection="column">
+      <Pane
+        width={isMobile ? '90%' : '50%'}
+        flexDirection="column"
+      >
         <InfoCard
           heading = "About Us:"
           text ={

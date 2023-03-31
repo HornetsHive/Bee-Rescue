@@ -6,6 +6,7 @@ import '../fonts.css';
 import '../App.css';
 import InfoCard from '../components/InfoCard';
 import BRForm from '../components/BRForm'
+import BRFormMobile from '../components/BRFormMobile'
 
 import Axios from 'axios';
 
@@ -17,6 +18,8 @@ function isValidEmail(email) {
 function Home(){
 
   const navigate = useNavigate();
+  const isMobile = /Mobile/.test(window.navigator.userAgent);
+  
 
   const [form, setForm] = useState({
     address: "",
@@ -132,14 +135,22 @@ function Home(){
   return (
     <div className="App">
 
-        <Pane flexDirection="row" alignContent="center" display="flex" justifyContent="center">
-          <Pane width="45%" flexDirection="column">
+        <Pane 
+          flexDirection={isMobile ? 'column' : 'row'}
+          alignContent="center"
+          display="flex"
+          justifyContent="center"
+        >
+          <Pane
+            width={isMobile ? '100%' : '45%'}
+            flexDirection="column"
+          >
 
             {/*Heading*/}
             <Pane
               align="left"
               margin={majorScale(2)}
-              marginTop={majorScale(6)}
+              marginTop={isMobile ? 0 : majorScale(6)}
             >
               <Heading fontFamily="Comfortaa-Bold" size="900">Bee Rescue - Hive Reporting</Heading>
               <Heading paddingTop={majorScale(2)}>Welcome to the Bee Rescue Swarm reporting tool</Heading>
@@ -215,13 +226,28 @@ function Home(){
           </Pane>
 
           {/* ----------Form----------*/}
-          <BRForm
-            form={form}
-            setForm={setForm}
-            errors={errors}
-            setErrors={setErrors}
-            submitReport={submitReport}
-          />
+          <Pane
+            width={isMobile ? '100%' : '33%'}
+          > 
+          {isMobile ?
+            <BRFormMobile
+              form={form}
+              setForm={setForm}
+              errors={errors}
+              setErrors={setErrors}
+              submitReport={submitReport}
+            />
+            
+            :
+            <BRForm
+              form={form}
+              setForm={setForm}
+              errors={errors}
+              setErrors={setErrors}
+              submitReport={submitReport}
+            />
+          }
+          </Pane>
 
         </Pane>
     </div>

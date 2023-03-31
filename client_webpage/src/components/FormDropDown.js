@@ -1,7 +1,7 @@
 import React from 'react';
 import { SelectField, majorScale } from 'evergreen-ui';
 
-function FormDropDown ({ form, setForm, errors, setErrors, label, name, defaultText, options, required}) {
+function FormDropDown ({ form, setForm, errors, setErrors, label, name, defaultText, options, required, width}) {
   const error = errors[name];
   const isInvalid = Boolean(error);
   const validationMessage = error ? error : null;
@@ -21,7 +21,7 @@ function FormDropDown ({ form, setForm, errors, setErrors, label, name, defaultT
         validationMessage={validationMessage}
         label={label}
         margin={majorScale(1)}
-        width="65%"
+        width={width || "65%"}
         defaultValue=""
         value={form[name] || ''} 
         onChange={handleChange}

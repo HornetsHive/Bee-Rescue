@@ -5,8 +5,7 @@ import '../App.css';
 import FormTextEntry from './FormTextEntry';
 import FormDropDown from './FormDropDown';
 
-export default function BRForm({ form, setForm, errors, setErrors, submitReport}) {
-
+export default function BRFormMobile({ form, setForm, errors, setErrors, submitReport}) {
 
   return(
     <Pane
@@ -15,7 +14,6 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
       borderRadius='1em'
       height="fit-content"
       margin={32}
-      marginTop={majorScale(12)}
       align="center"
       flexDirection="row"
     >
@@ -25,13 +23,13 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
       <Pane className="reporterInfo" elevation='2' margin='2em' padding='0.5em' borderRadius='1em'>
         {/*------------ NAME ------------*/}
         <Pane
-          width="85%"
+          width="90%"
           margin={majorScale(2)}
           float="center"
           display="flex"
           justifyContent="normal"
           alignItems="flex-end"
-          flexDirection="row"
+          flexDirection="column"
         >
 
           <FormTextEntry
@@ -80,11 +78,12 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
         <Pane
           margin={majorScale(1)}
           float="center"
-          width="85%"
+          width="90%"
+          marginTop={60}
           display="flex"
           justifyContent="normal"
           alignItems="flex-end"
-          flexDirection="row"
+          flexDirection="column"
         >
 
           <FormTextEntry
@@ -122,7 +121,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
       {/*------------ PROPERTY INFO ------------*/}
       <Pane className="propertyInfo" elevation='2' margin='2em' padding='0.5em' borderRadius='1em'>
         <Pane
-          margin={majorScale(2)}
+          margin={majorScale(1)}
           float="center"
           width="fit-content"
           display="flex"
@@ -137,6 +136,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="90%"
             label="Type of Property"
             name="propertyType"
             defaultText="Select a property type"
@@ -154,6 +154,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="90%"
             label="Where is the hive located on the property?"
             name="propertyLoc"
             defaultText="Select a location"
@@ -174,6 +175,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="90%"
             label="How high up is the hive"
             name="height"
             defaultText="Select a height"
@@ -190,6 +192,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="90%"
             label="How large is the hive?"
             name="size"
             defaultText="Select a size"
@@ -205,8 +208,8 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="90%"
             placeholder={"Numeric only, ie. '4'"}
-            width="65%"
             label="Approximately how many days has the hive been present?:"
             name="duration"
           />
