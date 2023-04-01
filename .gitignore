@@ -42,6 +42,8 @@ client_webpageThe Bee Space.code-workspace
 
 server/node_modules
 
+compose.yaml
+
 # db stuff
 SQLsetup.txt
 SQLdrop.txt

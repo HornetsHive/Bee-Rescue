@@ -33,7 +33,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/api/mailtest", (req, res) => {
+app.get("/mailtest", (req, res) => {
   const mailoptionstest = {
     from: "BeeRescuePostmaster@outlook.com",
     to: "BeeRescuePostmaster@outlook.com",
@@ -52,7 +52,7 @@ app.get("/api/mailtest", (req, res) => {
 //SERVER POSTS//
 
 //reports database insert
-app.post("/api/insert", (req, res) => {
+app.post("/insert", (req, res) => {
   const address = req.body.address;
   const city = req.body.city;
   const zip = req.body.zip;
@@ -103,7 +103,7 @@ app.post("/api/insert", (req, res) => {
         //send confirmation email
         //################################# Change this link later! #########################################
         const confirmationLink =
-          "localhost:3001/confirm-email?code=" + conf_code;
+          "http://45.33.38.54/confirm-email?code=" + conf_code;
         const messagebody =
           "Hi " +
           fname +
@@ -157,7 +157,7 @@ app.get("/confirm-email", (req, res) => {
 });
 
 //send unique code for password reset
-app.post("/api/sendCode", (req, res) => {
+app.post("/sendCode", (req, res) => {
   const email = req.body.email;
   const code = req.body.code;
 
@@ -181,7 +181,7 @@ app.post("/api/sendCode", (req, res) => {
 });
 
 //Inserts a new Beekeeper
-app.post("/api/bk_insert", (req, res) => {
+app.post("/bk_insert", (req, res) => {
   const email = req.body.email;
   const pass = req.body.pass;
 
@@ -205,7 +205,7 @@ app.post("/api/bk_insert", (req, res) => {
 });
 
 // Update Beekeeper table with personal info
-app.post("/api/bk_update", (req, res) => {
+app.post("/bk_update", (req, res) => {
   const fname = req.body.fname;
   const lname = req.body.lname;
   const phone_no = req.body.phone_no;
@@ -227,7 +227,7 @@ app.post("/api/bk_update", (req, res) => {
 });
 
 // Updates a Beekeeper user's Qualifications based on the bk_id
-app.post("/api/bk_qualif_update", (req, res) => {
+app.post("/bk_qualif_update", (req, res) => {
   const ground_swarms = req.body.ground_swarms;
   const valve_or_water_main = req.body.valve_or_water_main;
   const shrubs = req.body.shrubs;
@@ -277,7 +277,7 @@ app.post("/api/bk_qualif_update", (req, res) => {
 });
 
 //updates bk password and salt using the confirmed id
-app.post("/api/bk_pass_update", (req, res) => {
+app.post("/bk_pass_update", (req, res) => {
   const pass = req.body.pass;
   const bk_id = req.body.bk_id;
 
@@ -302,7 +302,7 @@ app.post("/api/bk_pass_update", (req, res) => {
 });
 
 //Posts update to mark report as complete TRIGGER WARNING this will delete this report from reports, if you want to find it again it will be in report_archive
-app.post("/api/complete_report", (req, res) => {
+app.post("/complete_report", (req, res) => {
   const r_id = req.body.r_id;
   //const active = req.body.active;
 
@@ -350,7 +350,7 @@ app.post("/api/complete_report", (req, res) => {
 });
 
 // Delete the report from active_reports table, and set report.active to FALSE
-app.post("/api/abandon_report", (req, res) => {
+app.post("/abandon_report", (req, res) => {
   const r_id = req.body.r_id;
   console.log("Abandoning report #" + r_id);
 
@@ -368,7 +368,7 @@ app.post("/api/abandon_report", (req, res) => {
   res.send("Report has been abandoned.");
 });
 
-app.post("/api/claim_report", (req, res) => {
+app.post("/claim_report", (req, res) => {
   const r_id = req.body.r_id;
   const bk_id = req.body.bk_id;
 
@@ -417,7 +417,7 @@ app.post("/api/claim_report", (req, res) => {
 //GET REALMS//
 
 // Fetches a user email and bk_id from the Beekeepers table
-app.get("/api/bk_user", (req, res) => {
+app.get("/bk_user", (req, res) => {
   const email = req.query.email;
 
   const sqlQuery = "SELECT email, bk_id FROM beekeepers WHERE email = ?;";
@@ -429,7 +429,7 @@ app.get("/api/bk_user", (req, res) => {
 
 // Fetches the user email/password unique pair based on beekeepers ID
 //not being used as of now
-app.get("/api/bk_pass", (req, res) => {
+app.get("/bk_pass", (req, res) => {
   const bk_id = req.query.bk_id;
 
   const sqlQuery = "SELECT email, pass FROM beekeepers WHERE bk_id = ?";
@@ -446,7 +446,7 @@ app.get("/api/bk_pass", (req, res) => {
 //and another get call for preferences reurn everythihng BUT email and pass)
 
 //TODO: small bug where if user hits login it does not get confirmed on the app until button is pressed again
-app.get("/api/bk_get", (req, res) => {
+app.get("/bk_get", (req, res) => {
   //MSUT use query when making a get request to the database!
   const email = req.query.email;
   const pass = req.query.pass;
@@ -473,7 +473,7 @@ app.get("/api/bk_get", (req, res) => {
 });
 
 // Fetch bee reports to display on the app
-app.get("/api/bk_appReports", (req, res) => {
+app.get("/bk_appReports", (req, res) => {
   const sqlQuery =
     "SELECT * FROM reports WHERE active = false AND confirmed = true;";
   db.query(sqlQuery, (err, result) => {
@@ -484,7 +484,7 @@ app.get("/api/bk_appReports", (req, res) => {
 });
 
 // Feteches reports a beekeeper has claimed for MyReports for a report to show here active must be true
-app.get("/api/bk_claimedReports", (req, res) => {
+app.get("/bk_claimedReports", (req, res) => {
   const bk_id = req.query.bk_id;
 
   const sqlQuery =
@@ -497,7 +497,7 @@ app.get("/api/bk_claimedReports", (req, res) => {
 });
 
 // Feteches reports a beekeeper has completed for MyReports
-app.get("/api/bk_completedReports", (req, res) => {
+app.get("/bk_completedReports", (req, res) => {
   const bk_id = req.query.bk_id;
 
   const sqlQuery = "SELECT * FROM report_archive WHERE bk_id = ?";
@@ -513,7 +513,7 @@ app.get("/", (req, res) => {
   res.send("Hello World, this is the Bee Rescue server");
 });
 
-app.get("/api/debug-report", (req, res) => {
+app.get("/debug-report", (req, res) => {
   const sqlINSERT =
     'INSERT INTO reports (address, city, zip, phone_no, fname, lname, email, duration, p_type, location, height, size, category, confirmed)\
    VALUES (\
