@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  backend:
+    image: beeapi-image
+    ports:
+      - "3001:3001"
+  react-app:
+    image: client-webpage-image
+    ports:
+      - "80:80"
