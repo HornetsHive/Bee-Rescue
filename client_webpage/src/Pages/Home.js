@@ -47,7 +47,7 @@ function Home(){
       return;
     }
 
-    Axios.post("/api/insert", {
+    Axios.post("/insert", {
       address: form.address,
       fname: form.fname,
       lname: form.lname,
