@@ -9,7 +9,7 @@ export default class InfoCard extends React.Component {
 
     render() {
       return(
-        <Card style={styles.card}>
+        <Card style={styles.card} elevation={2}>
               <Heading style={styles.heading}>{this.props.heading}</Heading>
               <Paragraph size={500} style={styles.paragraph}>
               {this.props.text}
@@ -25,7 +25,6 @@ const styles = {
   },
 
   card: {
-      elevation: '1',
       borderRadius: '1em',
       backgroundColor: "#FFFFFF", 
       margin: majorScale(2), 

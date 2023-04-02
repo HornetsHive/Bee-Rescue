@@ -5,6 +5,7 @@ import '../fonts.css';
 import '../App.css';
 
 export default function MobileMenu({ isShown, setIsShown }) {
+
   return (
     <Pane
       className="mobile-menu"
@@ -22,7 +23,7 @@ export default function MobileMenu({ isShown, setIsShown }) {
         backgroundColor="#FFFFFF"
         borderRadius="1em"
       >
-        <Link to="/" onClick={() => setIsShown(false)} color="#FFFFFF">Report a Swarm</Link>
+        <Link to="/#form" onClick={() => setIsShown(false)} color="#FFFFFF">Report a Swarm</Link>
       </Card>
 
       <Card

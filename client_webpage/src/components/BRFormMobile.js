@@ -8,6 +8,7 @@ import FormDropDown from './FormDropDown';
 export default function BRFormMobile({ form, setForm, errors, setErrors, submitReport}) {
 
   return(
+    <section id="form">
     <Pane
       className="form"
       elevation={1}
@@ -28,7 +29,7 @@ export default function BRFormMobile({ form, setForm, errors, setErrors, submitR
           float="center"
           display="flex"
           justifyContent="normal"
-          alignItems="flex-end"
+          alignItems="normal"
           flexDirection="column"
         >
 
@@ -82,7 +83,7 @@ export default function BRFormMobile({ form, setForm, errors, setErrors, submitR
           marginTop={60}
           display="flex"
           justifyContent="normal"
-          alignItems="flex-end"
+          alignItems="normal"
           flexDirection="column"
         >
 
@@ -240,5 +241,6 @@ export default function BRFormMobile({ form, setForm, errors, setErrors, submitR
         Submit
       </Button>
     </Pane>
+    </section>
   )
 }

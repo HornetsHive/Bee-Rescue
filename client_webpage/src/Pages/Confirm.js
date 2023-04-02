@@ -11,7 +11,7 @@ export default function Confirm(){
           <>
             Your Bee Rescue report has been submitted. You will receieve an email receipt shortly to confirm your submission.<br/><br/>
 
-            Beekeepers in your area have been notified and you will receive an update email when a Beekeeper claims your report.<br/><br/>
+            Beekeepers in your area will be notified and you will receive an update email when a Beekeeper claims your report.<br/><br/>
           </>
           }
         />

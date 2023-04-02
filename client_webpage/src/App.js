@@ -1,10 +1,9 @@
 import { Pane } from 'evergreen-ui';
-import React from 'react';
-import { Routes, Route, Link} from 'react-router-dom';
+import  React, { useEffect } from 'react';
+import { Routes, Route, Link, useLocation} from 'react-router-dom';
 import './fonts.css';
 import './App.css';
 import MobileMenu from './components/MobileMenu';
-import MobileHeader from './components/MobileHeader';
 import Home from './Pages/Home';
 import About from './Pages/About';
 import Confirm from './Pages/Confirm';
@@ -12,9 +11,27 @@ import Confirm from './Pages/Confirm';
 
 function App(){
 
+  const location = useLocation();
   const isMobile = /Mobile/.test(window.navigator.userAgent);
   const [isShown, setIsShown] = React.useState(false)
+  const { pathname, hash, key } = useLocation();
 
+  useEffect(() => {
+    // if not a hash link, scroll to top
+    if (hash === '') {
+      window.scrollTo(0, 0);
+    }
+    // else scroll to id
+    else {
+      setTimeout(() => {
+        const id = hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView();
+        }
+      }, 0);
+    }
+  }, [pathname, hash, key]); // do this on route change
 
   return (
     
@@ -40,12 +57,19 @@ function App(){
         </div>
       </Pane>
       :
-        <Pane className="header" borderRadius='1em'>
+        <Pane
+          className="header"
+          width="76%" 
+          margin="auto"
+          marginBottom="1em"
+        >
           {/*TODO: Make a logo */}
           {/*<img src="path/to/logo.png" alt="Bee Rescue logo" />*/}
           <nav paddingLeft={100}>
             <ul>
-              <li><Link to="/">Report a Swarm</Link></li>
+              {pathname === "/" ? <></>:
+                <li><Link to="/">Report a Swarm</Link></li>
+              }
               <li><a href="https://sacbeekeepers.org/">Sacramento Area Beekeepers Association</a></li>
               <li><Link to="/about">About us</Link></li>
             </ul>

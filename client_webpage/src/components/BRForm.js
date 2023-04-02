@@ -1,12 +1,11 @@
 import React from 'react';
-import { Pane, Heading, majorScale, Button} from 'evergreen-ui'
+import { Pane, Heading, majorScale, Button, Paragraph} from 'evergreen-ui'
 import '../fonts.css';
 import '../App.css';
 import FormTextEntry from './FormTextEntry';
 import FormDropDown from './FormDropDown';
 
 export default function BRForm({ form, setForm, errors, setErrors, submitReport}) {
-
 
   return(
     <Pane
@@ -15,23 +14,35 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
       borderRadius='1em'
       height="fit-content"
       margin={32}
-      marginTop={majorScale(12)}
       align="center"
       flexDirection="row"
     >
-      <Pane><Heading margin={majorScale(1)} size="600"><br></br>Submit a new Bee Rescue report</Heading></Pane>
+      <Pane>
+        <Heading margin={majorScale(1)} size="600"><br></br>Submit a new Bee Rescue report</Heading>
+        <Paragraph
+              fontFamily="Louis-George-Cafe"
+              color="#000000" 
+              margin={majorScale(4)} 
+              size={400}
+              textAlign="left"
+            >
+              Fill out this form to submit a new report.
+              After confirming your report through your email, the network of beekeepers in your area will be notified
+              about your swarm. You will be contacted shortly to arrange for pickup.
+            </Paragraph>
+      </Pane>
       
       {/*------------ REPORTER INFO ------------*/}
       <Pane className="reporterInfo" elevation='2' margin='2em' padding='0.5em' borderRadius='1em'>
         {/*------------ NAME ------------*/}
         <Pane
-          width="85%"
+          width="60%"
           margin={majorScale(2)}
           float="center"
           display="flex"
           justifyContent="normal"
-          alignItems="flex-end"
-          flexDirection="row"
+          alignItems="normal"
+          flexDirection="column"
         >
 
           <FormTextEntry
@@ -80,11 +91,12 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
         <Pane
           margin={majorScale(1)}
           float="center"
-          width="85%"
+          width="60%"
+          marginTop={60}
           display="flex"
           justifyContent="normal"
-          alignItems="flex-end"
-          flexDirection="row"
+          alignItems="normal"
+          flexDirection="column"
         >
 
           <FormTextEntry
@@ -122,12 +134,12 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
       {/*------------ PROPERTY INFO ------------*/}
       <Pane className="propertyInfo" elevation='2' margin='2em' padding='0.5em' borderRadius='1em'>
         <Pane
+          width="60%"
           margin={majorScale(2)}
           float="center"
-          width="fit-content"
           display="flex"
-          justifyContent="center"
-          alignItems="center"
+          justifyContent="normal"
+          alignItems="normal"
           flexDirection="column"
         >
 
@@ -137,6 +149,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="100%"
             label="Type of Property"
             name="propertyType"
             defaultText="Select a property type"
@@ -154,6 +167,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="100%"
             label="Where is the hive located on the property?"
             name="propertyLoc"
             defaultText="Select a location"
@@ -174,6 +188,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="100%"
             label="How high up is the hive"
             name="height"
             defaultText="Select a height"
@@ -190,6 +205,7 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="100%"
             label="How large is the hive?"
             name="size"
             defaultText="Select a size"
@@ -205,8 +221,8 @@ export default function BRForm({ form, setForm, errors, setErrors, submitReport}
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
+            width="100%"
             placeholder={"Numeric only, ie. '4'"}
-            width="65%"
             label="Approximately how many days has the hive been present?:"
             name="duration"
           />
