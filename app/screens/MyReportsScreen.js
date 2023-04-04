@@ -32,7 +32,7 @@ export default function MyReportsScreen({ route, navigation }) {
   // Complete the report
   const completeReport = () => {
     console.log("Completing report.");
-    Axios.post("http://10.0.2.2:3001/api/complete_report", {
+    Axios.post("http://45.33.38.54:3001/complete_report", {
       r_id: report.r_id 
     })
       .then(function (response) {
@@ -47,7 +47,7 @@ export default function MyReportsScreen({ route, navigation }) {
   // Abandon the report
   const abandonReport = () => {
     console.log("Abandoning report.");
-    Axios.post("http://10.0.2.2:3001/api/abandon_report", { 
+    Axios.post("http://45.33.38.54:3001/abandon_report", { 
       r_id: report.r_id })
       .then(function (response) {
         // If successful, print out the server's response

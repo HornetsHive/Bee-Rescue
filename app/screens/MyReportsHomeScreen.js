@@ -30,7 +30,7 @@ export default function MyReportsHomeScreen({ navigation }) {
   const showClaimedReports = async () => {
     //needs the beekeeper
     const res = await Axios.get("http://10.0.2.2:3001/api/bk_claimedReports", {
-        params: { bk_id: "1"}
+        params: { bk_id: userID}
     })
       .then((res) => {
         setReportRawData(res.data);

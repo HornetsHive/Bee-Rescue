@@ -29,7 +29,7 @@ export default function ReportInfoScreen({ route, navigation }) {
   // Sends claim_report post request to the server
   const claimReport = () => {
     console.log('Claiming report.')
-    Axios.post("http://10.0.2.2:3001/api/claim_report", {
+    Axios.post("http://45.33.38.54:3001/claim_report", {
       r_id: report.r_id,
       //Hardcoded to BB
       bk_id: 1,
