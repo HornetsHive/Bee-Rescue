@@ -28,6 +28,7 @@ export default class MyReportRibbon extends React.Component {
           this.props.nav.navigate("MyReportsScreen", {
             screen: "MyReportsScreen",
             report: thisReport,
+            bk_id: this.props.bk_id,
           });
         }}
       >

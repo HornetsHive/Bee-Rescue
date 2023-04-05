@@ -15,6 +15,7 @@ import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
 
 export default function ReportInfoScreen({ route, navigation }) {
+  const userID = route.params.bk_id;
   const { report } = route.params
 
   const [loaded] = useFonts({
@@ -26,17 +27,19 @@ export default function ReportInfoScreen({ route, navigation }) {
     return null;
   }
 
+  console.log("account id: " + userID);
+
   // Sends claim_report post request to the server
   const claimReport = () => {
     console.log('Claiming report.')
     Axios.post("http://45.33.38.54:3001/claim_report", {
       r_id: report.r_id,
       //Hardcoded to BB
-      bk_id: 1,
+      bk_id: userID,
     })
       .then(function (response) {
         console.log(response.data);
-        navigation.navigate("HomeScreen", { screen: "HomeScreen" })
+        navigation.navigate("HomeScreen", { screen: "HomeScreen", bk_id: userID })
       })
       .catch(function (error) {
         console.log(error);
@@ -203,7 +206,7 @@ export default function ReportInfoScreen({ route, navigation }) {
       </View>      
       
       <View style={styles.footer}>
-        <HomeButtonFooter nav={navigation} />
+        <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
     </View>
   );

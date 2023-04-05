@@ -18,7 +18,8 @@ import {
 import MyReportRibbon from "../components/MyReportRibbon";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 
-export default function MyReportsHomeScreen({ navigation }) {
+export default function MyReportsHomeScreen({ route, navigation }) {
+  const userID = route.params.bk_id;
   const [reportRawData, setReportRawData] = React.useState([]);
   const [formattedReportArray, updateReportArray] = React.useState(new Array());
 
@@ -29,7 +30,8 @@ export default function MyReportsHomeScreen({ navigation }) {
 
   const showClaimedReports = async () => {
     //needs the beekeeper
-    const res = await Axios.get("http://10.0.2.2:3001/api/bk_claimedReports", {
+    //changing '1' to userID isnt displaying user specific claimed reports?
+    const res = await Axios.get("http://45.33.38.54:3001/bk_claimedReports", {
         params: { bk_id: userID}
     })
       .then((res) => {
@@ -144,6 +146,7 @@ export default function MyReportsHomeScreen({ navigation }) {
             <MyReportRibbon
               key={key}
               id={report.reportID}
+              bk_id={userID}
               location={report.formattedLocation}
               date={report.formattedDate}
               nav={navigation}
@@ -155,7 +158,7 @@ export default function MyReportsHomeScreen({ navigation }) {
       </View>
 
       <View style={styles.footer}>
-        <HomeButtonFooter nav={navigation} />
+      <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
     </SafeAreaView>
   );

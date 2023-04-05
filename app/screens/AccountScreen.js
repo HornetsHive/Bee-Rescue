@@ -18,7 +18,9 @@ import {
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader"
 
-export default function AccountScreen({ navigation }) {
+export default function AccountScreen({ route, navigation }) {
+  const userID = route.params.bk_id;
+
   const [image, setImage] = useState("default");
   const [name, setName] = useState();
   const [loc, setLocation] = useState();
@@ -379,7 +381,7 @@ export default function AccountScreen({ navigation }) {
 
       {/* Footer */}
       <View style={styles.footer}>
-        <HomeButtonFooter nav={navigation}/>
+        <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
     </SafeAreaView>
   );
