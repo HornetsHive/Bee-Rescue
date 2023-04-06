@@ -23,7 +23,7 @@ const Stack = createNativeStackNavigator();
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
+    shouldPlaySound: true,
     shouldSetBadge: true,
   }),
 });
@@ -132,12 +132,6 @@ export default function App() {
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
         <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
       </Stack.Navigator>
-      <Button
-        title="Press to Send Notification"
-        onPress={async () => {
-          await sendPushNotification(expoPushToken);
-        }}
-      />
     </NavigationContainer>
   );
 }
