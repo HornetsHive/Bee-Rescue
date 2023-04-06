@@ -222,7 +222,7 @@ export default function HomeScreen({ route, navigation }) {
             <Text style={styles.textBox}>Change location</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => fetchReports().then(console.log("Updated reports"))}
+            onPress={() => fetchReports().then(console.log("Updated reports"), console.log("beekeeper ID: " + userID))}
           >
             <Image
               source={require("../assets/refresh.png")}
@@ -236,6 +236,7 @@ export default function HomeScreen({ route, navigation }) {
             <ReportRibbon
               key={key}
               id={report.reportID}
+              bk_id={userID}
               location={report.formattedLocation}
               area={report.formattedArea}
               date={report.formattedDate}

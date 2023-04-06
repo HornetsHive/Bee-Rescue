@@ -15,6 +15,7 @@ import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
 
 export default function MyReportsScreen({ route, navigation }) {
+  const userID = route.params.bk_id;
   const { report } = route.params;
   const [claimedreports, setClaimedReports] = React.useState([]);
   const [completedreports, setCompletedReports] = React.useState([]);
@@ -37,7 +38,7 @@ export default function MyReportsScreen({ route, navigation }) {
     })
       .then(function (response) {
         console.log(response.data);
-        navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen" })
+        navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen", bk_id: userID })
       })
       .catch(function (error) {
         console.log(error);
@@ -52,7 +53,7 @@ export default function MyReportsScreen({ route, navigation }) {
       .then(function (response) {
         // If successful, print out the server's response
         console.log(response.data);
-        navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen" })
+        navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen", bk_id: userID })
       })
       .catch(function (error) {
         // If error, print the error
@@ -276,7 +277,7 @@ export default function MyReportsScreen({ route, navigation }) {
       </View>      
 
       <View style={styles.footer}>
-        <HomeButtonFooter nav={navigation} />
+      <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
     </View>
   );
