@@ -3,8 +3,10 @@ import * as React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { addNotificationReceivedListener } from "expo-notifications";
 import { NavigationContainer } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import createSender from "./PushController";
+import { Text, View, Button, Platform } from "react-native";
+import { useState, useEffect, useRef } from "react";
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
 
 import AccountScreen from "./screens/AccountScreen";
 import ForgotPassScreen from "./screens/ForgotPassScreen";
@@ -18,35 +20,94 @@ import SettingsScreen from "./screens/SettingsScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 
 const Stack = createNativeStackNavigator();
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: true,
+  }),
+});
+
+// Can use this function below OR use Expo's Push Notification Tool from: https://expo.dev/notifications
+async function sendPushNotification(expoPushToken) {
+  const message = {
+    to: expoPushToken,
+    sound: "default",
+    title: "Original Title",
+    body: "And here is the body!",
+    data: { someData: "goes here" },
+  };
+
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(message),
+  });
+}
+
+async function registerForPushNotificationsAsync() {
+  let token;
+  //if (Device.isDevice) {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+  if (finalStatus !== "granted") {
+    alert("Failed to get push token for push notification!");
+    return;
+  }
+  token = (await Notifications.getExpoPushTokenAsync()).data;
+  console.log(token);
+  //} else {
+  //alert("Must use physical device for Push Notifications");
+  //}
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token;
+}
 
 export default function App() {
-  // Function that will hold our push notification send function (an object with the function)
-  const [sender, setSender] = useState(null);
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
-  // useEffect to get token and create sender, add listener for alerts
   useEffect(() => {
-    // create send function promise
-    const s = createSender();
-    // add notification listener to trigger events when notification is sent
-    addNotificationReceivedListener((notification) => {
-      console.log("Notification Coming!");
-      console.log(notification);
-    });
-    // add function to state when send promise resolves
-    s.then((sendFunc) => {
-      console.log(typeof sendFunc);
-      setSender({ sendFunc });
-    });
+    registerForPushNotificationsAsync().then((token) =>
+      setExpoPushToken(token)
+    );
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
-
-  // useEffect that will send push alert
-  useEffect(() => {
-    // if the send function exists, send a notification
-    if (sender && sender.sendFunc instanceof Function) {
-      console.log(sender);
-      sender.sendFunc("hello");
-    }
-  }, [sender]);
   ////////////////////////////////
 
   return (
@@ -71,6 +132,12 @@ export default function App() {
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
         <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
       </Stack.Navigator>
+      <Button
+        title="Press to Send Notification"
+        onPress={async () => {
+          await sendPushNotification(expoPushToken);
+        }}
+      />
     </NavigationContainer>
   );
 }
