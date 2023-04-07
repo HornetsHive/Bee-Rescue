@@ -18,7 +18,8 @@ import {
 import MyReportRibbon from "../components/MyReportRibbon";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 
-export default function MyReportsHomeScreen({ navigation }) {
+export default function MyReportsHomeScreen({ route, navigation }) {
+  const userID = route.params.bk_id;
   const [reportRawData, setReportRawData] = React.useState([]);
   const [formattedReportArray, updateReportArray] = React.useState(new Array());
 
@@ -29,8 +30,9 @@ export default function MyReportsHomeScreen({ navigation }) {
 
   const showClaimedReports = async () => {
     //needs the beekeeper
-    const res = await Axios.get("http://10.0.2.2:3001/api/bk_claimedReports", {
-        params: { bk_id: "1"}
+    //changing '1' to userID isnt displaying user specific claimed reports?
+    const res = await Axios.get("http://45.33.38.54:3001/bk_claimedReports", {
+        params: { bk_id: userID}
     })
       .then((res) => {
         setReportRawData(res.data);
@@ -76,6 +78,7 @@ export default function MyReportsHomeScreen({ navigation }) {
     return(formatted);
   };
 
+  //TODO: This returns UTC time
   function makeReadableDate(dateString){
     //split date and time
     var date = dateString.split("T")[0];
@@ -96,8 +99,6 @@ export default function MyReportsHomeScreen({ navigation }) {
     var hour = parseInt(time[0]);
     var minute = parseInt(time[1]);
 
-    //translate from UTC to west coast time; <------ Should probably change this later to be accurate to timezone
-    hour -= 8;
     //determine AM or PM
     var am_pm = "am";
     if (hour >= 12) {
@@ -145,6 +146,7 @@ export default function MyReportsHomeScreen({ navigation }) {
             <MyReportRibbon
               key={key}
               id={report.reportID}
+              bk_id={userID}
               location={report.formattedLocation}
               date={report.formattedDate}
               nav={navigation}
@@ -156,7 +158,7 @@ export default function MyReportsHomeScreen({ navigation }) {
       </View>
 
       <View style={styles.footer}>
-        <HomeButtonFooter nav={navigation} />
+      <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
     </SafeAreaView>
   );

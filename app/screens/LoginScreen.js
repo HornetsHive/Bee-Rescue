@@ -44,7 +44,7 @@ export default function LoginScreen({ navigation }) {
   async function fetchBeekeeper() {
     const res = await Axios
       //10.0.2.2 is a general IP address for the emulator
-      .get("http://10.0.2.2:3001/api/bk_get", {
+      .get("http://45.33.38.54:3001/bk_get", {
         params: { email: enteredEmail, pass: enteredPass },
       })
       .then((res) => {

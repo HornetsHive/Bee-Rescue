@@ -20,7 +20,7 @@ export default class HomeButtonFooter extends React.Component {
         >
             <TouchableOpacity
                 onPress={() =>
-                this.props.nav.navigate("HomeScreen", { screen: "HomeScreen" })
+                this.props.nav.navigate("HomeScreen", { screen: "HomeScreen", bk_id: this.props.bk_id })
                 }
             >
                 <Image

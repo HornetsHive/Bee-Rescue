@@ -41,3 +41,12 @@ client_webpageyarn-error.log*
 client_webpageThe Bee Space.code-workspace
 
 server/node_modules
+
+compose.yaml
+git-update.sh
+restart.sh
+up.sh
+
+# db stuff
+SQLsetup.txt
+SQLdrop.txt

@@ -19,7 +19,8 @@ import {
 import AccountHeader from "../components/AccountHeader";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 
-export default function SettingsScreen({ navigation }) {
+export default function SettingsScreen({ route, navigation }) {
+  const userID = route.params.bk_id;
   const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
   const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
 
@@ -113,7 +114,7 @@ export default function SettingsScreen({ navigation }) {
         </View>
 
       <View style={styles.footer}>
-        <HomeButtonFooter nav={navigation}/>
+      <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
     </SafeAreaView>
   );

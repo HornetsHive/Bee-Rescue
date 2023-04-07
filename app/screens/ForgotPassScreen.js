@@ -61,7 +61,7 @@ export default function ForgotPassScreen({ navigation }) {
   //send email to user with unique code
   const submitEmail = () => {
     // check if the email entered is in the database
-    Axios.get("http://10.0.2.2:3001/api/bk_user", {
+    Axios.get("http://45.33.38.54:3001/bk_user", {
       params: { email: enteredEmail },
     }).then((res) => {
       setUser(res.data);
@@ -91,7 +91,7 @@ export default function ForgotPassScreen({ navigation }) {
     //generate unique code and show cod textbox
     genCode();
     //send email
-    Axios.post("http://10.0.2.2:3001/api/sendCode", {
+    Axios.post("http://45.33.38.54:3001/sendCode", {
       email: enteredEmail,
       code: code,
     }).then(() => {
@@ -131,7 +131,7 @@ export default function ForgotPassScreen({ navigation }) {
 
     //update pasword in database with axios then navigate to login
     //maybe check if password is not the same as it was before?
-    Axios.post("http://10.0.2.2:3001/api/bk_pass_update", {
+    Axios.post("http://45.33.38.54:3001/bk_pass_update", {
       pass: pass,
       bk_id: userID,
     }).then(() => {

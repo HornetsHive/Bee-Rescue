@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { useFonts } from "expo-font";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Axios from "axios";
 import {
   Text,
@@ -32,14 +32,14 @@ export default function HomeScreen({ route, navigation }) {
     this.reportID = id;
     this.formattedLocation = location;
     this.formattedDate = date;
-    this.formattedArea = area
+    this.formattedArea = area;
   }
 
   //fetching reports from database to display
   const fetchReports = async () => {
     const res = await Axios
       //10.0.2.2 is a general IP address for the emulator
-      .get("http://10.0.2.2:3001/api/bk_appReports")
+      .get("http://45.33.38.54:3001/bk_appReports")
       .then((res) => {
         setReportRawData(res.data);
         updateReportArray(extractReportInfo(res.data));
@@ -122,12 +122,17 @@ export default function HomeScreen({ route, navigation }) {
 
     return formattedDate + " at " + formattedTime;
   }
+  const [time, setTime] = useState(new Date());
 
-  //get reports on page load
+  //get reports on page load every 10 seconds
   useEffect(() => {
-    // Run this function once on page load
     fetchReports();
     console.log("beekeeper ID: " + userID);
+
+    const interval = setInterval(() => {
+      console.log("refreshing...");
+      fetchReports();
+    }, 10000);
   }, []);
 
   return (
@@ -142,7 +147,7 @@ export default function HomeScreen({ route, navigation }) {
             navigation.navigate("AccountScreen", {
               screen: "AccountScreen",
               bk_id: userID,
-            })
+            });
           }}
         >
           <Image
@@ -156,7 +161,7 @@ export default function HomeScreen({ route, navigation }) {
             navigation.navigate("SettingsScreen", {
               screen: "SettingsScreen",
               bk_id: userID,
-            })
+            });
           }}
         >
           <Image
@@ -170,7 +175,7 @@ export default function HomeScreen({ route, navigation }) {
             navigation.navigate("MyReportsHomeScreen", {
               screen: "MyReportsHomeScreen",
               bk_id: userID,
-            })
+            });
           }}
         >
           <Image
@@ -222,7 +227,12 @@ export default function HomeScreen({ route, navigation }) {
             <Text style={styles.textBox}>Change location</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => fetchReports().then(console.log("Updated reports"))}
+            onPress={() =>
+              fetchReports().then(
+                console.log("Updated reports"),
+                console.log("beekeeper ID: " + userID)
+              )
+            }
           >
             <Image
               source={require("../assets/refresh.png")}
@@ -236,6 +246,7 @@ export default function HomeScreen({ route, navigation }) {
             <ReportRibbon
               key={key}
               id={report.reportID}
+              bk_id={userID}
               location={report.formattedLocation}
               area={report.formattedArea}
               date={report.formattedDate}
@@ -305,11 +316,11 @@ const styles = StyleSheet.create({
     width: 10,
   },
   iconButton: {
-      height: 30,
-      width: 30,
+    height: 30,
+    width: 30,
   },
   iconButtonL: {
     height: 38,
     width: 38,
-}, 
+  },
 });

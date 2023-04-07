@@ -91,7 +91,7 @@ export default function PreferencesScreen({ route, navigation }) {
     }
 
     //axios.post to update beekeeper personal info
-    Axios.post("http://10.0.2.2:3001/api/bk_update", {
+    Axios.post("http://45.33.38.54:3001/api/bk_update", {
       fname: fname,
       lname: lname,
       phone_no: phone_no,
@@ -108,7 +108,7 @@ export default function PreferencesScreen({ route, navigation }) {
       });
 
     //axios post again to update beekeeper qualifications
-    Axios.post("http://10.0.2.2:3001/api/bk_qualif_update", {
+    Axios.post("http://45.33.38.54:3001/api/bk_qualif_update", {
       ground_swarms: ability1,
       valve_or_water_main: ability2,
       shrubs: ability3,
@@ -144,7 +144,7 @@ export default function PreferencesScreen({ route, navigation }) {
   async function fetchBeekeeper() {
     const res = await Axios
       //10.0.2.2 is a general IP address for the emulator
-      .get("http://10.0.2.2:3001/api/bk_get", {
+      .get("http://45.33.38.54:3001/bk_get", {
         params: { email: userEmail, pass: userPass },
       })
       .then((res) => {
