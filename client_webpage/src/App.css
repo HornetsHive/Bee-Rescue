@@ -51,15 +51,15 @@ html {
 .header nav ul li {
   margin-right: 16px;
   margin-left: 16px;
-  padding: 5px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease-in-out;
+  padding: 8px;
+  border-radius: 20px;
+  transition: background-color 0.3s ease-in-out
 }
 
 .header nav ul li:hover{
   background-color: #ffffff;
   color: #fff;
-  border-radius: 8px;
+  border-radius: 20px;
   box-shadow: 0 0 10px #ffffff;
 }
 
