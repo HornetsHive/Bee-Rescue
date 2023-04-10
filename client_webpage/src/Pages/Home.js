@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Pane, Paragraph, Heading, majorScale, toaster, UnorderedList, ListItem } from 'evergreen-ui';
-import { useNavigate } from "react-router-dom";
+import { React } from 'react';
+import { Pane, Paragraph, Heading, majorScale, UnorderedList, ListItem } from 'evergreen-ui';
 
 import '../fonts.css';
 import '../App.css';
@@ -8,129 +7,9 @@ import InfoCard from '../components/InfoCard';
 import BRForm from '../components/BRForm'
 import BRFormMobile from '../components/BRFormMobile'
 
-import Axios from 'axios';
-
-function isValidEmail(email) {
-  var regex = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-  return regex.test(email);
-}
-
 function Home(){
 
-  const navigate = useNavigate();
   const isMobile = /Mobile/.test(window.navigator.userAgent);
-  
-
-  const [form, setForm] = useState({
-    address: "",
-    fname: "",
-    lname: "",
-    city: "",
-    zip: "",
-    email: "",
-    phone_no: "",
-    propertyType: "",
-    propertyLoc: "",
-    duration: "",
-    height: "",
-    size: "",
-    image: ""
-  });
-
-  const submitReport = e => {
-    e.preventDefault();
-
-    //validate form
-    const err = validate();
-    if(err) {
-      toaster.danger('Please input all required fields');
-      return;
-    }
-
-    Axios.post("/api/insert", {
-      address: form.address,
-      fname: form.fname,
-      lname: form.lname,
-      city: form.city,
-      zip: form.zip,
-      email: form.email,
-      phone_no: form.phone_no,
-      propertyType: form.propertyType,
-      propertyLoc: form.propertyLoc,
-      duration: form.duration,
-      location: form.location,
-      height: form.height,
-      size: form.size,
-      image: form.image
-    }).then(response => {
-      toaster.success("Your form has been submitted!");
-      navigate('/confirm');
-    }).catch(error => {
-      console.error(error);
-    });
-  }
-
-  const [errors, setErrors] = useState({
-    address: "",
-    fname: "",
-    lname: "",
-    city: "",
-    zip: "",
-    email: "",
-    phone_no: "",
-    propertyType: "",
-    propertyLoc: "",
-    duration: "",
-    height: "",
-    size: "",
-    image: ""
-  });
-
-  const validate = () => {
-    const newErrors = {...errors};
-    if(!form.address){
-      newErrors.address = "This field is required"
-    }
-    if(!form.fname){
-      newErrors.fname = "This field is required"
-    }
-    if(!form.lname){
-      newErrors.lname = "This field is required"
-    }
-    if(!form.city){
-      newErrors.city = "This field is required"
-    }
-    if(!form.zip){
-      newErrors.zip = "This field is required"
-    }
-    if(isNaN(form.zip) || form.zip.length < 3 || form.zip.length > 5){
-      newErrors.zip = "Please enter a valid zip"
-    }
-    if(!isValidEmail(form.email)){
-      newErrors.email = "Please enter a valid email"
-    }
-    if(!form.email){
-      newErrors.email = "This field is required"
-    }
-    if(!form.phone_no){
-      newErrors.phone_no = "This field is required"
-    }
-    if(!form.propertyType){
-      newErrors.propertyType = "This field is required"
-    }
-    if(!form.propertyLoc){
-      newErrors.propertyLoc = "This field is required"
-    }
-    if(!form.height){
-      newErrors.height = "This field is required"
-    }
-    if(isNaN(form.duration)){
-      newErrors.duration = "Please enter a numeric value"
-    }
-    
-    setErrors(newErrors)
-    return !Object.values(newErrors).every(error => error === '');
-  };
 
   return (
     <div className="App" display="flex" justifyContent="center">
@@ -254,22 +133,10 @@ function Home(){
           width={isMobile ? '100%' : '33%'}
         > 
         {isMobile ?
-          <BRFormMobile
-            form={form}
-            setForm={setForm}
-            errors={errors}
-            setErrors={setErrors}
-            submitReport={submitReport}
-          />
+          <BRFormMobile/>
           
           :
-          <BRForm
-            form={form}
-            setForm={setForm}
-            errors={errors}
-            setErrors={setErrors}
-            submitReport={submitReport}
-          />
+          <BRForm/>
         }
         </Pane>
 
