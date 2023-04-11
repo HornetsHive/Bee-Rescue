@@ -35,7 +35,6 @@ function Home(){
         </Pane>
       }
 
-
       <Pane
         flexDirection={isMobile ? 'column' : 'row'}
         alignContent="center"
