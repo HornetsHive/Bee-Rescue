@@ -47,7 +47,7 @@ export default function LoginScreen({ navigation }) {
         
         if(id != null){
           console.log("credentials matched");
-          navigation.navigate("HomeScreen", {
+          navigation.replace("HomeScreen", {
             screen: "HomeScreen",
             bk_id: id
           })

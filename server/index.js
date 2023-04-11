@@ -10,10 +10,10 @@ const bcrypt = require("bcryptjs");
 //SQL server connection
 const db = mysql.createConnection({
   //to be changed later
-  host: process.env.MYSQL_HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
+  host: "45.33.104.176",
+  user: "brdb-dev",
+  password: "beesrock",
+  database: "brdb",
 });
 
 //Set up nodemailer connection
@@ -99,6 +99,7 @@ app.post("/insert", (req, res) => {
       } else {
         console.log("Successfully inserted record");
         console.log(result);
+        res.status(200).send("Insert Succesful");
 
         //send confirmation email
         //################################# Change this link later! #########################################
@@ -127,7 +128,6 @@ app.post("/insert", (req, res) => {
       }
     }
   );
-  res.status(200).send("Insert Succesful");
 });
 
 // Handle the confirmation link
@@ -199,6 +199,7 @@ app.post("/bk_insert", (req, res) => {
       db.query(sqlINSERT, [email, hash, salt], (err, result) => {
         if (err) return res.status(500).send(err.message);
         console.log(result);
+        res.status(200).send("Insert Succesful");
       });
     });
   });
@@ -222,6 +223,7 @@ app.post("/bk_update", (req, res) => {
     (err, result) => {
       if (err) return res.status(500).send(err.message);
       console.log(result);
+      res.status(200).send("Insert Succesful");
     }
   );
 });
@@ -272,6 +274,7 @@ app.post("/bk_qualif_update", (req, res) => {
       if (err) return res.status(500).send(err.message);
       console.log("qualifications updated");
       console.log(result);
+      res.status(200).send("Insert Succesful");
     }
   );
 });
@@ -296,6 +299,7 @@ app.post("/bk_pass_update", (req, res) => {
       db.query(sqlUpdate, [hash, salt, bk_id], (err, result) => {
         if (err) return res.status(500).send(err.message);
         console.log(result);
+        res.status(200).send("Insert Succesful");
       });
     });
   });

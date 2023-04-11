@@ -13,6 +13,7 @@ import {
   StyleSheet,
   SafeAreaView,
   ImageBackground,
+  Alert
 } from "react-native";
 
 //set the format for the phone number text entry
@@ -90,54 +91,57 @@ export default function PreferencesScreen({ route, navigation }) {
       return;
     }
 
-    //axios.post to update beekeeper personal info
-    Axios.post("http://45.33.38.54:3001/bk_update", {
-      fname: fname,
-      lname: lname,
-      phone_no: phone_no,
-      address: address,
-      city: city,
-      zip: zip,
-      bk_id: bk_id,
-    })
-      .then(() => {
-        console.log("successful insert");
-      })
-      .catch(function (error) {
-        if (error) console.log(error);
-      });
+    // Use Promise.all to wait for both posts to resolve
+    Promise.all([
+      //axios.post to update beekeeper personal info
+      Axios.post("http://45.33.38.54/bk_update", {
+        fname: fname,
+        lname: lname,
+        phone_no: phone_no,
+        address: address,
+        city: city,
+        zip: zip,
+        bk_id: bk_id,
+      }),
 
-    //axios post again to update beekeeper qualifications
-    Axios.post("http://45.33.38.54:3001/bk_qualif_update", {
-      ground_swarms: ability1,
-      valve_or_water_main: ability2,
-      shrubs: ability3,
-      low_tree: ability4,
-      mid_tree: ability5,
-      tall_tree: ability6,
-      fences: ability7,
-      low_structure: ability8,
-      mid_structure: ability9,
-      chimney: ability10,
-      interior: ability11,
-      cut_or_trap_out: ability12,
-      traffic_accidents: ability13,
-      bucket_w_pole: equipment1,
-      ladder: equipment2,
-      mechanical_lift: equipment3,
-      bk_id: bk_id,
-    })
+      //axios post again to update beekeeper qualifications
+      Axios.post("http://45.33.38.54/bk_qualif_update", {
+        ground_swarms: ability1,
+        valve_or_water_main: ability2,
+        shrubs: ability3,
+        low_tree: ability4,
+        mid_tree: ability5,
+        tall_tree: ability6,
+        fences: ability7,
+        low_structure: ability8,
+        mid_structure: ability9,
+        chimney: ability10,
+        interior: ability11,
+        cut_or_trap_out: ability12,
+        traffic_accidents: ability13,
+        bucket_w_pole: equipment1,
+        ladder: equipment2,
+        mechanical_lift: equipment3,
+        bk_id: bk_id,
+      }),
+    ])
       .then(() => {
         console.log("successful insert");
+        //navigate to homescreen and pass bk_id
+        navigation.replace("HomeScreen", {
+          screen: "HomeScreen",
+          bk_id: bk_id,
+        });
       })
-      .catch(function (error) {
-        if (error) console.log(error);
+      .catch((error) => {
+        if (error) console.log("Error in updateNewUser: " + error);
+        Alert.alert(error.message, "Something went wrong processing your request", [
+          {
+            text: 'OK'
+          }
+        ])
+        return;
       });
-    //navigae to homescreen and pass bk_id
-    navigation.navigate("HomeScreen", {
-      screen: "HomeScreen",
-      bk_id: bk_id,
-    });
   };
 
   // Get the beekeeper id that matches entered email and pass to verify login

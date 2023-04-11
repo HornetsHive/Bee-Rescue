@@ -13,6 +13,8 @@ import {
   TextInput,
   SafeAreaView,
   ImageBackground,
+  TouchableOpacity,
+  Alert
 } from "react-native";
 
 function isValidEmail(email) {
@@ -40,28 +42,52 @@ export default function SignUpScreen({ navigation }) {
   //submit email and password
   const submitNewUser = (e) => {
     e.preventDefault();
-
-    //validate submition
+  
+    //validate submission
     const err = validate();
     if (err) {
       return;
     }
-
-    Axios.post("http://45.33.38.54:3001/bk_insert", {
-      email: email,
-      pass: pass,
-    }).catch(function (error) {
-      if (error) console.log(error);
-    });
-    console.log("User created!");
-
-    //navigate to prefrences page
-    navigation.navigate("PreferencesScreen", {
-      screen: "PreferencesScreen",
-      email: email,
-      pass: pass,
-    });
-  };
+  
+    new Promise((resolve, reject) => {
+      Axios.post("http://45.33.38.54:3001/bk_insert", {
+        email: email,
+        pass: pass,
+      })
+        .then(() => {
+          resolve();
+        })
+        .catch(function (error) {
+          console.log(error);
+          Alert.alert(
+            error.message,
+            "Something went wrong processing your request",
+            [
+              {
+                text: "OK",
+              },
+            ]
+          );
+          reject();
+        });
+    })
+      .then(() => {
+        console.log("User created!");
+        //navigate to preferences page
+        navigation.reset({
+          index: 0,
+          routes: [
+            {
+              name: "PreferencesScreen",
+              params: { email: email, pass: pass },
+            },
+          ],
+        });
+      })
+      .catch((error) => { //every .then needs a .catch
+        console.log(error);
+      });
+  };  
 
   const validate = () => {
     const newErrors = { ...errors };
@@ -173,13 +199,24 @@ export default function SignUpScreen({ navigation }) {
                 }}
               />
 
-              <View style={styles.button}>
+              <View style={{height: 50, marginHorizontal: 10, marginTop: 10, marginBottom: 0}}>
                 <Button
                   color="#d92978"
                   title="Sign Up"
                   onPress={submitNewUser}
                 />
               </View>
+
+              <TouchableOpacity
+                style={{ alignSelf: "center", marginTop: 0, marginBottom: 20, padding: 0 }}
+                onPress={() => navigation.reset({
+                  index: 0,
+                  routes: [{ name: 'LoginScreen' }],
+                })}
+              >
+                <Text style={styles.hyperLinkText}>Return to login</Text>
+              </TouchableOpacity>
+
             </View>
           </View>
         </KeyboardAwareScrollView>

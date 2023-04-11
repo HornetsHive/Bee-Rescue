@@ -17,11 +17,13 @@ import {
 
 import ReportRibbon from "../components/ReportRibbon";
 import MapScreen from "../components/MapScreen";
+import { useIsFocused } from '@react-navigation/native';
 
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
   const [reportRawData, setReportRawData] = React.useState([]);
   const [formattedReportArray, updateReportArray] = React.useState([]);
+  const isFocused = useIsFocused();
 
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
@@ -126,14 +128,32 @@ export default function HomeScreen({ route, navigation }) {
 
   //get reports on page load every 10 seconds
   useEffect(() => {
-    fetchReports();
-    console.log("beekeeper ID: " + userID);
+    const fetchAndRefreshReports = async () => {
+      await fetchReports();
+    }
 
     const interval = setInterval(() => {
-      console.log("refreshing...");
-      fetchReports();
+      if(isFocused){
+        console.log("refreshing reports...");
+        fetchAndRefreshReports();
+      }
     }, 10000);
-  }, []);
+
+    // Call the function once before the interval starts to immediately fetch reports
+    fetchAndRefreshReports();
+    console.log("beekeeper ID: " + userID);
+
+    // Clear the interval timer when the component unmount
+    return () => clearInterval(interval);
+  }, [isFocused]);
+
+  //clear the report data when the component is unfocused
+  useEffect(() => {
+    if (!isFocused) {
+      setReportRawData([]);
+      updateReportArray([]);
+    }
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
