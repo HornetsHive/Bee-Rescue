@@ -43,7 +43,7 @@ export default function BRFormMobile() {
       return;
     }
 
-    Axios.post("http://localhost:3001/insert", {
+    Axios.post("http://45.33.38.54:3001/insert", {
       address: form.address,
       fname: form.fname,
       lname: form.lname,

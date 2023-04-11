@@ -133,6 +133,9 @@ export default function SignUpScreen({ navigation }) {
                 * must have a minimum of 8 chars
               </Text>
               <Text style={styles.textSmall}>
+                * must have at least one capital letter
+              </Text>
+              <Text style={styles.textSmall}>
                 * must have at least one special character
               </Text>
               <Text style={styles.textSmall}>

@@ -19,45 +19,14 @@ import {
 export default function LoginScreen({ navigation }) {
   const [enteredEmail, setEmail] = useState("");
   const [enteredPass, setPass] = useState("");
-  const [user, setUser] = React.useState([]);
-  var email, bk_id;
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  //login to the app
-  const login = () => {
-    fetchBeekeeper();
-
-    //map email and password from database if found
-    user.map((user) => {
-      bk_id = user.bk_id;
-      email = user.email;
-    });
-
-    //validate email and id
-    validate(email, bk_id);
-  };
-
   // Get the beekeeper id that matches entered email and pass to verify login
-  async function fetchBeekeeper() {
-    const res = await Axios
-      //10.0.2.2 is a general IP address for the emulator
-      .get("http://45.33.38.54:3001/bk_get", {
-        params: { email: enteredEmail, pass: enteredPass },
-      })
-      .then((res) => {
-        setUser(res.data);
-      })
-      .catch(function (error) {
-        if (error) console.log(error);
-      });
-    return res;
-  }
-
-  //check if email and password have been entered
-  const validate = (email, bk_id) => {
+  async function attemptLogin() {
+    //check if user actually put in input
     if (!enteredEmail) {
       console.log("Please enter email");
       return;
@@ -66,20 +35,32 @@ export default function LoginScreen({ navigation }) {
       console.log("Please enter pasword");
       return;
     }
-    if (email === enteredEmail && bk_id != null) {
-      console.log("credentials matched!");
-      //navigate to homescreen and pass beekeeper ID
-      navigation.navigate("HomeScreen", {
-        screen: "HomeScreen",
-        bk_id: bk_id,
+
+    //grab the user info from db, password is checked serverside and then whole row is sent back, else null
+    const res = await Axios
+      //10.0.2.2 is a general IP address for the emulator
+      .get("http://45.33.38.54:3001/bk_get", {
+        params: { email: enteredEmail, pass: enteredPass },
+      })
+      .then((res) => {
+        var id = res.data[0].bk_id;
+        
+        if(id != null){
+          console.log("credentials matched");
+          navigation.navigate("HomeScreen", {
+            screen: "HomeScreen",
+            bk_id: id
+          })
+        }
+        else{
+          console.log("wrong email or password");
+        }
+      })
+      .catch(function (error) {
+        if (error) console.log(error);
       });
-    } else {
-      console.log(
-        "wrong email or password | or you may need to hit login once more and it will work"
-      );
-      return;
-    }
-  }; //////////////////////////////////////////////////////////////////////////
+    return res;
+  }
 
   if (!loaded) {
     return null;
@@ -135,7 +116,7 @@ export default function LoginScreen({ navigation }) {
                   color="#d92978"
                   title="Login"
                   onPress={() => {
-                    login();
+                    attemptLogin();
                   }}
                 />
               </View>
