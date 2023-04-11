@@ -10,10 +10,10 @@ const bcrypt = require("bcryptjs");
 //SQL server connection
 const db = mysql.createConnection({
   //to be changed later
-  host: "45.33.104.176",
-  user: "brdb-dev",
-  password: "beesrock",
-  database: "brdb",
+  host: process.env.MYSQL_HOST,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
 });
 
 //Set up nodemailer connection
