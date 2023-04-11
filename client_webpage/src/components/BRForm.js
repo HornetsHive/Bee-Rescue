@@ -113,6 +113,9 @@ export default function BRForm() {
     if(!form.phone_no){
       newErrors.phone_no = "This field is required"
     }
+    if(form.phone_no.length < 14){
+      newErrors.phone_no = "Please enter a valid phone number"
+    }
     if(!form.propertyType){
       newErrors.propertyType = "This field is required"
     }
@@ -207,6 +210,7 @@ export default function BRForm() {
             setErrors={setErrors}
             label="Phone:"
             name="phone_no"
+            phone={true}
           />
         </Pane>
 
