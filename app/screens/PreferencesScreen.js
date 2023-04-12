@@ -42,7 +42,7 @@ export default function PreferencesScreen({ route, navigation }) {
   const [user, setUser] = React.useState([]);
   const [errors, setErrors] = useState("");
   const newErrors = { ...errors };
-  var bk_id;
+  var userID;
 
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
@@ -94,18 +94,18 @@ export default function PreferencesScreen({ route, navigation }) {
     // Use Promise.all to wait for both posts to resolve
     Promise.all([
       //axios.post to update beekeeper personal info
-      Axios.post("http://45.33.38.54/bk_update", {
+      Axios.post("http://45.33.38.54:3001/bk_update", {
         fname: fname,
         lname: lname,
         phone_no: phone_no,
         address: address,
         city: city,
         zip: zip,
-        bk_id: bk_id,
+        bk_id: userID,
       }),
 
       //axios post again to update beekeeper qualifications
-      Axios.post("http://45.33.38.54/bk_qualif_update", {
+      Axios.post("http://45.33.38.54:3001/bk_qualif_update", {
         ground_swarms: ability1,
         valve_or_water_main: ability2,
         shrubs: ability3,
@@ -122,7 +122,7 @@ export default function PreferencesScreen({ route, navigation }) {
         bucket_w_pole: equipment1,
         ladder: equipment2,
         mechanical_lift: equipment3,
-        bk_id: bk_id,
+        bk_id: userID,
       }),
     ])
       .then(() => {
@@ -130,7 +130,7 @@ export default function PreferencesScreen({ route, navigation }) {
         //navigate to homescreen and pass bk_id
         navigation.replace("HomeScreen", {
           screen: "HomeScreen",
-          bk_id: bk_id,
+          bk_id: userID,
         });
       })
       .catch((error) => {
@@ -152,7 +152,8 @@ export default function PreferencesScreen({ route, navigation }) {
         params: { email: userEmail, pass: userPass },
       })
       .then((res) => {
-        setUser(res.data);
+        userID = res.data[0].bk_id;
+        console.log(userID);
       })
       .catch(function (error) {
         if (error) console.log(error);
