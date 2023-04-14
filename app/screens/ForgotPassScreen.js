@@ -49,6 +49,8 @@ export default function ForgotPassScreen({ navigation }) {
   const [errors, setErrors] = useState("");
   const [pass, setPass] = useState("");
   const [passConfirm, confirmPass] = useState("");
+  const [hidePass1, setHidePass1] = useState(true);
+  const [hidePass2, setHidePass2] = useState(true);
 
   const [userID, setID] = useState("");
   var email, bk_id, code;
@@ -58,8 +60,14 @@ export default function ForgotPassScreen({ navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  //send email to user with unique code
-  const submitEmail = () => {
+  //verify if email is associated with a beekeeper
+  async function attemptEmailSubmit() {
+    //check if user actually put in input
+    if (!enteredEmail) {
+      console.log("Please enter email");
+      return;
+    }
+
     // check if the email entered is in the database
     Axios.get("http://45.33.38.54:3001/bk_user", {
       params: { email: enteredEmail },
@@ -74,8 +82,7 @@ export default function ForgotPassScreen({ navigation }) {
       setID(bk_id);
     });
 
-    //SMALL ERROR: this doesn't work on first press, but will work on second button press
-    if (bk_id != null) {
+    if ((email = enteredEmail)) {
       sendEmail();
       setShouldShow2(!shouldShow2);
       setShouldShow(!shouldShow);
@@ -83,11 +90,10 @@ export default function ForgotPassScreen({ navigation }) {
     } else {
       console.log("not a registered email");
     }
-  };
+  }
 
+  //send email to user with unique code
   const sendEmail = () => {
-    //verify if email is associated with a beekeeper
-
     //generate unique code and show cod textbox
     genCode();
     //send email
@@ -110,7 +116,7 @@ export default function ForgotPassScreen({ navigation }) {
   };
 
   //reset user password after verifying entered code
-  const resetPass = () => {
+  async function resetPass() {
     //verify code
     if (enteredCode != actualCode) {
       console.log("invalid code");
@@ -119,7 +125,7 @@ export default function ForgotPassScreen({ navigation }) {
     setShouldShow2(!shouldShow2);
     setShouldShow3(!shouldShow3);
     console.log("code confirmed!");
-  };
+  }
 
   const updatePass = () => {
     //validate password
@@ -129,7 +135,7 @@ export default function ForgotPassScreen({ navigation }) {
     }
     console.log("pass confirmed!");
 
-    //update pasword in database with axios then navigate to login
+    //update password in database with axios then navigate to login
     //maybe check if password is not the same as it was before?
     Axios.post("http://45.33.38.54:3001/bk_pass_update", {
       pass: pass,
@@ -149,7 +155,7 @@ export default function ForgotPassScreen({ navigation }) {
     setCode(formattedCode);
   };
 
-  //validate entered pasword
+  //validate entered password
   const validate = () => {
     const newErrors = { ...errors };
     if (!pass) {
@@ -209,7 +215,7 @@ export default function ForgotPassScreen({ navigation }) {
                       color="#d92978"
                       title="Submit"
                       onPress={() => {
-                        submitEmail();
+                        attemptEmailSubmit();
                       }}
                     />
                   </View>
@@ -287,33 +293,92 @@ export default function ForgotPassScreen({ navigation }) {
                   </Text>
 
                   {/*password input*/}
-                  <TextInput
-                    style={styles.input}
-                    label="password"
-                    placeholder="password"
-                    required
-                    secureTextEntry={true}
-                    type="text"
-                    onChangeText={(pass) => {
-                      setPass(pass);
-                      setErrors({ ...errors, pass: "" });
-                    }}
-                  />
+                  <View style={styles.input}>
+                    <TextInput
+                      style={{ marginRight: 25 }}
+                      label="password"
+                      placeholder="password"
+                      required
+                      secureTextEntry={true}
+                      type="text"
+                      onChangeText={(pass) => {
+                        setPass(pass);
+                        setErrors({ ...errors, pass: "" });
+                      }}
+                    />
+                    <View style={styles.passContainer}>
+                      {!hidePass1 ? (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setHidePass1(!hidePass1);
+                          }}
+                        >
+                          <Image
+                            style={styles.eyeIcon}
+                            source={require("../assets/show.png")}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setHidePass1(!hidePass1);
+                          }}
+                        >
+                          <Image
+                            style={styles.eyeIcon}
+                            source={require("../assets/hide.png")}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </View>
 
                   <Text style={styles.textRegular}>confirm new password</Text>
                   {/*confirm password input*/}
-                  <TextInput
-                    style={styles.input}
-                    label="confirmPassword"
-                    placeholder="password"
-                    required
-                    secureTextEntry={true}
-                    type="text"
-                    onChangeText={(passConfirm) => {
-                      confirmPass(passConfirm);
-                      setErrors({ ...errors, passConfirm: "" });
-                    }}
-                  />
+
+                  <View style={styles.input}>
+                    <TextInput
+                      style={{ marginRight: 25 }}
+                      label="confirmPassword"
+                      placeholder="password"
+                      required
+                      secureTextEntry={true}
+                      type="text"
+                      onChangeText={(passConfirm) => {
+                        confirmPass(passConfirm);
+                        setErrors({ ...errors, passConfirm: "" });
+                      }}
+                    />
+                    <View style={styles.passContainer}>
+                      {!hidePass2 ? (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setHidePass2(!hidePass2);
+                          }}
+                        >
+                          <Image
+                            style={styles.eyeIcon}
+                            source={require("../assets/show.png")}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => {
+                            setHidePass2(!hidePass2);
+                          }}
+                        >
+                          <Image
+                            style={styles.eyeIcon}
+                            source={require("../assets/hide.png")}
+                            resizeMode="contain"
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </View>
 
                   <View style={styles.button}>
                     <Button
@@ -327,17 +392,22 @@ export default function ForgotPassScreen({ navigation }) {
                 </View>
               )}
 
-              <View style={styles.button}>
-                <Button
-                  color="#bfbfbf"
-                  title="Back"
-                  onPress={() =>
-                    navigation.navigate("LoginScreen", {
-                      screen: "LoginScreen",
-                    })
-                  }
-                ></Button>
-              </View>
+              <TouchableOpacity
+                style={{
+                  alignSelf: "center",
+                  marginTop: 0,
+                  marginBottom: 20,
+                  padding: 0,
+                }}
+                onPress={() =>
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: "LoginScreen" }],
+                  })
+                }
+              >
+                <Text style={styles.hyperLinkText}>Return to login</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </KeyboardAwareScrollView>

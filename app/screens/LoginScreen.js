@@ -19,6 +19,7 @@ import {
 export default function LoginScreen({ navigation }) {
   const [enteredEmail, setEmail] = useState("");
   const [enteredPass, setPass] = useState("");
+  const [hidePass, setHidePas] = useState(true);
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -44,15 +45,14 @@ export default function LoginScreen({ navigation }) {
       })
       .then((res) => {
         var id = res.data[0].bk_id;
-        
-        if(id != null){
+
+        if (id != null) {
           console.log("credentials matched");
           navigation.replace("HomeScreen", {
             screen: "HomeScreen",
-            bk_id: id
-          })
-        }
-        else{
+            bk_id: id,
+          });
+        } else {
           console.log("wrong email or password");
         }
       })
@@ -96,20 +96,50 @@ export default function LoginScreen({ navigation }) {
                   setEmail(enteredEmail);
                 }}
               />
+
               <Text style={styles.textRegular}>password</Text>
               {/*password input*/}
-              <TextInput
-                style={styles.input}
-                label="password"
-                placeholder="password"
-                required
-                secureTextEntry={true}
-                type="text"
-                name="password"
-                onChangeText={(enteredPass) => {
-                  setPass(enteredPass);
-                }}
-              />
+              <View style={styles.input}>
+                <TextInput
+                  style={{ marginRight: 25 }}
+                  label="password"
+                  placeholder="password"
+                  required
+                  secureTextEntry={hidePass}
+                  type="text"
+                  name="password"
+                  onChangeText={(enteredPass) => {
+                    setPass(enteredPass);
+                  }}
+                />
+                <View style={styles.passContainer}>
+                  {!hidePass ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setHidePas(!hidePass);
+                      }}
+                    >
+                      <Image
+                        style={styles.eyeIcon}
+                        source={require("../assets/show.png")}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setHidePas(!hidePass);
+                      }}
+                    >
+                      <Image
+                        style={styles.eyeIcon}
+                        source={require("../assets/hide.png")}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
 
               <View style={styles.button}>
                 <Button

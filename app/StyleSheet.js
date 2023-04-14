@@ -61,6 +61,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderColor: "white",
   },
+  passContainer: {
+    flex: 1,
+    bottom: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-end",
+  },
   inputCode: {
     height: 50,
     margin: 10,
@@ -76,6 +83,7 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 10,
   },
+  eyeIcon: { width: 20, height: 20 },
   img: {
     alignSelf: "center",
     resizeMode: "contain",
