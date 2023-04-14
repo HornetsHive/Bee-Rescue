@@ -5,10 +5,10 @@
     "version": "1.0.0",
     "orientation": "default",
     "packagerOpts": {
-      "sourceExts": [ "js", "json", "ts", "tsx", "jsx", "vue"],
+      "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"],
       "config": "metro.config.js"
     },
-    
+
     "userInterfaceStyle": "light",
     "splash": {
       "resizeMode": "contain",
@@ -17,15 +17,22 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#FFFFFF",
+        "useNextNotificationsApi": true,
+        "package": "com.SABA.BeeRescue",
+        "permissions": [
+          "READ_EXTERNAL_STORAGE",
+          "WRITE_EXTERNAL_STORAGE",
+          "NOTIFICATIONS"
+        ],
+        "googleServicesFile": "./google-services.json",
+        "versionCode": 1
       },
       "config": {
         "googleMaps": {
@@ -33,7 +40,6 @@
         }
       }
     },
-    "web": {
-    }
+    "web": {}
   }
 }

@@ -17,7 +17,7 @@ import {
 
 import ReportRibbon from "../components/ReportRibbon";
 import MapScreen from "../components/MapScreen";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -130,10 +130,10 @@ export default function HomeScreen({ route, navigation }) {
   useEffect(() => {
     const fetchAndRefreshReports = async () => {
       await fetchReports();
-    }
+    };
 
     const interval = setInterval(() => {
-      if(isFocused){
+      if (isFocused) {
         console.log("refreshing reports...");
         fetchAndRefreshReports();
       }
@@ -209,14 +209,6 @@ export default function HomeScreen({ route, navigation }) {
         <View height="40%">
           <MapScreen />
         </View>
-        {/*<Image
-          source={require("../assets/map.png")}
-          style={{
-            alignSelf: "center",
-            resizeMode: "contain",
-            height: 180,
-          }}
-        />*/}
         <View
           style={{
             flexDirection: "row",
