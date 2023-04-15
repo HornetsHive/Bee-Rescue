@@ -427,7 +427,7 @@ app.get("/bk_user", (req, res) => {
   const sqlQuery = "SELECT email, bk_id FROM beekeepers WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    res.send(result);
+    res.status(200).send(result);
   });
 });
 
@@ -440,7 +440,7 @@ app.get("/bk_pass", (req, res) => {
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
-    res.send(result);
+    res.status(200).send(result);
   });
 });
 
@@ -465,7 +465,7 @@ app.get("/bk_get", (req, res) => {
       bcrypt.hash(pass, result[0]["salt"], function (err, hash) {
         if (result[0]["pass"] == hash) {
           console.log("password verified");
-          res.send(result);
+          res.status(200).send(result);
         } else return console.log("wrong password");
         //catch errors
         if (err) return console.log(err);
@@ -483,7 +483,7 @@ app.get("/bk_appReports", (req, res) => {
   db.query(sqlQuery, (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
-    res.send(result);
+    res.status(200).send(result);
   });
 });
 
@@ -496,7 +496,7 @@ app.get("/bk_claimedReports", (req, res) => {
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
-    res.send(result);
+    res.status(200).send(result);
   });
 });
 
@@ -508,13 +508,8 @@ app.get("/bk_completedReports", (req, res) => {
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
-    res.send(result);
+    res.status(200).send(result);
   });
-});
-
-app.get("/", (req, res) => {
-  console.log("received get");
-  res.send("Hello World, this is the Bee Rescue server");
 });
 
 app.get("/debug-report", (req, res) => {
