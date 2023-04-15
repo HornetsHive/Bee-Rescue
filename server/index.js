@@ -546,3 +546,5 @@ app.get("/debug-report", (req, res) => {
 app.listen(3001, () => {
   console.log("Running on port 3001");
 });
+
+module.exports = app;
