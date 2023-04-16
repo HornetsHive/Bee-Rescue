@@ -124,12 +124,12 @@ app.post("/insert", (req, res) => {
             console.log(err);
           } else {
             console.log("Sent: " + info.response);
+            return res.send(200).send("Action Succesful");
           }
         });
       }
     }
   );
-  return res.send(200).send("Action Succesful");
 });
 
 // Handle the confirmation link
@@ -274,7 +274,7 @@ app.post("/bk_qualif_update", (req, res) => {
       bk_id,
     ],
     (err, result) => {
-      if (err) return res.status(500).send(err.message);
+      if (err) return res.status(500); //.send(err.message)
       console.log("qualifications updated");
       console.log(result);
       return res.status(200).send("Insert Succesful");
@@ -546,8 +546,14 @@ app.get("/debug-report", (req, res) => {
 });
 
 //server port, change later
-app.listen(3001, () => {
+const server = app.listen(3001, () => {
   console.log("Running on port 3001");
 });
 
-module.exports = app;
+module.exports = {
+  app,
+  server,
+  closeServer: () => {
+    server.close();
+  }
+};

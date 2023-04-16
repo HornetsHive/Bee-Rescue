@@ -9,7 +9,7 @@ describe("GET /bk_pass", () => {
         };
         const response = await server
             .get('/bk_pass')
-            .send(emailFetch);
+            .send(passFetch);
         expect(response.status).toBe(200);
     })
 });
