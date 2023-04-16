@@ -46,7 +46,7 @@ app.get("/mailtest", (req, res) => {
       return;
     }
     console.log("Sent: " + info.response);
-    return res.status(200).send("Action Succesful");
+    return res.status(200).send("Action Successful");
   });
 });
 
@@ -100,7 +100,7 @@ app.post("/insert", (req, res) => {
       } else {
         console.log("Successfully inserted record");
         console.log(result);
-        res.status(200).send("Insert Succesful");
+        res.status(200).send("Insert Successful");
 
         //send confirmation email
         //################################# Change this link later! #########################################
@@ -110,7 +110,7 @@ app.post("/insert", (req, res) => {
           "Hi " +
           fname +
           ",\n" +
-          "Thank you for submitting your report. We will notifiy the beekeepers in your area, and you will recieve a follow-up email when an available beekeeper claims your report.\n\n Important! Please click this link to confirm your report:\n" +
+          "Thank you for submitting your report. We will notify the beekeepers in your area, and you will receive a follow-up email when an available beekeeper claims your report.\n\n Important! Please click this link to confirm your report:\n" +
           confirmationLink;
         const confirmReportOptions = {
           from: "BeeRescuePostmaster@outlook.com",
@@ -124,7 +124,7 @@ app.post("/insert", (req, res) => {
             console.log(err);
           } else {
             console.log("Sent: " + info.response);
-            return res.send(200).send("Action Succesful");
+            return res.send(200).send("Action Successful");
           }
         });
       }
@@ -192,9 +192,6 @@ app.post("/bk_insert", (req, res) => {
     if (err) return console.log(err);
     bcrypt.hash(pass, salt, function (err, hash) {
       if (err) return console.log(err);
-      console.log(pass); //only for testing!
-      console.log(hash); //only for testing!
-      console.log(salt); //only for testing!
 
       //insert hashed password and salt into database
       const sqlINSERT =
@@ -292,10 +289,6 @@ app.post("/bk_pass_update", (req, res) => {
     bcrypt.hash(pass, salt, function (err, hash) {
       if (err) return console.log(err);
 
-      console.log(pass); //only for testing!
-      console.log(hash); //only for testing!
-      console.log(salt); //only for testing!
-
       //update hashed password and salt into database
       const sqlUpdate =
         "UPDATE beekeepers SET pass = ?, salt = ? WHERE bk_id = ?;";
@@ -355,7 +348,7 @@ app.post("/complete_report", (req, res) => {
     console.log(res);
   });
 
-  return res.status(200).send("Action Succesful");
+  return res.status(200).send("Action Successful");
 });
 
 // Delete the report from active_reports table, and set report.active to FALSE
@@ -420,7 +413,7 @@ app.post("/claim_report", (req, res) => {
         return;
       }
       console.log("Sent: " + info.response);
-      return res.status(200).send("Action Succesful");
+      return res.status(200).send("Action Successful");
     });
   });
 });
@@ -434,7 +427,7 @@ app.get("/bk_user", (req, res) => {
   const sqlQuery = "SELECT email, bk_id FROM beekeepers WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    return res.status(200).send("Action Succesful");
+    return res.status(200).send("Action Successful");
   });
 });
 
@@ -447,7 +440,7 @@ app.get("/bk_pass", (req, res) => {
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
-    return res.status(200).send("Action Succesful");
+    return res.status(200).send("Action Successful");
   });
 });
 
@@ -480,7 +473,7 @@ app.get("/bk_get", (req, res) => {
       console.log("email not found");
     }
   });
-  return res.status(200).send("Action Succesful");
+  return res.status(200).send("Action Successful");
 });
 
 // Fetch bee reports to display on the app
