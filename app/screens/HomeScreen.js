@@ -39,9 +39,7 @@ export default function HomeScreen({ route, navigation }) {
 
   //fetching reports from database to display
   const fetchReports = async () => {
-    const res = await Axios
-      //10.0.2.2 is a general IP address for the emulator
-      .get("http://45.33.38.54:3001/bk_appReports")
+    const res = await Axios.get("http://45.33.38.54:3001/bk_appReports")
       .then((res) => {
         setReportRawData(res.data);
         updateReportArray(extractReportInfo(res.data));

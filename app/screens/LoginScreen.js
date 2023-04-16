@@ -19,7 +19,7 @@ import {
 export default function LoginScreen({ navigation }) {
   const [enteredEmail, setEmail] = useState("");
   const [enteredPass, setPass] = useState("");
-  const [hidePass, setHidePas] = useState(true);
+  const [hidePass, setHidePass] = useState(true);
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -33,16 +33,14 @@ export default function LoginScreen({ navigation }) {
       return;
     }
     if (!enteredPass) {
-      console.log("Please enter pasword");
+      console.log("Please enter password");
       return;
     }
 
-    //grab the user info from db, password is checked serverside and then whole row is sent back, else null
-    const res = await Axios
-      //10.0.2.2 is a general IP address for the emulator
-      .get("http://45.33.38.54:3001/bk_get", {
-        params: { email: enteredEmail, pass: enteredPass },
-      })
+    //grab the user info from db, password is checked server side and then whole row is sent back, else null
+    const res = await Axios.get("http://45.33.38.54:3001/bk_get", {
+      params: { email: enteredEmail, pass: enteredPass },
+    })
       .then((res) => {
         var id = res.data[0].bk_id;
 
@@ -116,7 +114,7 @@ export default function LoginScreen({ navigation }) {
                   {!hidePass ? (
                     <TouchableOpacity
                       onPress={() => {
-                        setHidePas(!hidePass);
+                        setHidePass(!hidePass);
                       }}
                     >
                       <Image
@@ -128,7 +126,7 @@ export default function LoginScreen({ navigation }) {
                   ) : (
                     <TouchableOpacity
                       onPress={() => {
-                        setHidePas(!hidePass);
+                        setHidePass(!hidePass);
                       }}
                     >
                       <Image

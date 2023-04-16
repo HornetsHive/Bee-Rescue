@@ -167,7 +167,7 @@ app.post("/sendCode", (req, res) => {
   const messageHeader = {
     from: "BeeRescuePostmaster@outlook.com",
     to: email,
-    subject: "Bee Rescue - Pasword Reset Code",
+    subject: "Bee Rescue - Password Reset Code",
     text: messagebody,
   };
 
@@ -199,7 +199,7 @@ app.post("/bk_insert", (req, res) => {
       db.query(sqlINSERT, [email, hash, salt], (err, result) => {
         if (err) return res.status(500).send(err.message);
         console.log(result);
-        res.status(200).send("Insert Succesful");
+        res.status(200).send("Insert Successful");
       });
     });
   });
@@ -223,7 +223,7 @@ app.post("/bk_update", (req, res) => {
     (err, result) => {
       if (err) return res.status(500).send(err.message);
       console.log(result);
-      res.status(200).send("Insert Succesful");
+      res.status(200).send("Insert Successful");
     }
   );
 });
@@ -274,7 +274,7 @@ app.post("/bk_qualif_update", (req, res) => {
       if (err) return res.status(500).send(err.message);
       console.log("qualifications updated");
       console.log(result);
-      res.status(200).send("Insert Succesful");
+      res.status(200).send("Insert Successful");
     }
   );
 });
@@ -299,7 +299,7 @@ app.post("/bk_pass_update", (req, res) => {
       db.query(sqlUpdate, [hash, salt, bk_id], (err, result) => {
         if (err) return res.status(500).send(err.message);
         console.log(result);
-        res.status(200).send("Insert Succesful");
+        res.status(200).send("Insert Successful");
       });
     });
   });
@@ -446,12 +446,11 @@ app.get("/bk_pass", (req, res) => {
 
 // Fetches ALL the Beekeeper information based on the email/password unique pair
 //uses: login screen and preferences
-//(for future make the login get call return jsut the bk_id
-//and another get call for preferences reurn everythihng BUT email and pass)
+//(for future make the login get call return just the bk_id
+//and another get call for preferences return everything BUT email and pass)
 
-//TODO: small bug where if user hits login it does not get confirmed on the app until button is pressed again
 app.get("/bk_get", (req, res) => {
-  //MSUT use query when making a get request to the database!
+  //MUST use query when making a get request to the database!
   const email = req.query.email;
   const pass = req.query.pass;
 
@@ -461,7 +460,7 @@ app.get("/bk_get", (req, res) => {
     if (err) return res.status(500).send(err.message);
     try {
       //validate password
-      //rehashes pasword using stored salt value and compares to hashed password in database
+      //rehashes password using stored salt value and compares to hashed password in database
       bcrypt.hash(pass, result[0]["salt"], function (err, hash) {
         if (result[0]["pass"] == hash) {
           console.log("password verified");
@@ -487,7 +486,7 @@ app.get("/bk_appReports", (req, res) => {
   });
 });
 
-// Feteches reports a beekeeper has claimed for MyReports for a report to show here active must be true
+// Fetches reports a beekeeper has claimed for MyReports for a report to show here active must be true
 app.get("/bk_claimedReports", (req, res) => {
   const bk_id = req.query.bk_id;
 
@@ -500,7 +499,7 @@ app.get("/bk_claimedReports", (req, res) => {
   });
 });
 
-// Feteches reports a beekeeper has completed for MyReports
+// Fetches reports a beekeeper has completed for MyReports
 app.get("/bk_completedReports", (req, res) => {
   const bk_id = req.query.bk_id;
 
@@ -538,7 +537,7 @@ app.get("/debug-report", (req, res) => {
   db.query(sqlINSERT, (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
-    res.status(200).send("Insert Succesful");
+    res.status(200).send("Insert Successful");
   });
 });
 

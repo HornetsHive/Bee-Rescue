@@ -94,7 +94,7 @@ export default function ForgotPassScreen({ navigation }) {
 
   //send email to user with unique code
   const sendEmail = () => {
-    //generate unique code and show cod textbox
+    //generate unique code and show code text box
     genCode();
     //send email
     Axios.post("http://45.33.38.54:3001/sendCode", {

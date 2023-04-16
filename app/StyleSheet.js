@@ -23,13 +23,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   titleText: {
+    marginTop: "1%",
     alignItems: "center",
     fontSize: 40,
     fontFamily: "RoundSerif",
   },
   text: {
     alignItems: "center",
-    paddingTop: "5%",
+    paddingTop: "3%",
     fontSize: 22,
     fontFamily: "Comfortaa",
   },
