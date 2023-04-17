@@ -112,7 +112,7 @@ function sendConfirmationEmail(email, fname, conf_code) {
   //send confirmation email
   //################################# Change this link later! #########################################
   const confirmationLink =
-    "http://45.33.38.54/confirm-email?code=" + conf_code;
+    "http://45.33.38.54:3001/confirm-email?code=" + conf_code;
   const messagebody =
     "Hi " +
     fname +
