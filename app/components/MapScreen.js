@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import MapView, { Marker, Callout } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function MapScreen() {
+function MapScreen({ reportCoordinates }) {
   const initialRegion = {
     latitude: 38.56,
     longitude: -121.42,
@@ -22,10 +23,36 @@ function MapScreen() {
     longitudeDelta: 0.0421,
   };
 
+  const navigation = useNavigation();
+
+  const handleMarkerPress = (reportId) => {
+    console.log("Going to info: " + reportId);
+    navigation.navigate("ReportInfoScreen", {
+      screen: "ReportInfoScreen",
+      reportId: reportId,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <MapView style={styles.map} initialRegion={initialRegion}>
-        <Marker coordinate={{ latitude: 38.56, longitude: -121.42 }} />
+        {reportCoordinates.map((coord) => (
+          <Marker
+            key={coord.id}
+            coordinate={{ latitude: coord.latitude, longitude: coord.longitude }}
+          >
+            <Callout
+              onPress={() => handleMarkerPress(coord.id)}
+              style={styles.callout}
+            >
+              <TouchableOpacity>
+                <View>
+                  <Text>Click for details</Text>
+                </View>
+              </TouchableOpacity>
+            </Callout>
+          </Marker>
+        ))}
       </MapView>
     </View>
   );

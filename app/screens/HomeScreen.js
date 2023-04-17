@@ -23,6 +23,7 @@ export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
   const [reportRawData, setReportRawData] = React.useState([]);
   const [formattedReportArray, updateReportArray] = React.useState([]);
+  const [reportCoordinates, updateReportCoordinates] = React.useState([]);
   const isFocused = useIsFocused();
 
   const [loaded] = useFonts({
@@ -39,51 +40,46 @@ export default function HomeScreen({ route, navigation }) {
 
   //fetching reports from database to display
   const fetchReports = async () => {
-    const res = await Axios.get("http://45.33.38.54:3001/bk_appReports")
-      .then((res) => {
-        setReportRawData(res.data);
+    try {
+      const res = await Axios.get("http://45.33.38.54:3001/bk_appReports");
+      setReportRawData(res.data);
+      if (Array.isArray(res.data) && res.data.length > 0) {
         updateReportArray(extractReportInfo(res.data));
-      })
-      //Error handling below here
-      .catch(function (error) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.log(error.request);
-        } else {
-          //Something happened in setting up the request that triggered an Error
-          console.log("Error", error.message);
-        }
-        console.log(error.config);
-      });
-    return res;
+        updateReportCoordinates(extractReportCoordinates(res.data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   function extractReportInfo(reportData) {
     var formatted = new Array();
-    reportData.map((reports) => {
-      var formattedLocation = reports.address + ", " + reports.city;
-      var rawDate = reports.rdate;
+    reportData.map((report) => {
+      var formattedLocation = report.address + ", " + report.city;
+      var rawDate = report.rdate;
       var formattedDate = makeReadableDate(rawDate);
-      var formattedArea = reports.city + ": (" + reports.zip + ")";
-
+      var formattedArea = report.city + ": (" + report.zip + ")";
+  
       var toPush = new formattedReport(
-        reports.r_id,
+        report.r_id,
         formattedLocation,
         formattedDate,
         formattedArea
       );
-
+  
       formatted.push(toPush);
     });
     return formatted;
+  }
+
+  function extractReportCoordinates(reportData) {
+    return reportData.map((report) => {
+      return {
+        id: report.r_id,
+        latitude: report.lat,
+        longitude: report.lng,
+      };
+    });
   }
 
   function makeReadableDate(dateString) {
@@ -205,7 +201,7 @@ export default function HomeScreen({ route, navigation }) {
 
       <View style={styles.body}>
         <View height="40%">
-          <MapScreen />
+          <MapScreen reportCoordinates={reportCoordinates}/>
         </View>
         <View
           style={{
