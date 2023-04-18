@@ -560,6 +560,17 @@ app.get("/debug-report", (req, res) => {
   });
 });
 
+//fetches all info for a specifc report
+app.get("/report_data", (req, res) => {
+  const r_id = req.query.r_id;
+
+  const sqlQuery = "SELECT * FROM reports WHERE r_id = ?;";
+  db.query(sqlQuery, [r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    res.status(200).send(result);
+  });
+});
+
 //server port, change later
 const server = app.listen(3001, () => {
   console.log("Running on port 3001");

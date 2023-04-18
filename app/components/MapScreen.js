@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function MapScreen({ reportCoordinates }) {
+function MapScreen({ reportCoordinates, bk_id}) {
   const initialRegion = {
     latitude: 38.56,
     longitude: -121.42,
@@ -29,7 +29,8 @@ function MapScreen({ reportCoordinates }) {
     console.log("Going to info: " + reportId);
     navigation.navigate("ReportInfoScreen", {
       screen: "ReportInfoScreen",
-      reportId: reportId,
+      r_id: reportId,
+      bk_id: bk_id
     });
   };
 

@@ -16,14 +16,9 @@ export default class ReportRibbon extends React.Component {
     return (
       <TouchableOpacity
         onPress={() => {
-          console.log("Going to info: " + this.props.id);
-          var thisReport = this.props.rawSQL.filter((obj) => {
-            return obj.r_id === this.props.id;
-          })[0];
-
           this.props.nav.navigate("ReportInfoScreen", {
             screen: "ReportInfoScreen",
-            report: thisReport,
+            r_id: this.props.id,
             bk_id: this.props.bk_id,
           });
         }}

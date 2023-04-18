@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { useState, useEffect } from "react";
 import { useFonts } from "expo-font";
 import Axios from "axios";
 import {
@@ -16,25 +16,18 @@ import AccountHeader from "../components/AccountHeader";
 
 export default function ReportInfoScreen({ route, navigation }) {
   const userID = route.params.bk_id;
-  const { report } = route.params
-
-  const [loaded] = useFonts({
-    Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
-    RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
-  });
-
-  if (!loaded) {
-    return null;
-  }
+  const reportID = route.params.r_id;
+  const[reportData, setReportData] = useState(null);
+  const[loadingData, setLoadingData] = useState(true);
 
   console.log("account id: " + userID);
+  console.log("report id: " + reportID);
 
   // Sends claim_report post request to the server
   const claimReport = () => {
     console.log('Claiming report.')
     Axios.post("http://45.33.38.54:3001/claim_report", {
-      r_id: report.r_id,
-      //Hardcoded to BB
+      r_id: reportID,
       bk_id: userID,
     })
       .then(function (response) {
@@ -125,6 +118,37 @@ export default function ReportInfoScreen({ route, navigation }) {
     }
   };
 
+  useEffect(() => {
+    // Get report data from server
+    console.log("Getting report data...");
+    Axios.get("http://45.33.38.54:3001/report_data", {
+      params: {
+        r_id: reportID,
+      }
+    })
+      .then((response) => {
+        console.log(response.data);
+        setReportData(response.data[0]);
+        setLoadingData(false);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }, []);
+
+  const [loadedFonts] = useFonts({
+    Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
+    RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
+  });
+
+  if (!loadedFonts || loadingData) {
+    return(
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading report data...</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -154,7 +178,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>General Area{/*Address*/}</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ report.city + ": " + report.zip /*report.address*/ }</Text>
+                  <Text style={styles.text}>{ reportData.city + ": " + reportData.zip /*report.address*/ }</Text>
                 </View>
             </View>
 
@@ -163,7 +187,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>Duration</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ report.duration } days</Text>
+                  <Text style={styles.text}>{ reportData.duration } days</Text>
                 </View>
             </View>
 
@@ -172,7 +196,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>Location</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ convertPropertyLocation(report.location) }</Text>
+                  <Text style={styles.text}>{ convertPropertyLocation(reportData.location) }</Text>
                 </View>
             </View>
 
@@ -181,7 +205,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>Height</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ convertHeight(report.height) }</Text>
+                  <Text style={styles.text}>{ convertHeight(reportData.height) }</Text>
                 </View>
             </View>
 
@@ -190,7 +214,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>Size</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ convertSize(report.size) }</Text>
+                  <Text style={styles.text}>{ convertSize(reportData.size) }</Text>
                 </View>
             </View>
 
@@ -199,7 +223,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>Property Type</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ convertPropertyType(report.p_type) }</Text>
+                  <Text style={styles.text}>{ convertPropertyType(reportData.p_type) }</Text>
                 </View>
             </View>
           </ScrollView>
@@ -292,5 +316,14 @@ const styles = StyleSheet.create({
   },
   text: {
     paddingLeft: 15,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 20,
+    color: '#333',
   },
 });

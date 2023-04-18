@@ -201,7 +201,7 @@ export default function HomeScreen({ route, navigation }) {
 
       <View style={styles.body}>
         <View height="40%">
-          <MapScreen reportCoordinates={reportCoordinates}/>
+          <MapScreen reportCoordinates={reportCoordinates} bk_id={userID}/>
         </View>
         <View
           style={{
@@ -257,7 +257,6 @@ export default function HomeScreen({ route, navigation }) {
               area={report.formattedArea}
               date={report.formattedDate}
               nav={navigation}
-              rawSQL={reportRawData}
             />
           ))}
           {/*--------------End of scroll-----------------*/}
