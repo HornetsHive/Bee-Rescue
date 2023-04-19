@@ -1,7 +1,8 @@
 import * as React from "react";
 
 import { useFonts } from "expo-font";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import Axios from "axios";
 import {
   Text,
@@ -116,7 +117,6 @@ export default function HomeScreen({ route, navigation }) {
 
     return formattedDate + " at " + formattedTime;
   }
-  const [time, setTime] = useState(new Date());
 
   //get reports on page load every 10 seconds
   useEffect(() => {
@@ -145,6 +145,16 @@ export default function HomeScreen({ route, navigation }) {
       updateReportArray([]);
     }
   }, [isFocused]);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Run when component is navigated to
+      console.log("Automatic navigation refresh");
+      updateReportArray([]);
+      updateReportCoordinates([])
+      fetchReports();
+    }, [])
+  );
 
   return (
     <SafeAreaView style={styles.container}>
