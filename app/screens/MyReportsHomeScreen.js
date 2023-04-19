@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 
 import { useFonts } from "expo-font";
 import Axios from "axios";
@@ -10,7 +11,6 @@ import {
   ScrollView,
   StyleSheet,
   SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
   StatusBar,
 } from "react-native";
@@ -20,58 +20,44 @@ import HomeButtonFooter from "../components/HomeButtonFooter";
 
 export default function MyReportsHomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
-  const [reportRawData, setReportRawData] = React.useState([]);
-  const [formattedReportArray, updateReportArray] = React.useState(new Array());
+  const [formattedReportArray, updateReportArray] = useState(new Array());
 
-  const [loaded] = useFonts({
-    Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
-    RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
-  });
-
-  const showClaimedReports = async () => {
-    //needs the beekeeper
-    //changing '1' to userID isnt displaying user specific claimed reports?
-    const res = await Axios.get("http://45.33.38.54:3001/bk_claimedReports", {
+  const getClaimedReports = async () => {
+    await Axios.get("http://45.33.38.54:3001/bk_claimedReports", {
         params: { bk_id: userID}
     })
       .then((res) => {
-        setReportRawData(res.data);
-        updateReportArray(extractReportInfo(res.data));
+        if (Array.isArray(res.data) && res.data.length > 0) {
+          updateReportArray(extractReportInfo(res.data));
+        }
       })
       .catch(function (error) {
         if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
           console.log("Error: ", error.message);
         }
-        console.log(error.config);
       });
-    return res;
   };
 
-  function formattedReport(id, location, date){
+  function formattedReport(id, location, date, zip){
     this.reportID = id;
     this.formattedLocation = location;
     this.formattedDate = date;
+    this.zip = zip;
   };
 
   function extractReportInfo(reportData){
     var formatted = new Array();
     reportData.map((reports) => {
       var formattedLocation = reports.address + ", " + reports.city;
-      var rawDate = reports.rdate;
-      var formattedDate = makeReadableDate(rawDate);
+      var formattedDate = makeReadableDate(reports.rdate);
+      var zip = reports.zip;
 
       var toPush = new formattedReport(
         reports.r_id,
         formattedLocation,
-        formattedDate
+        formattedDate,
+        zip
       );
-      //console.log("To Push: " + toPush);
       formatted.push(toPush);
     });
 
@@ -117,8 +103,30 @@ export default function MyReportsHomeScreen({ route, navigation }) {
   //get reports on page load
   useEffect(() => {
     // Run this function once on page load
-    showClaimedReports();
+    getClaimedReports();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Run when component is navigated to
+      console.log("Automatic refresh");
+      updateReportArray([]);
+      getClaimedReports();
+    }, [])
+  );
+
+  const [loadedFonts] = useFonts({
+    Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
+    RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
+  });
+
+  if(!loadedFonts){
+    return(
+      <View>
+        <Text>Error loading page</Text>
+      </View>
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -126,7 +134,7 @@ export default function MyReportsHomeScreen({ route, navigation }) {
         <Text style={styles.title}>My Reports</Text>
         <TouchableOpacity
           onPress={() =>
-            showClaimedReports().
+            getClaimedReports().
               then(
                 console.log("Updating reports...")
               )
@@ -145,12 +153,11 @@ export default function MyReportsHomeScreen({ route, navigation }) {
           {formattedReportArray.map((report, key) =>
             <MyReportRibbon
               key={key}
-              id={report.reportID}
+              r_id={report.reportID}
               bk_id={userID}
               location={report.formattedLocation}
               date={report.formattedDate}
               nav={navigation}
-              rawSQL={reportRawData}
             />
           )}
           {/*--------------End of scroll-------------------------------*/}

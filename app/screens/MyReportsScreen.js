@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { useState, useEffect } from "react";
 import { useFonts } from "expo-font";
 import Axios from "axios";
 import {
@@ -14,27 +14,17 @@ import {
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
 
-export default function MyReportsScreen({ route, navigation }) {
+export default function MyReportsScreen({ route, navigation}) {
   const userID = route.params.bk_id;
-  const { report } = route.params;
-  const [claimedreports, setClaimedReports] = React.useState([]);
-  const [completedreports, setCompletedReports] = React.useState([]);
-  const clamReportArray = new Array();
-  const compReportArray = new Array();
-  const [loaded] = useFonts({
-    Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
-    RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
-  });
-
-  if (!loaded) {
-    return null;
-  }
+  const reportID = route.params.r_id;
+  const[reportData, setReportData] = useState(null);
+  const[loadingData, setLoadingData] = useState(true);
 
   // Complete the report
   const completeReport = () => {
     console.log("Completing report.");
     Axios.post("http://45.33.38.54:3001/complete_report", {
-      r_id: report.r_id 
+      r_id: reportID 
     })
       .then(function (response) {
         console.log(response.data);
@@ -49,9 +39,8 @@ export default function MyReportsScreen({ route, navigation }) {
   const abandonReport = () => {
     console.log("Abandoning report.");
     Axios.post("http://45.33.38.54:3001/abandon_report", { 
-      r_id: report.r_id })
+      r_id: reportID })
       .then(function (response) {
-        // If successful, print out the server's response
         console.log(response.data);
         navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen", bk_id: userID })
       })
@@ -180,11 +169,42 @@ export default function MyReportsScreen({ route, navigation }) {
     }
   };
 
+  useEffect(() => {
+    // Get report data from server
+    console.log("Getting report data for reportID: ", reportID);
+    Axios.get("http://45.33.38.54:3001/report_data", {
+      params: {
+        r_id: reportID,
+      }
+    })
+      .then((response) => {
+        console.log("Report data from server: ", response.data);
+        setReportData(response.data[0]);
+        setLoadingData(false);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  }, []);
+
+  const [loadedFonts] = useFonts({
+    Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
+    RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
+  });
+
+  if (!loadedFonts || loadingData) {
+    return(
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading report data...</Text>
+      </View>
+    );
+  };
+
   //-----------------this return needs rewritting to be more like home screen----------------------//
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <AccountHeader nav={navigation} titleText="My Report" />
+        <AccountHeader nav={navigation} titleText="Claimed Report" />
       </View>
 
       <View style={styles.body}>
@@ -222,19 +242,19 @@ export default function MyReportsScreen({ route, navigation }) {
         <ScrollView>
             <View style={styles.row}>
                 <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>General Area{/*Address*/}</Text>
+                  <Text style={styles.nameTxt}>Address</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ report.city + ": " + report.zip /*report.address*/ }</Text>
+                  <Text style={styles.text}>{reportData.address}, {reportData.city} {reportData.zip}</Text>
                 </View>
             </View>
 
             <View style={styles.row}>
                 <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Duration</Text>
+                  <Text style={styles.nameTxt}>Time present</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ report.duration } days</Text>
+                  <Text style={styles.text}>{ reportData.duration } days</Text>
                 </View>
             </View>
 
@@ -243,7 +263,7 @@ export default function MyReportsScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>Location</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ convertPropertyLocation(report.location) }</Text>
+                  <Text style={styles.text}>{ convertPropertyLocation(reportData.location) }</Text>
                 </View>
             </View>
 
@@ -252,7 +272,7 @@ export default function MyReportsScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>Height</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ convertHeight(report.height) }</Text>
+                  <Text style={styles.text}>{ convertHeight(reportData.height) }</Text>
                 </View>
             </View>
 
@@ -261,7 +281,7 @@ export default function MyReportsScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>Size</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ convertSize(report.size) }</Text>
+                  <Text style={styles.text}>{ convertSize(reportData.size) }</Text>
                 </View>
             </View>
 
@@ -270,7 +290,7 @@ export default function MyReportsScreen({ route, navigation }) {
                   <Text style={styles.nameTxt}>Property Type</Text>
                 </View>
                 <View>
-                  <Text style={styles.text}>{ convertPropertyType(report.p_type) }</Text>
+                  <Text style={styles.text}>{ convertPropertyType(reportData.p_type) }</Text>
                 </View>
             </View>
           </ScrollView>

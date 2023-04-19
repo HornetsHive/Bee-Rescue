@@ -21,7 +21,6 @@ import { useIsFocused } from "@react-navigation/native";
 
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
-  const [reportRawData, setReportRawData] = React.useState([]);
   const [formattedReportArray, updateReportArray] = React.useState([]);
   const [reportCoordinates, updateReportCoordinates] = React.useState([]);
   const isFocused = useIsFocused();
@@ -42,7 +41,6 @@ export default function HomeScreen({ route, navigation }) {
   const fetchReports = async () => {
     try {
       const res = await Axios.get("http://45.33.38.54:3001/bk_appReports");
-      setReportRawData(res.data);
       if (Array.isArray(res.data) && res.data.length > 0) {
         updateReportArray(extractReportInfo(res.data));
         updateReportCoordinates(extractReportCoordinates(res.data));
@@ -144,7 +142,6 @@ export default function HomeScreen({ route, navigation }) {
   //clear the report data when the component is unfocused
   useEffect(() => {
     if (!isFocused) {
-      setReportRawData([]);
       updateReportArray([]);
     }
   }, [isFocused]);
