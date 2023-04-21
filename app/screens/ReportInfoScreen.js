@@ -149,6 +149,19 @@ export default function ReportInfoScreen({ route, navigation }) {
     );
   };
 
+  function renderDuration() {
+    if (reportData.duration != null && reportData.duration != '') {
+      return (<View style={styles.row}>
+      <View style={styles.nameContainer}>
+        <Text style={styles.nameTxt}>Duration</Text>
+      </View>
+      <View>
+        <Text style={styles.text}>{ reportData.duration } days</Text>
+      </View>
+    </View>)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -182,14 +195,7 @@ export default function ReportInfoScreen({ route, navigation }) {
                 </View>
             </View>
 
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Duration</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ reportData.duration } days</Text>
-                </View>
-            </View>
+            {renderDuration()}
 
             <View style={styles.row}>
                 <View style={styles.nameContainer}>
