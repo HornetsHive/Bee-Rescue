@@ -39,10 +39,9 @@ export default function PreferencesScreen({ route, navigation }) {
   const userPass = route.params.pass;
 
   const switchColor = { false: "#808080", true: "#d92978" };
-  const [user, setUser] = React.useState([]);
+  const [userID, setUserID] = useState([]);
   const [errors, setErrors] = useState("");
   const newErrors = { ...errors };
-  var userID;
 
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
@@ -74,74 +73,82 @@ export default function PreferencesScreen({ route, navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  //send beekeeper info and update SQL table
-  const updateNewUser = () => {
-    //fetch beekeeper id using email and password
-    fetchBeekeeper();
-
-    //map id to send to homescreen
-    user.map((user) => {
-      bk_id = user.bk_id;
-    });
-
-    //validate preference input
-    const err = validate();
-    if (err) {
-      console.log(newErrors);
-      return;
-    }
-
-    // Use Promise.all to wait for both posts to resolve
-    Promise.all([
-      //axios.post to update beekeeper personal info
-      Axios.post("http://45.33.38.54:3001/bk_update", {
-        fname: fname,
-        lname: lname,
-        phone_no: phone_no,
-        address: address,
-        city: city,
-        zip: zip,
-        bk_id: userID,
-      }),
-
-      //axios post again to update beekeeper qualifications
-      Axios.post("http://45.33.38.54:3001/bk_qualif_update", {
-        ground_swarms: ability1,
-        valve_or_water_main: ability2,
-        shrubs: ability3,
-        low_tree: ability4,
-        mid_tree: ability5,
-        tall_tree: ability6,
-        fences: ability7,
-        low_structure: ability8,
-        mid_structure: ability9,
-        chimney: ability10,
-        interior: ability11,
-        cut_or_trap_out: ability12,
-        traffic_accidents: ability13,
-        bucket_w_pole: equipment1,
-        ladder: equipment2,
-        mechanical_lift: equipment3,
-        bk_id: userID,
-      }),
-    ])
-      .then(() => {
-        console.log("successful insert");
-        //navigate to homescreen and pass bk_id
-        navigation.replace("HomeScreen", {
-          screen: "HomeScreen",
-          bk_id: userID,
+  const updateNewUser = async () => {
+    try {
+      // Get the beekeeper id that matches entered email and pass to verify login
+      const res = await Axios
+        //10.0.2.2 is a general IP address for the emulator
+        .get("http://45.33.38.54:3001/bk_get", {
+          params: { email: userEmail, pass: userPass },
+        })
+        .catch(function (error) {
+          console.log(error);
+          return null;
         });
-      })
-      .catch((error) => {
-        if (error) console.log("Error in updateNewUser: " + error);
-        Alert.alert(error.message, "Something went wrong processing your request", [
-          {
-            text: 'OK'
-          }
-        ])
+  
+      if (!res || !res.data || res.data.length === 0) {
+        console.error("Beekeeper not found");
         return;
+      }
+  
+      const beekeeperId = res.data[0].bk_id;
+  
+      //validate preference input
+      const err = validate();
+      if (err) {
+        console.log(newErrors);
+        return;
+      }
+  
+      // Use Promise.all to wait for both posts to resolve
+      await Promise.all([
+        //axios.post to update beekeeper personal info
+        Axios.post("http://45.33.38.54:3001/bk_update", {
+          fname: fname,
+          lname: lname,
+          phone_no: phone_no,
+          address: address,
+          city: city,
+          zip: zip,
+          bk_id: beekeeperId,
+        }),
+  
+        //axios post again to update beekeeper qualifications
+        Axios.post("http://45.33.38.54:3001/bk_qualif_update", {
+          ground_swarms: ability1,
+          valve_or_water_main: ability2,
+          shrubs: ability3,
+          low_tree: ability4,
+          mid_tree: ability5,
+          tall_tree: ability6,
+          fences: ability7,
+          low_structure: ability8,
+          mid_structure: ability9,
+          chimney: ability10,
+          interior: ability11,
+          cut_or_trap_out: ability12,
+          traffic_accidents: ability13,
+          bucket_w_pole: equipment1,
+          ladder: equipment2,
+          mechanical_lift: equipment3,
+          bk_id: beekeeperId,
+        }),
+      ]);
+  
+      console.log("successful insert");
+      //navigate to homescreen and pass bk_id
+      navigation.replace("HomeScreen", {
+        screen: "HomeScreen",
+        bk_id: beekeeperId,
       });
+    } catch (error) {
+      console.error("Error in updateNewUser: " + error);
+      Alert.alert(error.message, "Something went wrong processing your request", [
+        {
+          text: "OK",
+        },
+      ]);
+    }
   };
 
   // Get the beekeeper id that matches entered email and pass to verify login
@@ -152,8 +159,7 @@ export default function PreferencesScreen({ route, navigation }) {
         params: { email: userEmail, pass: userPass },
       })
       .then((res) => {
-        userID = res.data[0].bk_id;
-        console.log(userID);
+        setUserID(res.data[0].bk_id);
       })
       .catch(function (error) {
         if (error) console.log(error);

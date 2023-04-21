@@ -3,46 +3,34 @@ import React from "react";
 import {
   Text,
   View,
-  Image,
-  ScrollView,
   StyleSheet,
-  SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
 } from "react-native";
 
-export default class MyReportRibbon extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+export default function MyReportRibbon ({r_id, bk_id, location, date, nav}) {
 
-  render() {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          console.log("Going to info: " + this.props.id);
-          var thisReport = this.props.rawSQL.filter((obj) => {
-            return obj.r_id === this.props.id;
-          })[0];
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        console.log("Going to info: " + r_id);
 
-          this.props.nav.navigate("MyReportsScreen", {
-            screen: "MyReportsScreen",
-            report: thisReport,
-            bk_id: this.props.bk_id,
-          });
-        }}
-      >
-        <View style={styles.task}>
-          <View style={styles.taskText}>
-            <Text value={{}} style={{ fontSize: 16 }}>
-              Swarm at {this.props.location}
-            </Text>
-          </View>
-          <Text>{this.props.date}</Text>
+        nav.navigate("MyReportsScreen", {
+          screen: "MyReportsScreen",
+          r_id: r_id,
+          bk_id: bk_id,
+        });
+      }}
+    >
+      <View style={styles.task}>
+        <View style={styles.taskText}>
+          <Text value={{}} style={{ fontSize: 16 }}>
+            Swarm at {location}
+          </Text>
         </View>
-      </TouchableOpacity>
-    );
-  }
+        <Text>{date}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
