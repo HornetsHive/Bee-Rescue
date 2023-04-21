@@ -98,8 +98,10 @@ export default function AccountScreen({ route, navigation }) {
 
   async function logOut() {
     AsyncStorage.setItem("stayLoggedIn", "");
+    AsyncStorage.setItem("storedEmail", "");
     AsyncStorage.setItem("bk_id", "");
     console.log("logging out");
+
     navigation.navigate("LoginScreen", {
       screen: "LoginScreen",
     });

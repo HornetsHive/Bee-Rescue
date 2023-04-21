@@ -36,6 +36,18 @@ export default function SignUpScreen({ navigation }) {
   const [passConfirm, confirmPass] = useState("");
   const [hidePass1, setHidePass1] = useState(true);
   const [hidePass2, setHidePass2] = useState(true);
+
+  const [inputErrPass, setInputErrPass] = useState(false);
+  const [inputErrPassConfirm, setInputErrPassConfirm] = useState(false);
+  const [inputErrEmail, setInputErrEmail] = useState(false);
+  const [validEmail, setValidEmail] = useState(true);
+  const [validPass, setValidPass] = useState(true);
+  const [validPassConfirm, setValidPassConfirm] = useState(true);
+  const [inputStylePass, setInputStylePass] = useState(styles.input);
+  const [inputStyleEmail, setInputStyleEmail] = useState(styles.input);
+  const [inputStylePassConfirm, setInputStylePassConfirm] = useState(
+    styles.input
+  );
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -94,35 +106,74 @@ export default function SignUpScreen({ navigation }) {
 
   const validate = () => {
     const newErrors = { ...errors };
-    if (!email) {
-      newErrors.email = "This field is required";
-      console.log("Please enter email");
+    if (!email || !pass || !passConfirm) {
+      if (!email) {
+        newErrors.email = "This field is required";
+        console.log("Please enter email");
+        setInputStyleEmail(styles.inputError);
+        setInputErrEmail(true);
+      }
+      if (!pass) {
+        newErrors.pass = "This field is required";
+        console.log("Please enter password");
+        setInputStylePass(styles.inputError);
+        setInputErrPass(true);
+      }
+      if (!passConfirm) {
+        console.log("Please confirm password");
+        setInputStylePassConfirm(styles.inputError);
+        setInputErrPassConfirm(true);
+      }
     }
-    if (!pass) {
-      newErrors.pass = "This field is required";
-      console.log("Please enter password");
-    }
-    if (!isValidPassword(pass)) {
+    if (pass != "" && !isValidPassword(pass)) {
       newErrors.pass = "Please enter a valid password";
       console.log("Please enter a valid password");
+      setInputStylePass(styles.inputError);
+      setValidPass(false);
     }
-    if (!isValidEmail(email)) {
+    if (email != "" && !isValidEmail(email)) {
       newErrors.email = "Please enter a valid email";
       console.log("Please enter a valid email");
+      setInputStyleEmail(styles.inputError);
+      setValidEmail(false);
     }
-    if (pass != passConfirm) {
+    if (isValidPassword(pass) && pass != passConfirm) {
       newErrors.passConfirm = "passwords don't match";
-      Alert.alert('Error', 'Passwords don\'t match.', [
-        {
-          text: 'Ok', 
-        },
-      ]);
       console.log("passwords don't match");
+      setInputStylePassConfirm(styles.inputError);
+      setValidPassConfirm(false);
     }
     setErrors(newErrors);
 
     return !Object.values(newErrors).every((error) => error === "");
-  }; //////////////////////////////////////////////////////////////////////////
+  };
+
+  //resets error text and error box based on the parameters passed
+  async function resetErrors(errType) {
+    if (errType === "email") {
+      setInputStyleEmail(styles.input);
+      setInputErrEmail(false);
+      if (!validEmail) {
+        setValidEmail(true);
+      }
+    }
+    if (errType === "pass") {
+      setInputStylePass(styles.input);
+      setInputErrPass(false);
+      if (!validPass) {
+        setValidPass(true);
+      }
+    }
+    if (errType === "passConfirm") {
+      setInputStylePassConfirm(styles.input);
+      setInputErrPassConfirm(false);
+      if (!validPassConfirm) {
+        setValidPassConfirm(true);
+      }
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////////
 
   if (!loaded) {
     return null;
@@ -146,10 +197,19 @@ export default function SignUpScreen({ navigation }) {
 
             <View style={{ width: 300 }}>
               <Text style={styles.textRegular}>email</Text>
-
+              {inputErrEmail ? (
+                <Text style={styles.textError}>Please enter email</Text>
+              ) : (
+                <View></View>
+              )}
+              {!validEmail ? (
+                <Text style={styles.textError}>Please enter a valid email</Text>
+              ) : (
+                <View></View>
+              )}
               {/*email input*/}
               <TextInput
-                style={styles.input}
+                style={inputStyleEmail}
                 label="email"
                 placeholder="email"
                 required
@@ -159,6 +219,7 @@ export default function SignUpScreen({ navigation }) {
                 onChangeText={(email) => {
                   setEmail(email);
                   setErrors({ ...errors, email: "" });
+                  resetErrors("email");
                 }}
               />
 
@@ -176,8 +237,20 @@ export default function SignUpScreen({ navigation }) {
                 * must have at least one number
               </Text>
 
+              {inputErrPass ? (
+                <Text style={styles.textError}>Please enter password</Text>
+              ) : (
+                <View></View>
+              )}
+              {!validPass ? (
+                <Text style={styles.textError}>
+                  Please enter a valid password
+                </Text>
+              ) : (
+                <View></View>
+              )}
               {/*password input*/}
-              <View style={styles.input}>
+              <View style={inputStylePass}>
                 <TextInput
                   style={{ marginRight: 25 }}
                   label="password"
@@ -190,6 +263,7 @@ export default function SignUpScreen({ navigation }) {
                   onChangeText={(pass) => {
                     setPass(pass);
                     setErrors({ ...errors, pass: "" });
+                    resetErrors("pass");
                   }}
                 />
                 <View style={styles.passContainer}>
@@ -222,8 +296,18 @@ export default function SignUpScreen({ navigation }) {
               </View>
 
               <Text style={styles.textRegular}>confirm password</Text>
+              {inputErrPassConfirm ? (
+                <Text style={styles.textError}>Please confirm password</Text>
+              ) : (
+                <View></View>
+              )}
+              {!validPassConfirm ? (
+                <Text style={styles.textError}>Passwords do not match</Text>
+              ) : (
+                <View></View>
+              )}
               {/*confirm password input*/}
-              <View style={styles.input}>
+              <View style={inputStylePassConfirm}>
                 <TextInput
                   style={{ marginRight: 25 }}
                   label="confirmPassword"
@@ -234,6 +318,7 @@ export default function SignUpScreen({ navigation }) {
                   onChangeText={(passConfirm) => {
                     confirmPass(passConfirm);
                     setErrors({ ...errors, passConfirm: "" });
+                    resetErrors("passConfirm");
                   }}
                 />
                 <View style={styles.passContainer}>

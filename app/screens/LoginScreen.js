@@ -40,10 +40,21 @@ export default function LoginScreen({ navigation }) {
     const data2 = await AsyncStorage.getItem("storedEmail");
     setIsLoggedIn(data);
     setStoredEmail(data2);
+    if (isLoggedIn) {
+      console.log("logged in");
+    }
   }
 
-  async function resetErrors() {
-    if (!validCredentials) {
+  //resets error text and error box based on the parameters passed
+  async function resetErrors(errType) {
+    if (errType === "email") {
+      setInputStyleEmail(styles.input);
+      setInputErrEmail(false);
+    }
+    if (errType === "pass") {
+      setInputStylePass(styles.input);
+      setInputErrPass(false);
+    } else if (!validCredentials) {
       setValidCredentials(true);
       setInputStyleEmail(styles.input);
       setInputStylePass(styles.input);
@@ -66,13 +77,13 @@ export default function LoginScreen({ navigation }) {
 
     //if user logged in, fetch their ID fom async storage and let hem go to the home screen
     if (isLoggedIn) {
-      const id = await AsyncStorage.getItem("bk_id");
-      setUserID(parseInt(id, 10));
+      const ID = await AsyncStorage.getItem("bk_id");
+      setUserID(parseInt(ID, 10));
 
       //navigate if already logged in
       navigation.replace("HomeScreen", {
         screen: "HomeScreen",
-        bk_id: id,
+        bk_id: ID,
       });
     } else {
       //check if user actually put in input
@@ -97,7 +108,7 @@ export default function LoginScreen({ navigation }) {
         .then((res) => {
           var id = res.data[0].bk_id;
 
-          if (id != null) {
+          if (id != null && id != undefined && id != "") {
             console.log("credentials matched");
 
             //stay logged in functionality
@@ -150,7 +161,6 @@ export default function LoginScreen({ navigation }) {
                 //if user is logged in just show email container
                 <View>
                   <Text style={styles.textRegular}>email</Text>
-
                   {/*email input*/}
                   <TextInput
                     style={styles.input}
@@ -165,6 +175,7 @@ export default function LoginScreen({ navigation }) {
                   />
                 </View>
               ) : (
+                //if user not logged in
                 <View>
                   <Text style={styles.textRegular}>email</Text>
 
@@ -174,7 +185,6 @@ export default function LoginScreen({ navigation }) {
                     <View></View>
                   )}
                   {/*email input*/}
-
                   <TextInput
                     style={inputStyleEmail}
                     label="email"
@@ -184,9 +194,7 @@ export default function LoginScreen({ navigation }) {
                     name="email"
                     onChangeText={(enteredEmail) => {
                       setEmail(enteredEmail);
-                      setInputStyleEmail(styles.input);
-                      setInputErrEmail(false);
-                      resetErrors();
+                      resetErrors("email");
                     }}
                   />
 
@@ -208,9 +216,7 @@ export default function LoginScreen({ navigation }) {
                       name="password"
                       onChangeText={(enteredPass) => {
                         setPass(enteredPass);
-                        setInputStylePass(styles.input);
-                        setInputErrPass(false);
-                        resetErrors();
+                        resetErrors("pass");
                       }}
                     />
 
