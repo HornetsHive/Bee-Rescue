@@ -40,7 +40,6 @@ export default function LoginScreen({ navigation }) {
     const data2 = await AsyncStorage.getItem("storedEmail");
     setIsLoggedIn(data);
     setStoredEmail(data2);
-    setPlaceholderPass("placeholder");
   }
 
   async function resetErrors() {
