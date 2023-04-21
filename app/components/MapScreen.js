@@ -48,7 +48,7 @@ function MapScreen({ reportCoordinates, bk_id}) {
             >
               <TouchableOpacity>
                 <View>
-                  <Text>Click for details</Text>
+                  <Text>Tap for details</Text>
                 </View>
               </TouchableOpacity>
             </Callout>
