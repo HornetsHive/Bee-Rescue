@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Image,
-  View,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { StyleSheet, Image, View, TouchableOpacity, Text } from "react-native";
 
 // Account header component contains: menu button, a title, and a bell button
 export default class AccountHeader extends React.Component {
@@ -14,55 +8,63 @@ export default class AccountHeader extends React.Component {
   }
 
   render() {
-    return (        
+    return (
       <View style={styles.header}>
         <Text style={styles.title}>{this.props.titleText}</Text>
-        {this.props.titleText === "Account" ?
-        <TouchableOpacity
-          onPress={() =>
-            this.props.nav.navigate("SettingsScreen", { screen: "SettingsScreen" })
-          }
-        >
-          <Image
-            source={require("../assets/bell.png")}
-            style={styles.iconButton}
-          />
-        </TouchableOpacity>
-        :<></>}
-        {this.props.titleText === "My Report" ?
-        <TouchableOpacity
-          onPress={() =>
-            this.props.nav.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen" })
-          }
-        >
-          <Image
-            source={require("../assets/myReportButton.png")}
-            style={styles.iconButton}
-          />
-        </TouchableOpacity>
-        :<></>}
+        {this.props.titleText === "Account" ? (
+          <TouchableOpacity
+            onPress={() =>
+              this.props.nav.navigate("SettingsScreen", {
+                screen: "SettingsScreen",
+              })
+            }
+          >
+            <Image
+              source={require("../assets/gear.png")}
+              style={styles.iconButton}
+            />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
+        {this.props.titleText === "My Report" ? (
+          <TouchableOpacity
+            onPress={() =>
+              this.props.nav.navigate("MyReportsHomeScreen", {
+                screen: "MyReportsHomeScreen",
+              })
+            }
+          >
+            <Image
+              source={require("../assets/myReportButton.png")}
+              style={styles.iconButton}
+            />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-    header: {
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      },
-    iconButton: {
-        margin: 20,
-        height: 30,
-        width: 30,
-    }, 
-    title: {
-      align: "left",
-      marginHorizontal: 20,
-      fontSize: 30,
-      fontFamily: "Comfortaa",
-    }
+  header: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-);
+  iconButton: {
+    marginTop: 25,
+    margin: 20,
+    height: 38,
+    width: 38,
+  },
+  title: {
+    align: "left",
+    marginHorizontal: 20,
+    fontSize: 30,
+    fontFamily: "Comfortaa",
+  },
+});

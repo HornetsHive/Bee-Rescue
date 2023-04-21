@@ -1,12 +1,11 @@
 import * as React from "react";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { addNotificationReceivedListener } from "expo-notifications";
 import { NavigationContainer } from "@react-navigation/native";
-import { Text, View, Button, Platform } from "react-native";
-import { useState, useEffect, useRef } from "react";
-import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import { useState, useEffect, useRef } from "react";
+import { Platform } from "react-native";
+import * as Device from "expo-device";
 
 import AccountScreen from "./screens/AccountScreen";
 import ForgotPassScreen from "./screens/ForgotPassScreen";
@@ -63,7 +62,7 @@ async function registerForPushNotificationsAsync() {
     return;
   }
   token = (await Notifications.getExpoPushTokenAsync()).data;
-  console.log(token);
+  //console.log(token);
   //} else {
   //alert("Must use physical device for Push Notifications");
   //}
@@ -80,6 +79,7 @@ async function registerForPushNotificationsAsync() {
   return token;
 }
 
+// --------------------- Start of App ---------------------
 export default function App() {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
@@ -87,15 +87,14 @@ export default function App() {
   const responseListener = useRef();
 
   useEffect(() => {
+    //notification handling
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
     );
-
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
       });
-
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log(response);
@@ -108,7 +107,6 @@ export default function App() {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
-  ////////////////////////////////
 
   return (
     <NavigationContainer>
@@ -118,19 +116,18 @@ export default function App() {
         }}
       >
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
-
-        <Stack.Screen name="AccountScreen" component={AccountScreen} />
-        <Stack.Screen name="ForgotPassScreen" component={ForgotPassScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen
           name="MyReportsHomeScreen"
           component={MyReportsHomeScreen}
         />
-        <Stack.Screen name="MyReportsScreen" component={MyReportsScreen} />
         <Stack.Screen name="PreferencesScreen" component={PreferencesScreen} />
-        <Stack.Screen name="ReportInfoScreen" component={ReportInfoScreen} />
-        <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
         <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+        <Stack.Screen name="ForgotPassScreen" component={ForgotPassScreen} />
+        <Stack.Screen name="ReportInfoScreen" component={ReportInfoScreen} />
+        <Stack.Screen name="MyReportsScreen" component={MyReportsScreen} />
+        <Stack.Screen name="AccountScreen" component={AccountScreen} />
+        <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

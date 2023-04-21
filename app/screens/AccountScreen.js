@@ -1,6 +1,8 @@
-import * as ImagePicker from "expo-image-picker";
-import { useFonts } from "expo-font";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
+import { Alert } from "react-native";
+import { useFonts } from "expo-font";
 import { useState } from "react";
 import {
   Text,
@@ -16,7 +18,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import HomeButtonFooter from "../components/HomeButtonFooter";
-import AccountHeader from "../components/AccountHeader"
+import AccountHeader from "../components/AccountHeader";
 
 export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -76,11 +78,38 @@ export default function AccountScreen({ route, navigation }) {
     else setImage("default");
   };
 
+  async function attemptLogOut() {
+    Alert.alert(
+      "",
+      "Do you want to log out?",
+      [
+        {
+          text: "No",
+          onPress: () => {
+            return;
+          },
+          style: "cancel",
+        },
+        { text: "Yes", onPress: () => logOut() },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  async function logOut() {
+    AsyncStorage.setItem("stayLoggedIn", "");
+    AsyncStorage.setItem("bk_id", "");
+    console.log("logging out");
+    navigation.navigate("LoginScreen", {
+      screen: "LoginScreen",
+    });
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <AccountHeader nav={navigation} titleText="Account"/>
+        <AccountHeader nav={navigation} titleText="Account" />
       </View>
 
       {/* Body */}
@@ -94,9 +123,15 @@ export default function AccountScreen({ route, navigation }) {
             }
             style={styles.pfp}
           />
+
           <TouchableOpacity onPress={uploadImage}>
             <Text style={styles.smallText}>Edit Profile Picture</Text>
           </TouchableOpacity>
+          <View style={styles.logoutContainer}>
+            <TouchableOpacity onPress={attemptLogOut}>
+              <Text style={styles.smallText}>Log Out</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Name</Text>
             <TextInput
@@ -184,7 +219,9 @@ export default function AccountScreen({ route, navigation }) {
             ></Switch>
           </View>
           <View style={styles.aligned}>
-            <Text style={styles.switchLabel}>Mid Size Tree (Up to 20 feet)</Text>
+            <Text style={styles.switchLabel}>
+              Mid Size Tree (Up to 20 feet)
+            </Text>
             <Switch
               style={styles.switch}
               trackColor={{ false: "#808080", true: "#d92978" }}
@@ -214,7 +251,9 @@ export default function AccountScreen({ route, navigation }) {
             ></Switch>
           </View>
           <View style={styles.aligned}>
-            <Text style={styles.switchLabel}>Low Structure (Up to 10 feet)</Text>
+            <Text style={styles.switchLabel}>
+              Low Structure (Up to 10 feet)
+            </Text>
             <Switch
               style={styles.switch}
               trackColor={{ false: "#808080", true: "#d92978" }}
@@ -376,7 +415,7 @@ export default function AccountScreen({ route, navigation }) {
             onPress={saveChanges}
             title="Save Changes"
           ></Button>
-        </KeyboardAwareScrollView>        
+        </KeyboardAwareScrollView>
       </View>
 
       {/* Footer */}
@@ -419,6 +458,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Comfortaa",
     textAlign: "center",
+  },
+  logoutContainer: {
+    flex: 1,
+    alignSelf: "center",
+    marginVertical: 13,
+    width: "20%",
+    backgroundColor: "pink",
+    paddingBottom: 3,
+    borderRadius: 10,
   },
   input: {
     flex: 6,
@@ -475,5 +523,5 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 1,
-  }
+  },
 });

@@ -1,7 +1,8 @@
 import * as React from "react";
 
-import { useFonts } from "expo-font";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
+import { useFonts } from "expo-font";
 import Axios from "axios";
 import {
   Text,
@@ -152,6 +153,10 @@ export default function HomeScreen({ route, navigation }) {
       updateReportArray([]);
     }
   }, [isFocused]);
+
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={styles.container}>

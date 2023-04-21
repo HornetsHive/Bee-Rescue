@@ -39,6 +39,13 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     fontFamily: "Comfortaa",
   },
+  textError: {
+    fontSize: 14,
+    paddingLeft: 10,
+    color: "red",
+    textAlign: "center",
+    fontFamily: "Comfortaa",
+  },
   textSmall: {
     fontSize: 12,
     paddingLeft: 10,
@@ -61,6 +68,16 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "white",
     borderColor: "white",
+    borderRadius: 5,
+  },
+  inputError: {
+    height: 50,
+    margin: 10,
+    padding: 10,
+    backgroundColor: "white",
+    borderColor: "#ff4d36",
+    borderWidth: 2.1,
+    borderRadius: 5,
   },
   passContainer: {
     flex: 1,
