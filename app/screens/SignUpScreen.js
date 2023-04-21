@@ -112,6 +112,11 @@ export default function SignUpScreen({ navigation }) {
     }
     if (pass != passConfirm) {
       newErrors.passConfirm = "passwords don't match";
+      Alert.alert('Error', 'Passwords don\'t match.', [
+        {
+          text: 'Ok', 
+        },
+      ]);
       console.log("passwords don't match");
     }
     setErrors(newErrors);
