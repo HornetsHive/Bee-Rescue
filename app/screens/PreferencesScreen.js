@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { useFonts } from "expo-font";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Axios from "axios";
 import {
   Text,
@@ -13,7 +13,7 @@ import {
   StyleSheet,
   SafeAreaView,
   ImageBackground,
-  Alert
+  Alert,
 } from "react-native";
 
 //set the format for the phone number text entry
@@ -42,6 +42,21 @@ export default function PreferencesScreen({ route, navigation }) {
   const [userID, setUserID] = useState([]);
   const [errors, setErrors] = useState("");
   const newErrors = { ...errors };
+
+  const [validZip, setValidZip] = useState(true);
+  const [inputErrFName, setInputErrFName] = useState(false);
+  const [inputErrLName, setInputErrLName] = useState(false);
+  const [inputErrPhone, setInputErrPhone] = useState(false);
+  const [inputErrAddr, setInputErrAddr] = useState(false);
+  const [inputErrCity, setInputErrCity] = useState(false);
+  const [inputErrZip, setInputErrZip] = useState(false);
+
+  const [inputStyleFName, setInputStyleFName] = useState(styles.input);
+  const [inputStyleLName, setInputStyleLName] = useState(styles.input);
+  const [inputStylePhone, setInputStylePhone] = useState(styles.input);
+  const [inputStyleAddr, setInputStyleAddr] = useState(styles.input);
+  const [inputStyleCity, setInputStyleCity] = useState(styles.input);
+  const [inputStyleZip, setInputStyleZip] = useState(styles.input);
 
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
@@ -73,33 +88,34 @@ export default function PreferencesScreen({ route, navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
+  scrollToTop = () => {
+    scroller.scrollTo({ x: 0, y: 0 });
+  };
+
   const updateNewUser = async () => {
     try {
       // Get the beekeeper id that matches entered email and pass to verify login
-      const res = await Axios
-        //10.0.2.2 is a general IP address for the emulator
-        .get("http://45.33.38.54:3001/bk_get", {
-          params: { email: userEmail, pass: userPass },
-        })
-        .catch(function (error) {
-          console.log(error);
-          return null;
-        });
-  
+      const res = await Axios.get("http://45.33.38.54:3001/bk_get", {
+        params: { email: userEmail, pass: userPass },
+      }).catch(function (error) {
+        console.log(error);
+        return null;
+      });
+
       if (!res || !res.data || res.data.length === 0) {
         console.error("Beekeeper not found");
         return;
       }
-  
       const beekeeperId = res.data[0].bk_id;
-  
+
       //validate preference input
       const err = validate();
       if (err) {
-        console.log(newErrors);
+        console.log("input errors");
+        scrollToTop();
         return;
       }
-  
+
       // Use Promise.all to wait for both posts to resolve
       await Promise.all([
         //axios.post to update beekeeper personal info
@@ -112,7 +128,7 @@ export default function PreferencesScreen({ route, navigation }) {
           zip: zip,
           bk_id: beekeeperId,
         }),
-  
+
         //axios post again to update beekeeper qualifications
         Axios.post("http://45.33.38.54:3001/bk_qualif_update", {
           ground_swarms: ability1,
@@ -134,66 +150,98 @@ export default function PreferencesScreen({ route, navigation }) {
           bk_id: beekeeperId,
         }),
       ]);
-  
+
       console.log("successful insert");
-      //navigate to homescreen and pass bk_id
+      //navigate to home screen and pass bk_id
       navigation.replace("HomeScreen", {
         screen: "HomeScreen",
         bk_id: beekeeperId,
       });
     } catch (error) {
       console.error("Error in updateNewUser: " + error);
-      Alert.alert(error.message, "Something went wrong processing your request", [
-        {
-          text: "OK",
-        },
-      ]);
+      Alert.alert(
+        error.message,
+        "Something went wrong processing your request",
+        [
+          {
+            text: "OK",
+          },
+        ]
+      );
     }
   };
-
-  // Get the beekeeper id that matches entered email and pass to verify login
-  async function fetchBeekeeper() {
-    const res = await Axios
-      //10.0.2.2 is a general IP address for the emulator
-      .get("http://45.33.38.54:3001/bk_get", {
-        params: { email: userEmail, pass: userPass },
-      })
-      .then((res) => {
-        setUserID(res.data[0].bk_id);
-      })
-      .catch(function (error) {
-        if (error) console.log(error);
-      });
-    return res;
-  }
 
   const validate = () => {
     //check for errors and set them if found
-    if (!fname) {
-      newErrors.fname = "This field is required";
+    if (!fname || !lname || !phone_no || !address || !city || !zip) {
+      if (!fname) {
+        newErrors.fname = "This field is required";
+        setInputStyleFName(styles.inputError2);
+        setInputErrFName(true);
+      }
+      if (!lname) {
+        newErrors.lname = "This field is required";
+        setInputStyleLName(styles.inputError2);
+        setInputErrLName(true);
+      }
+      if (!phone_no) {
+        newErrors.phone_no = "This field is required";
+        setInputStylePhone(styles.inputError2);
+        setInputErrPhone(true);
+      }
+      if (!address) {
+        newErrors.address = "This field is required";
+        setInputStyleAddr(styles.inputError2);
+        setInputErrAddr(true);
+      }
+      if (!city) {
+        newErrors.city = "This field is required";
+        setInputStyleCity(styles.inputError2);
+        setInputErrCity(true);
+      }
+      if (!zip) {
+        newErrors.zip = "This field is required";
+        setInputStyleZip(styles.inputError2);
+        setInputErrZip(true);
+      }
     }
-    if (!lname) {
-      newErrors.lname = "This field is required";
-    }
-    if (!phone_no) {
-      newErrors.phone_no = "This field is required";
-    }
-    if (!address) {
-      newErrors.address = "This field is required";
-    }
-    if (!city) {
-      newErrors.city = "This field is required";
-    }
-    if (!zip) {
-      newErrors.zip = "This field is required";
-    }
-    if (isNaN(zip) || zip.length < 3 || zip.length > 5) {
-      newErrors.zip = "Please enter a valid zip";
-    }
-    setErrors(newErrors);
 
+    if (zip != "" && (isNaN(zip) || zip.length < 3 || zip.length > 5)) {
+      newErrors.zip = "Please enter a valid zip";
+      setValidZip(false);
+    }
+
+    setErrors(newErrors);
     return !Object.values(newErrors).every((error) => error === "");
   };
+
+  //resets error text and error box based on the parameters passed
+  async function resetErrors(errType) {
+    if (errType === "fName") {
+      setInputStyleFName(styles.input);
+      setInputErrFName(false);
+    }
+    if (errType === "lName") {
+      setInputStyleLName(styles.input);
+      setInputErrLName(false);
+    }
+    if (errType === "phone") {
+      setInputStylePhone(styles.input);
+      setInputErrPhone(false);
+    }
+    if (errType === "addr") {
+      setInputStyleAddr(styles.input);
+      setInputErrAddr(false);
+    }
+    if (errType === "city") {
+      setInputStyleCity(styles.input);
+      setInputErrCity(false);
+    }
+    if (errType === "zip") {
+      setInputStyleZip(styles.input);
+      setInputErrZip(false);
+    }
+  }
 
   //dynamically reformat phone number input
   const handleInput = (e) => {
@@ -216,7 +264,12 @@ export default function PreferencesScreen({ route, navigation }) {
           <Text style={styles.titleText}>Preferences</Text>
         </View>
 
-        <ScrollView style={styles.middle}>
+        <ScrollView
+          style={styles.middle}
+          ref={(scroller) => {
+            this.scroller = scroller;
+          }}
+        >
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -227,9 +280,18 @@ export default function PreferencesScreen({ route, navigation }) {
                 width: 200,
               }}
             >
-              <Text style={styles.textRegular}>First Name</Text>
+              <Text style={styles.textRegular}>
+                <Text style={styles.asterisk}>* </Text>First Name
+              </Text>
+              {inputErrFName ? (
+                <Text style={styles.textError}>
+                  Please enter your first name
+                </Text>
+              ) : (
+                <View></View>
+              )}
               <TextInput
-                style={styles.input}
+                style={inputStyleFName}
                 label="fname"
                 required
                 isInvalid={Boolean(errors.fname)}
@@ -237,6 +299,7 @@ export default function PreferencesScreen({ route, navigation }) {
                 onChangeText={(fname) => {
                   setFName(fname);
                   setErrors({ ...errors, fname: "" });
+                  resetErrors("fName");
                 }}
               />
             </View>
@@ -248,9 +311,18 @@ export default function PreferencesScreen({ route, navigation }) {
                 width: 200,
               }}
             >
-              <Text style={styles.textRegular}>Last Name</Text>
+              <Text style={styles.textRegular}>
+                <Text style={styles.asterisk}>* </Text>Last Name
+              </Text>
+              {inputErrLName ? (
+                <Text style={styles.textError}>
+                  Please enter your last name
+                </Text>
+              ) : (
+                <View></View>
+              )}
               <TextInput
-                style={styles.input}
+                style={inputStyleLName}
                 label="lname"
                 required
                 isInvalid={Boolean(errors.lname)}
@@ -258,14 +330,22 @@ export default function PreferencesScreen({ route, navigation }) {
                 onChangeText={(lname) => {
                   setLName(lname);
                   setErrors({ ...errors, lname: "" });
+                  resetErrors("lName");
                 }}
               />
             </View>
           </View>
 
-          <Text style={styles.textRegular}>Phone Number</Text>
+          <Text style={styles.textRegular}>
+            <Text style={styles.asterisk}>* </Text>Phone Number
+          </Text>
+          {inputErrPhone ? (
+            <Text style={styles.textError}>Please enter your phone number</Text>
+          ) : (
+            <View></View>
+          )}
           <TextInput
-            style={styles.input}
+            style={inputStylePhone}
             label="phone_no"
             required
             isInvalid={Boolean(errors.phone_no)}
@@ -273,12 +353,21 @@ export default function PreferencesScreen({ route, navigation }) {
             placeholder="+1 (XXX) XXX - XXXX"
             onChangeText={(e) => {
               handleInput(e), setErrors({ ...errors, phone_no: "" });
+              resetErrors("phone");
             }}
             value={phone_no}
           />
-          <Text style={styles.textRegular}>Address</Text>
+
+          <Text style={styles.textRegular}>
+            <Text style={styles.asterisk}>* </Text>Address
+          </Text>
+          {inputErrAddr ? (
+            <Text style={styles.textError}>Please enter an address</Text>
+          ) : (
+            <View></View>
+          )}
           <TextInput
-            style={styles.input}
+            style={inputStyleAddr}
             label="address"
             required
             isInvalid={Boolean(errors.address)}
@@ -286,11 +375,19 @@ export default function PreferencesScreen({ route, navigation }) {
             onChangeText={(address) => {
               setAddress(address);
               setErrors({ ...errors, address: "" });
+              resetErrors("addr");
             }}
           />
-          <Text style={styles.textRegular}>City</Text>
+          <Text style={styles.textRegular}>
+            <Text style={styles.asterisk}>* </Text>City
+          </Text>
+          {inputErrCity ? (
+            <Text style={styles.textError}>Please enter a city</Text>
+          ) : (
+            <View></View>
+          )}
           <TextInput
-            style={styles.input}
+            style={inputStyleCity}
             label="city"
             required
             isInvalid={Boolean(errors.city)}
@@ -298,11 +395,24 @@ export default function PreferencesScreen({ route, navigation }) {
             onChangeText={(city) => {
               setCity(city);
               setErrors({ ...errors, city: "" });
+              resetErrors("city");
             }}
           />
-          <Text style={styles.textRegular}>Zip Code</Text>
+          <Text style={styles.textRegular}>
+            <Text style={styles.asterisk}>* </Text>Zip Code
+          </Text>
+          {inputErrZip ? (
+            <Text style={styles.textError}>Please enter a zip code</Text>
+          ) : (
+            <View></View>
+          )}
+          {!validZip ? (
+            <Text style={styles.textError}>Please enter a valid zip code</Text>
+          ) : (
+            <View></View>
+          )}
           <TextInput
-            style={styles.input}
+            style={inputStyleZip}
             label="zip"
             required
             isInvalid={Boolean(errors.zip)}
@@ -311,6 +421,8 @@ export default function PreferencesScreen({ route, navigation }) {
             onChangeText={(zip) => {
               setZip(zip);
               setErrors({ ...errors, zip: "" });
+              resetErrors("zip");
+              setValidZip(true);
             }}
           />
 
@@ -537,7 +649,6 @@ export default function PreferencesScreen({ route, navigation }) {
             placeholder="e.g., 12in, 2ft"
             onChangeText={(maxHeight) => {
               setMaxHeight(maxHeight);
-              setErrors({ ...errors, maxHeight: "" });
             }}
           />
 
@@ -570,7 +681,10 @@ export default function PreferencesScreen({ route, navigation }) {
             <Button
               color="#da628c"
               title="Save Changes & Continue"
-              onPress={() => updateNewUser()}
+              //updateNewUser()
+              onPress={() => {
+                updateNewUser();
+              }}
             ></Button>
           </View>
         </ScrollView>
@@ -602,6 +716,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignSelf: "center",
   },
+  textError: {
+    fontSize: 14,
+    paddingLeft: 10,
+    color: "red",
+    textAlign: "center",
+    fontFamily: "Comfortaa",
+  },
   footer: {
     flex: 0.5,
     alignSelf: "flex-start",
@@ -622,6 +743,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Comfortaa",
   },
+  asterisk: { fontFamily: "", color: "#ed601f" },
+  inputError2: {
+    flex: 1,
+    flexDirection: "row",
+    alignSelf: "center",
+    height: 50,
+    width: "80%",
+    padding: 10,
+    margin: 5,
+    backgroundColor: "white",
+    borderColor: "#ff4d36",
+    borderWidth: 2.1,
+    borderRadius: 5,
+  },
   input: {
     flex: 1,
     flexDirection: "row",
@@ -630,8 +765,9 @@ const styles = StyleSheet.create({
     width: "80%",
     padding: 10,
     margin: 5,
-    backgroundColor: "#d9d9d9",
-    borderColor: "black",
+    backgroundColor: "white",
+    borderColor: "white",
+    borderRadius: 5,
   },
   notificationText: {
     left: 12,

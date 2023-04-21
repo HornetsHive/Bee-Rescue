@@ -163,6 +163,11 @@ export default function SignUpScreen({ navigation }) {
       if (!validPass) {
         setValidPass(true);
       }
+      if (!validPassConfirm) {
+        setValidPassConfirm(true);
+        setInputStylePassConfirm(styles.input);
+        setInputErrPassConfirm(false);
+      }
     }
     if (errType === "passConfirm") {
       setInputStylePassConfirm(styles.input);

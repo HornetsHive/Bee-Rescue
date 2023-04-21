@@ -101,13 +101,21 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 10,
   },
-  eyeIcon: { width: 20, height: 20 },
   img: {
     alignSelf: "center",
     resizeMode: "contain",
     height: 145,
     width: 500,
   },
+  logoutContainer: {
+    flex: 1,
+    alignSelf: "center",
+    backgroundColor: "#ffffff",
+    paddingBottom: 3,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+  },
+  eyeIcon: { width: 20, height: 20 },
 });
 
 export { styles };

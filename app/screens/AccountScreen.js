@@ -1,12 +1,12 @@
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
-import { Alert } from "react-native";
 import { useFonts } from "expo-font";
 import { useState } from "react";
 import {
   Text,
   View,
+  Alert,
   Image,
   Switch,
   Button,
@@ -44,13 +44,6 @@ export default function AccountScreen({ route, navigation }) {
   const [equipment1, setEquip1] = useState(false);
   const [equipment2, setEquip2] = useState(false);
   const [equipment3, setEquip3] = useState(false);
-  const [mon, setMon] = useState();
-  const [tue, setTue] = useState();
-  const [wed, setWed] = useState();
-  const [thu, setThu] = useState();
-  const [fri, setFri] = useState();
-  const [sat, setSat] = useState();
-  const [sun, setSun] = useState();
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -59,7 +52,9 @@ export default function AccountScreen({ route, navigation }) {
   if (!loaded) {
     return null;
   }
+  //////////////////DB QUERY
 
+  //////////////
   function saveChanges() {
     // Send new data to the database from here?
     console.log("changes saved");
@@ -77,6 +72,12 @@ export default function AccountScreen({ route, navigation }) {
     if (!result.cancelled) setImage(result.base64);
     else setImage("default");
   };
+
+  async function editCredentials() {
+    navigation.navigate("SettingsScreen", {
+      screen: "SettingsScreen",
+    });
+  }
 
   async function attemptLogOut() {
     Alert.alert(
@@ -129,6 +130,9 @@ export default function AccountScreen({ route, navigation }) {
           <TouchableOpacity onPress={uploadImage}>
             <Text style={styles.smallText}>Edit Profile Picture</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={editCredentials}>
+            <Text style={styles.smallText}>Security/Notification Settings</Text>
+          </TouchableOpacity>
           <View style={styles.logoutContainer}>
             <TouchableOpacity onPress={attemptLogOut}>
               <Text style={styles.smallText}>Log Out</Text>
@@ -154,6 +158,9 @@ export default function AccountScreen({ route, navigation }) {
             Note that the swarm notifications you receive are determined by this
             location entered.
           </Text>
+
+          <View style={styles.divider}>{/*****************************/}</View>
+
           <Text style={styles.bigText}>Preferences</Text>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Max Swarm Height</Text>
@@ -176,6 +183,9 @@ export default function AccountScreen({ route, navigation }) {
               onValueChange={() => setCoop(!cooperative)}
             ></Switch>
           </View>
+
+          <View style={styles.divider}>{/*****************************/}</View>
+
           <Text style={styles.bigText}>Self-Qualifications</Text>
           <Text style={styles.smallText}>
             Locations that you are skilled at gathering swarm clusters:
@@ -318,6 +328,9 @@ export default function AccountScreen({ route, navigation }) {
               onValueChange={() => setAbility13(!ability13)}
             ></Switch>
           </View>
+
+          <View style={styles.divider}>{/*****************************/}</View>
+
           <Text style={styles.smallText}>
             What special equipment do you have at your disposal to gather swarm
             clusters?
@@ -353,70 +366,15 @@ export default function AccountScreen({ route, navigation }) {
             ></Switch>
           </View>
 
-          <Text style={styles.bigText}>Availability</Text>
-          <View style={styles.aligned}>
-            <Text style={styles.inputLabel}>Monday</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="(e.g. 9am-3pm)"
-              onChangeText={setMon}
-            ></TextInput>
-          </View>
-          <View style={styles.aligned}>
-            <Text style={styles.inputLabel}>Tuesday</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="(e.g. 9am-3pm)"
-              onChangeText={setTue}
-            ></TextInput>
-          </View>
-          <View style={styles.aligned}>
-            <Text style={styles.inputLabel}>Wednesday</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="(e.g. 9am-3pm)"
-              onChangeText={setWed}
-            ></TextInput>
-          </View>
-          <View style={styles.aligned}>
-            <Text style={styles.inputLabel}>Thursday</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="(e.g. 9am-3pm)"
-              onChangeText={setThu}
-            ></TextInput>
-          </View>
-          <View style={styles.aligned}>
-            <Text style={styles.inputLabel}>Friday</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="(e.g. 9am-3pm)"
-              onChangeText={setFri}
-            ></TextInput>
-          </View>
-          <View style={styles.aligned}>
-            <Text style={styles.inputLabel}>Saturday</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="(e.g. 9am-3pm)"
-              onChangeText={setSat}
-            ></TextInput>
-          </View>
-          <View style={styles.aligned}>
-            <Text style={styles.inputLabel}>Sunday</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="(e.g. 9am-3pm)"
-              onChangeText={setSun}
-            ></TextInput>
-          </View>
-          <View style={{ margin: 5 }} />
+          <View style={styles.divider}>{/*****************************/}</View>
 
-          <Button
-            color="#50C878"
-            onPress={saveChanges}
-            title="Save Changes"
-          ></Button>
+          <View style={styles.saveButton}>
+            <Button
+              color="#da628c"
+              onPress={saveChanges}
+              title="Save Changes"
+            ></Button>
+          </View>
         </KeyboardAwareScrollView>
       </View>
 
@@ -448,11 +406,10 @@ const styles = StyleSheet.create({
     height: 150,
   },
   bigText: {
-    borderTopWidth: 1,
-    borderTopColor: "grey",
     textAlign: "center",
     fontSize: 20,
     fontFamily: "Comfortaa",
+    marginBottom: 20,
   },
   smallText: {
     margin: "1%",
@@ -520,8 +477,21 @@ const styles = StyleSheet.create({
   body: {
     flex: 8,
     borderTopWidth: 1,
+  },
+  divider: {
+    flex: 1,
+    flexDirection: "row",
+    alignSelf: "center",
+    width: "50%",
     borderBottomWidth: 1,
-    borderColor: "gray",
+    borderBottomColor: "lightgrey",
+    marginVertical: 20,
+  },
+  saveButton: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 40,
   },
   footer: {
     flex: 1,

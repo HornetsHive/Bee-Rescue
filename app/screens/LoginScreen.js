@@ -9,6 +9,7 @@ import Axios from "axios";
 import {
   Text,
   View,
+  Alert,
   Image,
   Button,
   TextInput,
@@ -130,6 +131,35 @@ export default function LoginScreen({ navigation }) {
         });
       return res;
     }
+  }
+
+  async function attemptLogOut() {
+    Alert.alert(
+      "",
+      "Do you want to log out?",
+      [
+        {
+          text: "No",
+          onPress: () => {
+            return;
+          },
+          style: "cancel",
+        },
+        { text: "Yes", onPress: () => logOut() },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  async function logOut() {
+    AsyncStorage.setItem("stayLoggedIn", "");
+    AsyncStorage.setItem("storedEmail", "");
+    AsyncStorage.setItem("bk_id", "");
+    console.log("logging out");
+
+    navigation.navigate("LoginScreen", {
+      screen: "LoginScreen",
+    });
   }
 
   useEffect(() => {
@@ -271,8 +301,15 @@ export default function LoginScreen({ navigation }) {
               </View>
 
               {isLoggedIn ? (
-                //if logged in, don't show sign up option
-                <View></View>
+                //if logged in, don't show sign up option and show logout option
+                <TouchableOpacity
+                  style={styles.logoutContainer}
+                  onPress={() => {
+                    attemptLogOut();
+                  }}
+                >
+                  <Text style={styles.hyperLinkText}>Logout</Text>
+                </TouchableOpacity>
               ) : (
                 <TouchableOpacity
                   style={{ alignSelf: "center" }}
