@@ -1,8 +1,11 @@
 import * as React from "react";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import { useEffect, useState, useCallback } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import ReportRibbon from "../components/ReportRibbon";
+import MapScreen from "../components/MapScreen";
 import { useFonts } from "expo-font";
 import Axios from "axios";
 import {
@@ -16,10 +19,6 @@ import {
   TouchableOpacity,
   StatusBar,
 } from "react-native";
-
-import ReportRibbon from "../components/ReportRibbon";
-import MapScreen from "../components/MapScreen";
-import { useIsFocused } from "@react-navigation/native";
 
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -135,6 +134,7 @@ export default function HomeScreen({ route, navigation }) {
     // Call the function once before the interval starts to immediately fetch reports
     fetchAndRefreshReports();
     console.log("beekeeper ID: " + userID);
+    console.log("Num of reports: " + formattedReportArray.length);
 
     // Clear the interval timer when the component unmount
     return () => clearInterval(interval);
@@ -156,6 +156,10 @@ export default function HomeScreen({ route, navigation }) {
       fetchReports();
     }, [])
   );
+
+  if (!loaded) {
+    return null;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -240,6 +244,7 @@ export default function HomeScreen({ route, navigation }) {
           >
             <Text style={styles.textBox}>Change location</Text>
           </TouchableOpacity>
+
           <TouchableOpacity
             onPress={() =>
               fetchReports().then(
@@ -254,6 +259,21 @@ export default function HomeScreen({ route, navigation }) {
             ></Image>
           </TouchableOpacity>
         </View>
+        {formattedReportArray.length < 1 ? (
+          <View style={{ flex: 1, justifyContent: "flex-end" }}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontFamily: "Comfortaa",
+                color: "grey",
+              }}
+            >
+              no reports, check back later
+            </Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
         <ScrollView>
           {/*---------------Start of scroll---------------*/}
           {formattedReportArray.map((report, key) => (

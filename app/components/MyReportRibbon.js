@@ -1,14 +1,8 @@
 import React from "react";
 
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 
-export default function MyReportRibbon ({r_id, bk_id, location, date, nav}) {
-
+export default function MyReportRibbon({ r_id, bk_id, location, date, nav }) {
   return (
     <TouchableOpacity
       onPress={() => {

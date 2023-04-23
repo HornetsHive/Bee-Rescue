@@ -46,31 +46,6 @@ export default function LoginScreen({ navigation }) {
     }
   }
 
-  //resets error text and error box based on the parameters passed
-  async function resetErrors(errType) {
-    if (errType === "email") {
-      setInputStyleEmail(styles.input);
-      setInputErrEmail(false);
-    }
-    if (errType === "pass") {
-      setInputStylePass(styles.input);
-      setInputErrPass(false);
-    } else if (!validCredentials) {
-      setValidCredentials(true);
-      setInputStyleEmail(styles.input);
-      setInputStylePass(styles.input);
-    }
-  }
-
-  async function checkID() {
-    if (userID === "" && enteredEmail != "" && enteredPass != "") {
-      console.log("wrong email or password");
-      setInputStyleEmail(styles.inputError);
-      setInputStylePass(styles.inputError);
-      setValidCredentials(false);
-    }
-  }
-
   // Get the beekeeper id that matches entered email and pass to verify login
   async function attemptLogin() {
     //reset errors
@@ -130,6 +105,37 @@ export default function LoginScreen({ navigation }) {
           if (error) console.log(error);
         });
       return res;
+    }
+  }
+
+  //resets error text and error box based on the parameters passed
+  async function resetErrors(errType) {
+    if (errType === "email") {
+      setInputStyleEmail(styles.input);
+      setInputErrEmail(false);
+      if (!validCredentials) {
+        setValidCredentials(true);
+        setInputStyleEmail(styles.input);
+        setInputStylePass(styles.input);
+      }
+    }
+    if (errType === "pass") {
+      setInputStylePass(styles.input);
+      setInputErrPass(false);
+      if (!validCredentials) {
+        setValidCredentials(true);
+        setInputStyleEmail(styles.input);
+        setInputStylePass(styles.input);
+      }
+    }
+  }
+
+  async function checkID() {
+    if (userID === "" && enteredEmail != "" && enteredPass != "") {
+      console.log("wrong email or password");
+      setInputStyleEmail(styles.inputError);
+      setInputStylePass(styles.inputError);
+      setValidCredentials(false);
     }
   }
 

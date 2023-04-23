@@ -452,8 +452,10 @@ app.get("/bk_user", (req, res) => {
   const sqlQuery = "SELECT email, bk_id FROM beekeepers WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    return res.status(200).send("Action Successful");
+    res.status(200).send(result);
   });
+
+  return res.status(200).send("Action Successful");
 });
 
 // Fetches the user email/password unique pair based on beekeepers ID

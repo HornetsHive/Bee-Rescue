@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState, useCallback } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 
 import { useFonts } from "expo-font";
 import Axios from "axios";
@@ -24,7 +24,7 @@ export default function MyReportsHomeScreen({ route, navigation }) {
 
   const getClaimedReports = async () => {
     await Axios.get("http://45.33.38.54:3001/bk_claimedReports", {
-        params: { bk_id: userID}
+      params: { bk_id: userID },
     })
       .then((res) => {
         if (Array.isArray(res.data) && res.data.length > 0) {
@@ -38,14 +38,14 @@ export default function MyReportsHomeScreen({ route, navigation }) {
       });
   };
 
-  function formattedReport(id, location, date, zip){
+  function formattedReport(id, location, date, zip) {
     this.reportID = id;
     this.formattedLocation = location;
     this.formattedDate = date;
     this.zip = zip;
-  };
+  }
 
-  function extractReportInfo(reportData){
+  function extractReportInfo(reportData) {
     var formatted = new Array();
     reportData.map((reports) => {
       var formattedLocation = reports.address + ", " + reports.city;
@@ -61,11 +61,11 @@ export default function MyReportsHomeScreen({ route, navigation }) {
       formatted.push(toPush);
     });
 
-    return(formatted);
-  };
+    return formatted;
+  }
 
   //TODO: This returns UTC time
-  function makeReadableDate(dateString){
+  function makeReadableDate(dateString) {
     //split date and time
     var date = dateString.split("T")[0];
     var time = dateString.split("T")[1];
@@ -96,8 +96,8 @@ export default function MyReportsHomeScreen({ route, navigation }) {
       hour = 12;
     }
     var formattedTime = hour + ":" + minute + " " + am_pm;
-    
-    return(formattedDate + " at " + formattedTime);
+
+    return formattedDate + " at " + formattedTime;
   }
 
   //get reports on page load
@@ -120,12 +120,12 @@ export default function MyReportsHomeScreen({ route, navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  if(!loadedFonts){
-    return(
+  if (!loadedFonts) {
+    return (
       <View>
         <Text>Error loading page</Text>
       </View>
-    )
+    );
   }
 
   return (
@@ -134,10 +134,7 @@ export default function MyReportsHomeScreen({ route, navigation }) {
         <Text style={styles.title}>My Reports</Text>
         <TouchableOpacity
           onPress={() =>
-            getClaimedReports().
-              then(
-                console.log("Updating reports...")
-              )
+            getClaimedReports().then(console.log("Updating reports..."))
           }
         >
           <Image
@@ -148,9 +145,19 @@ export default function MyReportsHomeScreen({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
+        {formattedReportArray.length < 1 ? (
+          <View style={{ flex: 1, justifyContent: "flex-end" }}>
+            <Text style={styles.noReportText}>no reports</Text>
+            <Text style={styles.noReportText2}>
+              claim a report to view in list
+            </Text>
+          </View>
+        ) : (
+          <View></View>
+        )}
         <ScrollView>
           {/*---------------Start of scroll---------------------------------*/}
-          {formattedReportArray.map((report, key) =>
+          {formattedReportArray.map((report, key) => (
             <MyReportRibbon
               key={key}
               r_id={report.reportID}
@@ -159,13 +166,13 @@ export default function MyReportsHomeScreen({ route, navigation }) {
               date={report.formattedDate}
               nav={navigation}
             />
-          )}
+          ))}
           {/*--------------End of scroll-------------------------------*/}
         </ScrollView>
       </View>
 
       <View style={styles.footer}>
-      <HomeButtonFooter nav={navigation} bk_id={userID} />
+        <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
     </SafeAreaView>
   );
@@ -188,7 +195,6 @@ const styles = StyleSheet.create({
     flex: 8,
     borderColor: "gray",
     borderTopWidth: 1,
-    borderBottomWidth: 1,
   },
   footer: {
     flex: 1,
@@ -215,6 +221,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  noReportText: {
+    textAlign: "center",
+    fontFamily: "Comfortaa",
+    fontSize: 20,
+    color: "grey",
+  },
+  noReportText2: {
+    textAlign: "center",
+    fontFamily: "Comfortaa",
+    color: "grey",
+  },
   xButton: {
     resizeMode: "contain",
     margin: 10,
@@ -225,10 +242,10 @@ const styles = StyleSheet.create({
     margin: 20,
     height: 30,
     width: 30,
-  }, 
+  },
   title: {
     marginHorizontal: 20,
     fontSize: 30,
     fontFamily: "Comfortaa",
-  }
+  },
 });

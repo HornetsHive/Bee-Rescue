@@ -9,7 +9,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   StatusBar,
-  Alert
+  Alert,
 } from "react-native";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
@@ -17,22 +17,25 @@ import AccountHeader from "../components/AccountHeader";
 export default function ReportInfoScreen({ route, navigation }) {
   const userID = route.params.bk_id;
   const reportID = route.params.r_id;
-  const[reportData, setReportData] = useState(null);
-  const[loadingData, setLoadingData] = useState(true);
+  const [reportData, setReportData] = useState(null);
+  const [loadingData, setLoadingData] = useState(true);
 
   console.log("account id: " + userID);
   console.log("report id: " + reportID);
 
   // Sends claim_report post request to the server
   const claimReport = () => {
-    console.log('Claiming report.')
+    console.log("Claiming report.");
     Axios.post("http://45.33.38.54:3001/claim_report", {
       r_id: reportID,
       bk_id: userID,
     })
       .then(function (response) {
         console.log(response.data);
-        navigation.navigate("HomeScreen", { screen: "HomeScreen", bk_id: userID })
+        navigation.navigate("HomeScreen", {
+          screen: "HomeScreen",
+          bk_id: userID,
+        });
       })
       .catch(function (error) {
         console.log(error);
@@ -41,20 +44,20 @@ export default function ReportInfoScreen({ route, navigation }) {
 
   // Shows an alert asking the user to confirm or cancel
   const confirmClaim = () => {
-    Alert.alert('Confirm', 'Are you sure you want to claim this report?', [
+    Alert.alert("Confirm", "Are you sure you want to claim this report?", [
       {
         // Cancel button
-        text: 'Cancel',
-        onPress: () => console.log('Claim confirmation cancelled.'),
-        style: 'cancel',
+        text: "Cancel",
+        onPress: () => console.log("Claim confirmation cancelled."),
+        style: "cancel",
       },
       {
         // Claim button
-        text: 'Claim', 
+        text: "Claim",
         onPress: () => claimReport(),
       },
     ]);
-  }
+  };
 
   function convertPropertyLocation(propertyLocation) {
     switch (propertyLocation) {
@@ -75,10 +78,10 @@ export default function ReportInfoScreen({ route, navigation }) {
       default:
         return "null";
     }
-  };
+  }
 
   function convertHeight(height) {
-    switch(height) {
+    switch (height) {
       case "low":
         return "Low: Less than 10'";
       case "med":
@@ -88,10 +91,10 @@ export default function ReportInfoScreen({ route, navigation }) {
       default:
         return "null";
     }
-  };
+  }
 
   function convertSize(size) {
-    switch(size) {
+    switch (size) {
       case "small":
         return "Small (Size of grapefruit or smaller)";
       case "med":
@@ -101,10 +104,10 @@ export default function ReportInfoScreen({ route, navigation }) {
       default:
         return "null";
     }
-  };
+  }
 
   function convertPropertyType(propertyType) {
-    switch(propertyType) {
+    switch (propertyType) {
       case "res_detached":
         return "Residential detached home";
       case "res_apartment":
@@ -116,7 +119,7 @@ export default function ReportInfoScreen({ route, navigation }) {
       default:
         return "null";
     }
-  };
+  }
 
   useEffect(() => {
     // Get report data from server
@@ -124,7 +127,7 @@ export default function ReportInfoScreen({ route, navigation }) {
     Axios.get("http://45.33.38.54:3001/report_data", {
       params: {
         r_id: reportID,
-      }
+      },
     })
       .then((response) => {
         console.log(response.data);
@@ -142,23 +145,25 @@ export default function ReportInfoScreen({ route, navigation }) {
   });
 
   if (!loadedFonts || loadingData) {
-    return(
+    return (
       <View style={styles.loadingContainer}>
         <Text style={styles.loadingText}>Loading report data...</Text>
       </View>
     );
-  };
+  }
 
   function renderDuration() {
-    if (reportData.duration != null && reportData.duration != '') {
-      return (<View style={styles.row}>
-      <View style={styles.nameContainer}>
-        <Text style={styles.nameTxt}>Duration</Text>
-      </View>
-      <View>
-        <Text style={styles.text}>{ reportData.duration } days</Text>
-      </View>
-    </View>)
+    if (reportData.duration != null && reportData.duration != "") {
+      return (
+        <View style={styles.row}>
+          <View style={styles.nameContainer}>
+            <Text style={styles.nameTxt}>Duration</Text>
+          </View>
+          <View>
+            <Text style={styles.text}>{reportData.duration} days</Text>
+          </View>
+        </View>
+      );
     }
   }
 
@@ -169,72 +174,80 @@ export default function ReportInfoScreen({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
-          <View style={{ height: 57, top: 10, bottom: 100 }}>
-            <TouchableOpacity
-              style={{
-                padding: 8,
-                margin: 10,
-                borderRadius: 10,
-                backgroundColor: "#d3e954",
-              }}
-              onPress={() => confirmClaim()} // change this to actually claim a report
-            >
-              <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
-                Claim Report
+        <View style={{ height: 57, top: 10, bottom: 100 }}>
+          <TouchableOpacity
+            style={{
+              padding: 8,
+              margin: 10,
+              borderRadius: 10,
+              backgroundColor: "#d3e954",
+            }}
+            onPress={() => confirmClaim()} // change this to actually claim a report
+          >
+            <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
+              Claim Report
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>General Area{/*Address*/}</Text>
+            </View>
+            <View>
+              <Text style={styles.text}>
+                {reportData.city + ": " + reportData.zip /*report.address*/}
               </Text>
-            </TouchableOpacity>
+            </View>
           </View>
 
-          <ScrollView>
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>General Area{/*Address*/}</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ reportData.city + ": " + reportData.zip /*report.address*/ }</Text>
-                </View>
-            </View>
+          {renderDuration()}
 
-            {renderDuration()}
-
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Location</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ convertPropertyLocation(reportData.location) }</Text>
-                </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Location</Text>
             </View>
-
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Height</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ convertHeight(reportData.height) }</Text>
-                </View>
+            <View>
+              <Text style={styles.text}>
+                {convertPropertyLocation(reportData.location)}
+              </Text>
             </View>
+          </View>
 
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Size</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ convertSize(reportData.size) }</Text>
-                </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Height</Text>
             </View>
+            <View>
+              <Text style={styles.text}>
+                {convertHeight(reportData.height)}
+              </Text>
+            </View>
+          </View>
 
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Property Type</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ convertPropertyType(reportData.p_type) }</Text>
-                </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Size</Text>
             </View>
-          </ScrollView>
-      </View>      
-      
+            <View>
+              <Text style={styles.text}>{convertSize(reportData.size)}</Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Property Type</Text>
+            </View>
+            <View>
+              <Text style={styles.text}>
+                {convertPropertyType(reportData.p_type)}
+              </Text>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+
       <View style={styles.footer}>
         <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
@@ -263,7 +276,6 @@ const styles = StyleSheet.create({
     flex: 8,
     borderColor: "gray",
     borderTopWidth: 1,
-    borderBottomWidth: 1,
   },
   footer: {
     flex: 1,
@@ -296,27 +308,27 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   row: {
-    flexDirection: 'column',
-    borderColor: '#dcdcdc',
-    backgroundColor: '#fff',
+    flexDirection: "column",
+    borderColor: "#dcdcdc",
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
     padding: 10,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   nameContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: 270,
   },
   nameTxt: {
     marginLeft: 15,
-    fontWeight: '600',
-    color: '#222',
+    fontWeight: "600",
+    color: "#222",
     fontSize: 15,
   },
   details: {
-    fontWeight: '400',
-    color: '#666',
+    fontWeight: "400",
+    color: "#666",
     fontSize: 12,
     marginLeft: 15,
   },
@@ -325,11 +337,11 @@ const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   loadingText: {
     fontSize: 20,
-    color: '#333',
+    color: "#333",
   },
 });

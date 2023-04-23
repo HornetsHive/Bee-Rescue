@@ -41,7 +41,7 @@ export default function SettingsScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <AccountHeader nav={navigation} titleText="Settings"/>
+        <AccountHeader nav={navigation} titleText="Settings" />
       </View>
 
       <View style={styles.middle}>
@@ -89,32 +89,32 @@ export default function SettingsScreen({ route, navigation }) {
             </View>
           )}
 
-            <Text style={styles.subTitle}>Notifications</Text>
-            <View>
-              <Text style={styles.notificationText}>Swarm Reports</Text>
-              <Switch
-                style={styles.switch}
-                name="swarmReport"
-                trackColor={{ false: "#767577", true: "#d92978" }}
-                thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
-                onValueChange={toggleSwitch1}
-                value={isEnabled1}
-              />
-              <Text style={styles.notificationText}>Report Dropped</Text>
-              <Switch
-                style={styles.switch}
-                name="reportDropped"
-                trackColor={{ false: "#767577", true: "#d92978" }}
-                thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
-                onValueChange={toggleSwitch2}
-                value={isEnabled2}
-              />
-            </View>
-          </ScrollView>
-        </View>
+          <Text style={styles.subTitle}>Notifications</Text>
+          <View>
+            <Text style={styles.notificationText}>Swarm Reports</Text>
+            <Switch
+              style={styles.switch}
+              name="swarmReport"
+              trackColor={{ false: "#767577", true: "#d92978" }}
+              thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
+              onValueChange={toggleSwitch1}
+              value={isEnabled1}
+            />
+            <Text style={styles.notificationText}>Report Dropped</Text>
+            <Switch
+              style={styles.switch}
+              name="reportDropped"
+              trackColor={{ false: "#767577", true: "#d92978" }}
+              thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
+              onValueChange={toggleSwitch2}
+              value={isEnabled2}
+            />
+          </View>
+        </ScrollView>
+      </View>
 
       <View style={styles.footer}>
-      <HomeButtonFooter nav={navigation} bk_id={userID} />
+        <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
     </SafeAreaView>
   );
@@ -129,16 +129,15 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
-    flex: 1
+    flex: 1,
   },
   middle: {
     flex: 8,
     width: "100%",
     paddingHorizontal: 20,
     alignSelf: "center",
-    borderBottomWidth: 1,
     borderTopWidth: 1,
-    borderColor: "gray",  
+    borderColor: "gray",
   },
   footer: {
     flex: 1,

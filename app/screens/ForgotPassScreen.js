@@ -26,7 +26,7 @@ function isValidPassword(pass) {
 function formatCodeInput(value) {
   if (!value) return value;
   const codeValue = value;
-  // ensure that code input box does not go over 4 diits
+  // ensure that code input box does not go over 4 digits
 
   const codeLength = value.length;
   if (codeLength > 4) {
@@ -37,22 +37,38 @@ function formatCodeInput(value) {
 // -------------------- start of forgot pass screen -----------------------
 
 export default function ForgotPassScreen({ navigation }) {
+  const [pass, setPass] = useState("");
+  const [passConfirm, confirmPass] = useState("");
+
+  const [enteredCode, setCode] = useState("");
+  const [enteredEmail, setEmail] = useState("");
+  const [actualCode, setActualCode] = useState("");
+
+  const [userID, setID] = useState("");
+  const [errors, setErrors] = useState("");
+  const [user, setUser] = React.useState([]);
+  const [hidePass1, setHidePass1] = useState(true);
+  const [hidePass2, setHidePass2] = useState(true);
   const [shouldShow, setShouldShow] = useState(true);
   const [shouldShow2, setShouldShow2] = useState(true);
   const [shouldShow3, setShouldShow3] = useState(true);
 
-  const [enteredEmail, setEmail] = useState("");
-  const [user, setUser] = React.useState([]);
+  const [inputErrCode, setInputErrCode] = useState(false);
+  const [inputStyleCode, setInputStyleCode] = useState(styles.inputCode);
 
-  const [actualCode, setActualCode] = useState("");
-  const [enteredCode, setCode] = useState("");
-  const [errors, setErrors] = useState("");
-  const [pass, setPass] = useState("");
-  const [passConfirm, confirmPass] = useState("");
-  const [hidePass1, setHidePass1] = useState(true);
-  const [hidePass2, setHidePass2] = useState(true);
+  const [inputErrPass, setInputErrPass] = useState(false);
+  const [inputErrPassConfirm, setInputErrPassConfirm] = useState(false);
+  const [inputErrEmail, setInputErrEmail] = useState(false);
+  const [validEmail, setValidEmail] = useState(true);
+  const [validPass, setValidPass] = useState(true);
+  const [validCode, setValidCode] = useState(true);
+  const [validPassConfirm, setValidPassConfirm] = useState(true);
+  const [inputStylePass, setInputStylePass] = useState(styles.input);
+  const [inputStyleEmail, setInputStyleEmail] = useState(styles.input);
+  const [inputStylePassConfirm, setInputStylePassConfirm] = useState(
+    styles.input
+  );
 
-  const [userID, setID] = useState("");
   var email, bk_id, code;
 
   const [loaded] = useFonts({
@@ -65,6 +81,8 @@ export default function ForgotPassScreen({ navigation }) {
     //check if user actually put in input
     if (!enteredEmail) {
       console.log("Please enter email");
+      setInputStyleEmail(styles.inputError);
+      setInputErrEmail(true);
       return;
     }
 
@@ -84,11 +102,13 @@ export default function ForgotPassScreen({ navigation }) {
 
     if ((email = enteredEmail)) {
       sendEmail();
+      setValidEmail(true);
       setShouldShow2(!shouldShow2);
       setShouldShow(!shouldShow);
       console.log("email sent");
     } else {
       console.log("not a registered email");
+      setValidEmail(false);
     }
   }
 
@@ -118,8 +138,16 @@ export default function ForgotPassScreen({ navigation }) {
   //reset user password after verifying entered code
   async function resetPass() {
     //verify code
+    if (!enteredCode) {
+      console.log("Please enter code");
+      setInputStyleCode(styles.inputCodeErr);
+      setInputErrCode(true);
+      return;
+    }
     if (enteredCode != actualCode) {
       console.log("invalid code");
+      setInputStyleCode(styles.inputCodeErr);
+      setValidCode(false);
       return;
     }
     setShouldShow2(!shouldShow2);
@@ -135,7 +163,7 @@ export default function ForgotPassScreen({ navigation }) {
     }
     console.log("pass confirmed!");
 
-    //update password in database with axios then navigate to login
+    //updates password in database with axios then navigates to login
     //maybe check if password is not the same as it was before?
     Axios.post("http://45.33.38.54:3001/bk_pass_update", {
       pass: pass,
@@ -155,25 +183,75 @@ export default function ForgotPassScreen({ navigation }) {
     setCode(formattedCode);
   };
 
-  //validate entered password
+  //validate entered info
   const validate = () => {
     const newErrors = { ...errors };
-    if (!pass) {
-      newErrors.pass = "This field is required";
-      console.log("Please enter pasword");
+    if (!pass || !passConfirm) {
+      if (!pass) {
+        newErrors.pass = "This field is required";
+        console.log("Please enter password");
+        setInputStylePass(styles.inputError);
+        setInputErrPass(true);
+      }
+      if (!passConfirm) {
+        console.log("Please confirm password");
+        setInputStylePassConfirm(styles.inputError);
+        setInputErrPassConfirm(true);
+      }
     }
-    if (!isValidPassword(pass)) {
+    if (pass != "" && !isValidPassword(pass)) {
       newErrors.pass = "Please enter a valid password";
       console.log("Please enter a valid password");
+      setInputStylePass(styles.inputError);
+      setValidPass(false);
     }
-    if (pass != passConfirm) {
+    if (isValidPassword(pass) && pass != passConfirm) {
       newErrors.passConfirm = "passwords don't match";
       console.log("passwords don't match");
+      setInputStylePassConfirm(styles.inputError);
+      setValidPassConfirm(false);
     }
     setErrors(newErrors);
 
     return !Object.values(newErrors).every((error) => error === "");
   };
+
+  //resets error text and error box based on the parameters passed
+  async function resetErrors(errType) {
+    if (errType === "email") {
+      setInputStyleEmail(styles.input);
+      setInputErrEmail(false);
+      if (!validEmail) {
+        setValidEmail(true);
+      }
+    }
+    if (errType === "code") {
+      setInputStyleCode(styles.inputCode);
+      setInputErrCode(false);
+      if (!validCode) {
+        setValidCode(true);
+      }
+    }
+    if (errType === "pass") {
+      setInputStylePass(styles.input);
+      setInputErrPass(false);
+      if (!validPass) {
+        setValidPass(true);
+      }
+      if (!validPassConfirm) {
+        setValidPassConfirm(true);
+        setInputStylePassConfirm(styles.input);
+        setInputErrPassConfirm(false);
+      }
+    }
+    if (errType === "passConfirm") {
+      setInputStylePassConfirm(styles.input);
+      setInputErrPassConfirm(false);
+      if (!validPassConfirm) {
+        setValidPassConfirm(true);
+      }
+    }
+  }
 
   if (!loaded) {
     return null;
@@ -199,8 +277,13 @@ export default function ForgotPassScreen({ navigation }) {
               {shouldShow ? (
                 <View>
                   <Text style={styles.textRegular}>verify email</Text>
+                  {inputErrEmail ? (
+                    <Text style={styles.textError}>Please enter email</Text>
+                  ) : (
+                    <View></View>
+                  )}
                   <TextInput
-                    style={styles.input}
+                    style={inputStyleEmail}
                     label="email"
                     placeholder="email"
                     required
@@ -208,6 +291,7 @@ export default function ForgotPassScreen({ navigation }) {
                     name="email"
                     onChangeText={(enteredEmail) => {
                       setEmail(enteredEmail);
+                      resetErrors("email");
                     }}
                   />
                   <View style={styles.button}>
@@ -232,6 +316,11 @@ export default function ForgotPassScreen({ navigation }) {
                     <Text style={styles.textSmallTwo}>
                       enter the code sent to your email
                     </Text>
+                    {inputErrCode ? (
+                      <Text style={styles.textError}>Please enter a code</Text>
+                    ) : (
+                      <View></View>
+                    )}
                     <View
                       style={{
                         flex: 1,
@@ -240,13 +329,14 @@ export default function ForgotPassScreen({ navigation }) {
                       }}
                     >
                       <TextInput
-                        style={styles.inputCode}
+                        style={inputStyleCode}
                         label="code"
                         keyboardType="numeric"
                         placeholder={"enter code"}
                         name="code"
                         onChangeText={(e) => {
                           handleInput(e);
+                          resetErrors("code");
                         }}
                         value={enteredCode}
                       />
