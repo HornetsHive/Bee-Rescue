@@ -39,6 +39,8 @@ export default function LoginScreen({ navigation }) {
   async function setLogin() {
     const data = await AsyncStorage.getItem("stayLoggedIn");
     const data2 = await AsyncStorage.getItem("storedEmail");
+    const ID = await AsyncStorage.getItem("bk_id");
+    setUserID(parseInt(ID, 10));
     setIsLoggedIn(data);
     setStoredEmail(data2);
     if (isLoggedIn) {
@@ -53,13 +55,10 @@ export default function LoginScreen({ navigation }) {
 
     //if user logged in, fetch their ID fom async storage and let hem go to the home screen
     if (isLoggedIn) {
-      const ID = await AsyncStorage.getItem("bk_id");
-      setUserID(parseInt(ID, 10));
-
       //navigate if already logged in
       navigation.replace("HomeScreen", {
         screen: "HomeScreen",
-        bk_id: ID,
+        bk_id: userID,
       });
     } else {
       //check if user actually put in input
@@ -139,37 +138,19 @@ export default function LoginScreen({ navigation }) {
     }
   }
 
-  async function attemptLogOut() {
-    Alert.alert(
-      "",
-      "Do you want to log out?",
-      [
-        {
-          text: "No",
-          onPress: () => {
-            return;
-          },
-          style: "cancel",
-        },
-        { text: "Yes", onPress: () => logOut() },
-      ],
-      { cancelable: false }
-    );
-  }
-
-  async function logOut() {
-    AsyncStorage.setItem("stayLoggedIn", "");
-    AsyncStorage.setItem("storedEmail", "");
-    AsyncStorage.setItem("bk_id", "");
-    console.log("logging out");
-
-    navigation.navigate("LoginScreen", {
-      screen: "LoginScreen",
-    });
-  }
-
   useEffect(() => {
     setLogin();
+    try {
+      if (isLoggedIn) {
+        //navigate if already logged in
+        navigation.replace("HomeScreen", {
+          screen: "HomeScreen",
+          bk_id: userID,
+        });
+      }
+    } catch {
+      return console.log("error logging in");
+    }
   });
 
   if (!loaded) {
@@ -307,15 +288,8 @@ export default function LoginScreen({ navigation }) {
               </View>
 
               {isLoggedIn ? (
-                //if logged in, don't show sign up option and show logout option
-                <TouchableOpacity
-                  style={styles.logoutContainer}
-                  onPress={() => {
-                    attemptLogOut();
-                  }}
-                >
-                  <Text style={styles.hyperLinkText}>Logout</Text>
-                </TouchableOpacity>
+                //if logged in, don't show sign up option
+                <View></View>
               ) : (
                 <TouchableOpacity
                   style={{ alignSelf: "center" }}
