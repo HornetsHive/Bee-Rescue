@@ -371,9 +371,8 @@ app.post("/complete_report", (req, res) => {
   db.query(sqlDelete, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
+    res.status(200).send(result);
   });
-
-  return res.status(200).send("Action Successful");
 });
 
 // Delete the report from active_reports table, and set report.active to FALSE
@@ -395,22 +394,22 @@ app.post("/abandon_report", (req, res) => {
   res.status(200).send("Report has been abandoned.");
 });
 
-app.post("/claim_report", (req, res) => {
+app.use("/claim_report", (req, res) => {
   const r_id = req.body.r_id;
   const bk_id = req.body.bk_id;
 
   const sqlInsert = "INSERT INTO active_reports (bk_id, r_id) VALUES (?, ?)";
   db.query(sqlInsert, [bk_id, r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    console.log(res);
-    res.status(200).send(result);
+    console.log(result);
+    return;
   });
 
   const sqlUpdate = "UPDATE reports SET active = true WHERE r_id = ?;";
   db.query(sqlUpdate, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    console.log(res);
-    res.status(200).send(result);
+    console.log(result);
+    return;
   });
 
   //get report details for email
@@ -438,8 +437,8 @@ app.post("/claim_report", (req, res) => {
         return;
       }
       console.log("Sent: " + info.response);
-      return res.status(200).send("Action Successful");
     });
+    return res.status(200).send(result);
   });
 });
 
@@ -452,7 +451,8 @@ app.get("/bk_user", (req, res) => {
   const sqlQuery = "SELECT email, bk_id FROM beekeepers WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    return res.status(200).send("Action Successful");
+    console.log(result);
+    return res.status(200).send(result);
   });
 });
 
@@ -489,7 +489,7 @@ app.get("/bk_get", (req, res) => {
       bcrypt.hash(pass, result[0]["salt"], function (err, hash) {
         if (result[0]["pass"] == hash) {
           console.log("password verified");
-          res.status(200).send(result);
+          return res.status(200).send(result);
         } else return console.log("wrong password");
         //catch errors
         if (err) return console.log(err);
@@ -498,7 +498,6 @@ app.get("/bk_get", (req, res) => {
       console.log("email not found");
     }
   });
-  return res.status(200).send("Action Successful");
 });
 
 // Fetch bee reports to display on the app
@@ -519,8 +518,8 @@ app.get("/bk_claimedReports", (req, res) => {
     "SELECT * FROM reports JOIN active_reports ON reports.r_id = active_reports.r_id WHERE reports.active = true AND active_reports.bk_id = ?;";
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    console.log(res);
-    res.status(200).send(result);
+    console.log(result);
+    return res.status(200).send(result);
   });
 });
 
