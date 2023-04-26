@@ -9,7 +9,7 @@ const bcrypt = require("bcryptjs");
 const axios = require("axios");
 
 const gmapsAPIKey = process.env.GMAPS_API_KEY;
-
+//process.env...
 //SQL server connection
 const db = mysql.createConnection({
   //to be changed later
@@ -20,6 +20,8 @@ const db = mysql.createConnection({
 });
 
 //Set up nodemailer connection
+//this email is not final
+//-------------------------  add email user and pass to env file once finalized -----------------------------------
 const transporter = nodemailer.createTransport({
   service: "hotmail",
   auth: {
@@ -45,7 +47,7 @@ app.get("/mailtest", (req, res) => {
   };
   transporter.sendMail(mailoptionstest, function (err, info) {
     if (err) {
-      console.log(err);
+      console.log(err); 
       return;
     }
     console.log("Sent: " + info.response);
@@ -103,11 +105,11 @@ app.post("/insert", async (req, res) => {
     const result = await insertReport;
     console.log("Successfully inserted record");
     console.log(result);
-    res.status(200).send("Insert Successful");
+    return res.status(200).send("Insert Successful");
     sendConfirmationEmail(req.body.email, req.body.fname, conf_code);
   } catch (error) {
     console.error("Error:", error.message);
-    res.status(500).send("Failed to submit report");
+    return res.status(500).send("Failed to submit report");
   }
 });
 
@@ -120,7 +122,7 @@ function sendConfirmationEmail(email, fname, conf_code) {
     "Hi " +
     fname +
     ",\n" +
-    "Thank you for submitting your report. We will notifiy the beekeepers in your area, and you will recieve a follow-up email when an available beekeeper claims your report.\n\n Important! Please click this link to confirm your report:\n" +
+    "Thank you for submitting your report. We will notify the beekeepers in your area, and you will receive a follow-up email when an available beekeeper claims your report.\n\n Important! Please click this link to confirm your report:\n" +
     confirmationLink;
   const confirmReportOptions = {
     from: "BeeRescuePostmaster@outlook.com",
@@ -134,7 +136,7 @@ function sendConfirmationEmail(email, fname, conf_code) {
       console.log(err);
     } else {
       console.log("Sent: " + info.response);
-      return res.send(200).send("Action Succesful");
+      return res.send(200).send("Action Successful");
     }
   });
 }
@@ -177,7 +179,7 @@ app.get("/confirm-email", (req, res) => {
           console.log(err);
           return res.status(500).send("Internal Server Error");
         }
-        res.status(200).send("Email confirmed");
+        return res.status(200).send("Email confirmed");
       }
     );
   });
@@ -224,7 +226,7 @@ app.post("/bk_insert", (req, res) => {
       db.query(sqlINSERT, [email, hash, salt], (err, result) => {
         if (err) return res.status(500).send(err.message);
         console.log(result);
-        res.status(200).send("Insert Successful");
+        return res.status(200).send("Insert Successful");
       });
     });
   });
@@ -248,7 +250,7 @@ app.post("/bk_update", (req, res) => {
     (err, result) => {
       if (err) return res.status(500).send(err.message);
       console.log(result);
-      res.status(200).send("Insert Successful");
+      return res.status(200).send("Insert Successful");
     }
   );
 });
@@ -299,7 +301,7 @@ app.post("/bk_qualif_update", (req, res) => {
       if (err) return res.status(500); //.send(err.message)
       console.log("qualifications updated");
       console.log(result);
-      res.status(200).send("Insert Successful");
+      return res.status(200).send("Insert Successful");
     }
   );
 });
@@ -320,7 +322,7 @@ app.post("/bk_pass_update", (req, res) => {
       db.query(sqlUpdate, [hash, salt, bk_id], (err, result) => {
         if (err) return res.status(500).send(err.message);
         console.log(result);
-        res.status(200).send("Insert Successful");
+        return res.status(200).send("Insert Successful");
       });
     });
   });
@@ -371,7 +373,7 @@ app.post("/complete_report", (req, res) => {
   db.query(sqlDelete, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
-    res.status(200).send(result);
+    return res.status(200).send(result);
   });
 });
 
@@ -388,10 +390,40 @@ app.post("/abandon_report", (req, res) => {
   const sqlUpdate = "UPDATE reports SET active = FALSE WHERE r_id = ?;";
   db.query(sqlUpdate, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
+    
+    return res.status(200).send("Report has been abandoned.");
   });
 
   console.log("Report has been abandoned.");
-  res.status(200).send("Report has been abandoned.");
+});
+
+// Remove the report and mark it as unsuccessful
+app.post("/remove_report", (req, res) => {
+  const r_id = req.body.r_id;
+  const reason = req.body.reason;
+  console.log("Removing report #" + r_id);
+  console.log("Reason: " + reason);
+
+  // Mark report as complete
+  const sqlUpdate = "UPDATE reports SET complete = true WHERE r_id = ?;";
+  db.query(sqlUpdate, [r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+  });
+
+  // Remove completed report from active reports
+  const sqlDelete = "DELETE FROM reports WHERE r_id = ?;";
+  db.query(sqlDelete, [r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+  });
+
+  // Set success to false
+  const sqlUpdate2 = "UPDATE report_archive SET success = false WHERE r_id = ?;";
+  db.query(sqlUpdate2, [r_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+  });
+
+  console.log("Report has been removed.");
+  return res.status(200).send("Report has been removed.");
 });
 
 app.use("/claim_report", (req, res) => {
@@ -451,11 +483,8 @@ app.get("/bk_user", (req, res) => {
   const sqlQuery = "SELECT email, bk_id FROM beekeepers WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    console.log(result);
     return res.status(200).send(result);
   });
-
-  return res.status(200).send("Action Successful");
 });
 
 // Fetches the user email/password unique pair based on beekeepers ID
@@ -502,13 +531,22 @@ app.get("/bk_get", (req, res) => {
   });
 });
 
+app.get("/bk_getUser", (req, res) => {
+  const bk_id = req.query.bk_id;
+  const sqlQuery = "SELECT * FROM beekeepers WHERE bk_id = ?;";
+  db.query(sqlQuery, [bk_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    return res.status(200).send(result);
+  });
+});
+
 // Fetch bee reports to display on the app
 app.get("/bk_appReports", (req, res) => {
   const sqlQuery =
     "SELECT * FROM reports WHERE active = false AND confirmed = true;";
   db.query(sqlQuery, (err, result) => {
     if (err) return res.status(500).send(err.message);
-    res.status(200).send(result);
+    return res.status(200).send(result);
   });
 });
 
@@ -533,7 +571,7 @@ app.get("/bk_completedReports", (req, res) => {
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(res);
-    res.status(200).send(result);
+    return res.status(200).send(result);
   });
 });
 
@@ -558,7 +596,7 @@ app.get("/debug-report", (req, res) => {
   db.query(sqlINSERT, (err, result) => {
     if (err) return res.status(500).send(err.message);
     console.log(result);
-    res.status(200).send("Insert Successful");
+    return res.status(200).send("Insert Successful");
   });
 });
 
@@ -569,7 +607,7 @@ app.get("/report_data", (req, res) => {
   const sqlQuery = "SELECT * FROM reports WHERE r_id = ?;";
   db.query(sqlQuery, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    res.status(200).send(result);
+    return res.status(200).send(result);
   });
 });
 
