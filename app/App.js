@@ -8,11 +8,11 @@ import { Platform } from "react-native";
 import * as Device from "expo-device";
 
 import AccountScreen from "./screens/AccountScreen";
+import ClaimedReportInfoScreen from "./screens/ClaimedReportInfoScreen";
 import ForgotPassScreen from "./screens/ForgotPassScreen";
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
 import MyReportsHomeScreen from "./screens/MyReportsHomeScreen";
-import MyReportsScreen from "./screens/MyReportsScreen";
 import PreferencesScreen from "./screens/PreferencesScreen";
 import ReportInfoScreen from "./screens/ReportInfoScreen";
 import SettingsScreen from "./screens/SettingsScreen";
@@ -125,7 +125,10 @@ export default function App() {
         <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
         <Stack.Screen name="ForgotPassScreen" component={ForgotPassScreen} />
         <Stack.Screen name="ReportInfoScreen" component={ReportInfoScreen} />
-        <Stack.Screen name="MyReportsScreen" component={MyReportsScreen} />
+        <Stack.Screen
+          name="ClaimedReportInfoScreen"
+          component={ClaimedReportInfoScreen}
+        />
         <Stack.Screen name="AccountScreen" component={AccountScreen} />
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
       </Stack.Navigator>

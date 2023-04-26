@@ -1,23 +1,20 @@
 import * as React from "react";
 
+import HomeButtonFooter from "../components/HomeButtonFooter";
+import AccountHeader from "../components/AccountHeader";
 import { useFonts } from "expo-font";
 import { useState } from "react";
 import {
   Text,
   View,
-  Image,
   Switch,
   Button,
   TextInput,
   ScrollView,
   StyleSheet,
   SafeAreaView,
-  ImageBackground,
-  TouchableOpacity,
   StatusBar,
 } from "react-native";
-import AccountHeader from "../components/AccountHeader";
-import HomeButtonFooter from "../components/HomeButtonFooter";
 
 export default function SettingsScreen({ route, navigation }) {
   const userID = route.params.bk_id;

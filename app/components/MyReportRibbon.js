@@ -8,8 +8,8 @@ export default function MyReportRibbon({ r_id, bk_id, location, date, nav }) {
       onPress={() => {
         console.log("Going to info: " + r_id);
 
-        nav.navigate("MyReportsScreen", {
-          screen: "MyReportsScreen",
+        nav.navigate("ClaimedReportInfoScreen", {
+          screen: "ClaimedReportInfoScreen",
           r_id: r_id,
           bk_id: bk_id,
         });

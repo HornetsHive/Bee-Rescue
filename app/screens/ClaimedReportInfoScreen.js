@@ -1,4 +1,7 @@
 import * as React from "react";
+
+import HomeButtonFooter from "../components/HomeButtonFooter";
+import AccountHeader from "../components/AccountHeader";
 import { useState, useEffect } from "react";
 import { useFonts } from "expo-font";
 import Axios from "axios";
@@ -11,24 +14,25 @@ import {
   StatusBar,
   Alert,
 } from "react-native";
-import HomeButtonFooter from "../components/HomeButtonFooter";
-import AccountHeader from "../components/AccountHeader";
 
-export default function MyReportsScreen({ route, navigation}) {
+export default function ClaimedReportInfoScreen({ route, navigation }) {
   const userID = route.params.bk_id;
   const reportID = route.params.r_id;
-  const[reportData, setReportData] = useState(null);
-  const[loadingData, setLoadingData] = useState(true);
+  const [reportData, setReportData] = useState(null);
+  const [loadingData, setLoadingData] = useState(true);
 
   // Complete the report
   const completeReport = () => {
     console.log("Completing report.");
     Axios.post("http://45.33.38.54:3001/complete_report", {
-      r_id: reportID 
+      r_id: reportID,
     })
       .then(function (response) {
         console.log(response.data);
-        navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen", bk_id: userID })
+        navigation.navigate("MyReportsHomeScreen", {
+          screen: "MyReportsHomeScreen",
+          bk_id: userID,
+        });
       })
       .catch(function (error) {
         console.log(error);
@@ -38,11 +42,15 @@ export default function MyReportsScreen({ route, navigation}) {
   // Abandon the report
   const abandonReport = () => {
     console.log("Abandoning report.");
-    Axios.post("http://45.33.38.54:3001/abandon_report", { 
-      r_id: reportID })
+    Axios.post("http://45.33.38.54:3001/abandon_report", {
+      r_id: reportID,
+    })
       .then(function (response) {
         console.log(response.data);
-        navigation.navigate("MyReportsHomeScreen", { screen: "MyReportsHomeScreen", bk_id: userID })
+        navigation.navigate("MyReportsHomeScreen", {
+          screen: "MyReportsHomeScreen",
+          bk_id: userID,
+        });
       })
       .catch(function (error) {
         // If error, print the error
@@ -52,60 +60,63 @@ export default function MyReportsScreen({ route, navigation}) {
 
   // Shows an alert asking the user confirmation for completing the report
   const confirmComplete = () => {
-    Alert.alert('Confirm', 'Are you sure you want to complete this report?', [
+    Alert.alert("Confirm", "Are you sure you want to complete this report?", [
       {
         // Cancel button
-        text: 'Cancel',
-        onPress: () => console.log('Complete confirmation cancelled.'),
-        style: 'cancel',
+        text: "Cancel",
+        onPress: () => console.log("Complete confirmation cancelled."),
+        style: "cancel",
       },
       {
         // Claim button
-        text: 'Complete', 
+        text: "Complete",
         onPress: () => completeReport(),
       },
     ]);
-  }
+  };
 
-    // Shows an alert asking the user confirmation for abandoning the report
-    const confirmAbandon = () => {
-      Alert.alert('Confirm', 'Are you sure you want to complete this report?', [
-        {
-          // Cancel button
-          text: 'Cancel',
-          onPress: () => console.log('Abandon confirmation cancelled.'),
-          style: 'cancel',
-        },
-        {
-          // Claim button
-          text: 'Abandon', 
-          onPress: () => reasonForAbandon(),
-        },
-      ]);
-    }
+  // Shows an alert asking the user confirmation for abandoning the report
+  const confirmAbandon = () => {
+    Alert.alert("Confirm", "Are you sure you want to abandon this report?", [
+      {
+        // Cancel button
+        text: "Cancel",
+        onPress: () => console.log("Abandon confirmation cancelled."),
+        style: "cancel",
+      },
+      {
+        // Claim button
+        text: "Abandon",
+        onPress: () => reasonForAbandon(),
+      },
+    ]);
+  };
 
-    // Shows an alert asking the reason for abandoning
-    const reasonForAbandon = () => {
-      Alert.alert('Abandoning report', 'Is there a specific reason for abandoning this report?', [
+  // Shows an alert asking the reason for abandoning
+  const reasonForAbandon = () => {
+    Alert.alert(
+      "Abandoning report",
+      "Is there a specific reason for abandoning this report?",
+      [
         {
-          // No reason
-          text: 'No',
+          // No/other reason
+          text: "Other",
           onPress: () => abandonReport(),
-          style: 'cancel',
+          style: "cancel",
         },
         {
           // Exterminator
-          text: 'Needs exterminator', 
+          text: "Needs exterminator",
           onPress: () => abandonReport(),
         },
         {
           // No bees
-          text: 'No bee swarm', 
+          text: "No bee swarm",
           onPress: () => abandonReport(),
         },
-      ]);
-    }
-  
+      ]
+    );
+  };
 
   function convertPropertyLocation(propertyLocation) {
     switch (propertyLocation) {
@@ -126,10 +137,10 @@ export default function MyReportsScreen({ route, navigation}) {
       default:
         return "null";
     }
-  };
+  }
 
   function convertHeight(height) {
-    switch(height) {
+    switch (height) {
       case "low":
         return "Low: Less than 10'";
       case "med":
@@ -139,10 +150,10 @@ export default function MyReportsScreen({ route, navigation}) {
       default:
         return "null";
     }
-  };
+  }
 
   function convertSize(size) {
-    switch(size) {
+    switch (size) {
       case "small":
         return "Small (Size of grapefruit or smaller)";
       case "med":
@@ -152,10 +163,10 @@ export default function MyReportsScreen({ route, navigation}) {
       default:
         return "null";
     }
-  };
+  }
 
   function convertPropertyType(propertyType) {
-    switch(propertyType) {
+    switch (propertyType) {
       case "res_detached":
         return "Residential detached home";
       case "res_apartment":
@@ -167,7 +178,7 @@ export default function MyReportsScreen({ route, navigation}) {
       default:
         return "null";
     }
-  };
+  }
 
   useEffect(() => {
     // Get report data from server
@@ -175,7 +186,7 @@ export default function MyReportsScreen({ route, navigation}) {
     Axios.get("http://45.33.38.54:3001/report_data", {
       params: {
         r_id: reportID,
-      }
+      },
     })
       .then((response) => {
         console.log("Report data from server: ", response.data);
@@ -193,14 +204,13 @@ export default function MyReportsScreen({ route, navigation}) {
   });
 
   if (!loadedFonts || loadingData) {
-    return(
+    return (
       <View style={styles.loadingContainer}>
         <Text style={styles.loadingText}>Loading report data...</Text>
       </View>
     );
-  };
+  }
 
-  //-----------------this return needs rewritting to be more like home screen----------------------//
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -240,64 +250,98 @@ export default function MyReportsScreen({ route, navigation}) {
         </View>
 
         <ScrollView>
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Address</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{reportData.address}, {reportData.city} {reportData.zip}</Text>
-                </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Address</Text>
             </View>
+            <View>
+              <Text style={styles.text}>
+                {reportData.address}, {reportData.city} {reportData.zip}
+              </Text>
+            </View>
+          </View>
 
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Time present</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ reportData.duration } days</Text>
-                </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Time present</Text>
             </View>
+            <View>
+              <Text style={styles.text}>{reportData.duration} days</Text>
+            </View>
+          </View>
 
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Location</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ convertPropertyLocation(reportData.location) }</Text>
-                </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Location</Text>
             </View>
+            <View>
+              <Text style={styles.text}>
+                {convertPropertyLocation(reportData.location)}
+              </Text>
+            </View>
+          </View>
 
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Height</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ convertHeight(reportData.height) }</Text>
-                </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Height</Text>
             </View>
+            <View>
+              <Text style={styles.text}>
+                {convertHeight(reportData.height)}
+              </Text>
+            </View>
+          </View>
 
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Size</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ convertSize(reportData.size) }</Text>
-                </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Size</Text>
             </View>
+            <View>
+              <Text style={styles.text}>{convertSize(reportData.size)}</Text>
+            </View>
+          </View>
 
-            <View style={styles.row}>
-                <View style={styles.nameContainer}>
-                  <Text style={styles.nameTxt}>Property Type</Text>
-                </View>
-                <View>
-                  <Text style={styles.text}>{ convertPropertyType(reportData.p_type) }</Text>
-                </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Property Type</Text>
             </View>
-          </ScrollView>
-      </View>      
+            <View>
+              <Text style={styles.text}>
+                {convertPropertyType(reportData.p_type)}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Reporter Name</Text>
+            </View>
+            <View>
+              <Text style={styles.text}>
+                {reportData.fname + " " + reportData.lname + " "}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Reporter Phone Number</Text>
+            </View>
+            <View>
+              <Text style={styles.text}>{reportData.phone_no}</Text>
+            </View>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Reporter Email</Text>
+            </View>
+            <View>
+              <Text style={styles.text}>{reportData.email}</Text>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
 
       <View style={styles.footer}>
-      <HomeButtonFooter nav={navigation} bk_id={userID} />
+        <HomeButtonFooter nav={navigation} bk_id={userID} />
       </View>
     </View>
   );
@@ -323,7 +367,6 @@ const styles = StyleSheet.create({
   body: {
     flex: 8,
     borderColor: "gray",
-    borderBottomWidth: 1,
     borderTopWidth: 1,
     padding: 10,
     overflow: "scroll",
@@ -359,27 +402,27 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   row: {
-    flexDirection: 'column',
-    borderColor: '#dcdcdc',
-    backgroundColor: '#fff',
+    flexDirection: "column",
+    borderColor: "#dcdcdc",
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
     padding: 10,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   nameContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: 270,
   },
   nameTxt: {
     marginLeft: 15,
-    fontWeight: '600',
-    color: '#222',
+    fontWeight: "600",
+    color: "#222",
     fontSize: 15,
   },
   details: {
-    fontWeight: '400',
-    color: '#666',
+    fontWeight: "400",
+    color: "#666",
     fontSize: 12,
     marginLeft: 15,
   },
