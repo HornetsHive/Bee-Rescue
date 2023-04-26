@@ -20,16 +20,19 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 
 export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
+  const [edited, setEdit] = useState(false);
 
   const [image, setImage] = useState("default");
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
   const [email, setEmail] = useState("");
-  const [loc, setLocation] = useState();
+  const [city, setCity] = useState("");
+  const [zip, setZip] = useState("");
   const [maxHeight, setMaxHeight] = useState();
   const [cooperative, setCoop] = useState(false);
   const [ability1, setAbility1] = useState(false);
@@ -52,6 +55,10 @@ export default function AccountScreen({ route, navigation }) {
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
+
+  scrollToTop = () => {
+    scroller.scrollTo({ x: 0, y: 0 });
+  };
 
   //////////////////DB QUERY
   async function getUser() {
@@ -78,16 +85,83 @@ export default function AccountScreen({ route, navigation }) {
   function mapUserData(userData) {
     userData.map((user) => {
       setFName(user.fname);
-      setLName(user.fname);
+      setLName(user.lname);
       setEmail(user.email);
-      setLocation(user.city);
+      setCity(user.city);
+      setZip(user.zip);
+
+      /*setAbility1();
+      setAbility2();
+      setAbility3();
+      setAbility4();
+      setAbility5();
+      setAbility6();
+      setAbility7();
+      setAbility8();
+      setAbility9();
+      setAbility10();
+      setAbility11();
+      setAbility12();
+      setAbility13();
+      setEquip1();
+      setEquip2();
+      setEquip3();*/
     });
   }
+  //--------------------- update beekeeper info
+  const updateNewUser = async () => {
+    try {
+      // Use Promise.all to wait for both posts to resolve
+      await Promise.all([
+        //axios.post to update beekeeper personal info
+        Axios.post("http://45.33.38.54:3001/bk_update", {
+          fname: fname,
+          lname: lname,
+          city: city,
+          zip: zip,
+          bk_id: userID,
+        }),
 
+        //axios post again to update beekeeper qualifications
+        Axios.post("http://45.33.38.54:3001/bk_qualif_update", {
+          ground_swarms: ability1,
+          valve_or_water_main: ability2,
+          shrubs: ability3,
+          low_tree: ability4,
+          mid_tree: ability5,
+          tall_tree: ability6,
+          fences: ability7,
+          low_structure: ability8,
+          mid_structure: ability9,
+          chimney: ability10,
+          interior: ability11,
+          cut_or_trap_out: ability12,
+          traffic_accidents: ability13,
+          bucket_w_pole: equipment1,
+          ladder: equipment2,
+          mechanical_lift: equipment3,
+          bk_id: userID,
+        }),
+      ]);
+
+      console.log("changes saved");
+    } catch (error) {
+      console.error("Error in updateNewUser: " + error);
+      Alert.alert(
+        error.message,
+        "Something went wrong processing your request",
+        [
+          {
+            text: "OK",
+          },
+        ]
+      );
+    }
+  };
   //////////////
+
   function saveChanges() {
-    // Send new data to the database from here?
-    console.log("changes saved");
+    updateNewUser();
   }
 
   const uploadImage = async () => {
@@ -140,7 +214,7 @@ export default function AccountScreen({ route, navigation }) {
 
   useEffect(() => {
     getUser();
-  });
+  }, []);
 
   if (!loaded) {
     return null;
@@ -155,7 +229,12 @@ export default function AccountScreen({ route, navigation }) {
 
       {/* Body */}
       <View style={styles.body}>
-        <KeyboardAwareScrollView>
+        <ScrollView
+          style={styles.middle}
+          ref={(scroller) => {
+            this.scroller = scroller;
+          }}
+        >
           <Image
             source={
               image == "default"
@@ -180,38 +259,85 @@ export default function AccountScreen({ route, navigation }) {
             <Text style={styles.inputLabel}>First Name</Text>
             <TextInput
               style={styles.input}
-              placeholder={fname}
-              onChangeText={setFName}
+              value={fname}
+              onChangeText={(fname) => {
+                setFName(fname);
+                setEdit(true);
+              }}
             ></TextInput>
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Last Name</Text>
             <TextInput
               style={styles.input}
-              placeholder={lname}
-              onChangeText={setLName}
+              value={lname}
+              onChangeText={(lname) => {
+                setLName(lname);
+                setEdit(true);
+              }}
             ></TextInput>
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Email</Text>
             <TextInput
               style={styles.input}
-              placeholder={email}
-              onChangeText={setEmail}
+              value={email}
+              onChangeText={(email) => {
+                setEmail(email);
+                setEdit(true);
+              }}
             ></TextInput>
           </View>
           <View style={styles.aligned}>
-            <Text style={styles.inputLabel}>Location</Text>
+            <Text style={styles.inputLabel}>City</Text>
             <TextInput
               style={styles.input}
-              placeholder={loc}
-              onChangeText={setLocation}
+              value={city}
+              onChangeText={(city) => {
+                setCity(city);
+                setEdit(true);
+              }}
+            ></TextInput>
+            <Text style={styles.inputLabel}>Zip</Text>
+            <TextInput
+              style={styles.input}
+              value={zip}
+              onChangeText={(zip) => {
+                setZip(zip);
+                setEdit(true);
+              }}
             ></TextInput>
           </View>
           <Text style={styles.smallText}>
             Note that the swarm notifications you receive are determined by this
             location entered.
           </Text>
+          {edited ? (
+            <View style={{ flex: 1, flexDirection: "row", marginTop: 20 }}>
+              <View style={styles.saveButton}>
+                <Button
+                  color="grey"
+                  onPress={() => {
+                    getUser();
+                    setEdit(false);
+                  }}
+                  title="Cancel"
+                ></Button>
+              </View>
+              <View style={styles.saveButton}>
+                <Button
+                  color="#da628c"
+                  onPress={() => {
+                    saveChanges;
+                    setEdit(false);
+                  }}
+                  title="Save Changes"
+                ></Button>
+              </View>
+            </View>
+          ) : (
+            <View></View>
+          )}
 
           <View style={styles.divider}>{/*****************************/}</View>
 
@@ -222,7 +348,10 @@ export default function AccountScreen({ route, navigation }) {
               style={styles.input}
               keyboardType="numeric"
               placeholder="(e.g. 6 ft)"
-              onChangeText={setMaxHeight}
+              onChangeText={() => {
+                setMaxHeight;
+                setEdit(true);
+              }}
             ></TextInput>
           </View>
           <View style={styles.aligned}>
@@ -234,7 +363,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={cooperative ? "#FFFFFF" : "#f4f3f4"}
               value={cooperative}
-              onValueChange={() => setCoop(!cooperative)}
+              onValueChange={() => {
+                setCoop(!cooperative);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
 
@@ -251,7 +383,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability1 ? "#FFFFFF" : "#f4f3f4"}
               value={ability1}
-              onValueChange={() => setAbility1(!ability1)}
+              onValueChange={() => {
+                setAbility1(!ability1);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -261,7 +396,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability2 ? "#FFFFFF" : "#f4f3f4"}
               value={ability2}
-              onValueChange={() => setAbility2(!ability2)}
+              onValueChange={() => {
+                setAbility2(!ability2);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -271,7 +409,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability3 ? "#FFFFFF" : "#f4f3f4"}
               value={ability3}
-              onValueChange={() => setAbility3(!ability3)}
+              onValueChange={() => {
+                setAbility3(!ability3);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -281,7 +422,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability4 ? "#FFFFFF" : "#f4f3f4"}
               value={ability4}
-              onValueChange={() => setAbility4(!ability4)}
+              onValueChange={() => {
+                setAbility4(!ability4);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -293,7 +437,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability5 ? "#FFFFFF" : "#f4f3f4"}
               value={ability5}
-              onValueChange={() => setAbility5(!ability5)}
+              onValueChange={() => {
+                setAbility5(!ability5);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -303,7 +450,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability6 ? "#FFFFFF" : "#f4f3f4"}
               value={ability6}
-              onValueChange={() => setAbility6(!ability6)}
+              onValueChange={() => {
+                setAbility6(!ability6);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -313,7 +463,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability7 ? "#FFFFFF" : "#f4f3f4"}
               value={ability7}
-              onValueChange={() => setAbility7(!ability7)}
+              onValueChange={() => {
+                setAbility7(!ability7);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -325,7 +478,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability8 ? "#FFFFFF" : "#f4f3f4"}
               value={ability8}
-              onValueChange={() => setAbility8(!ability8)}
+              onValueChange={() => {
+                setAbility8(!ability8);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -337,7 +493,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability9 ? "#FFFFFF" : "#f4f3f4"}
               value={ability9}
-              onValueChange={() => setAbility9(!ability9)}
+              onValueChange={() => {
+                setAbility9(!ability9);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -347,7 +506,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability10 ? "#FFFFFF" : "#f4f3f4"}
               value={ability10}
-              onValueChange={() => setAbility10(!ability10)}
+              onValueChange={() => {
+                setAbility10(!ability10);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -359,7 +521,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability11 ? "#FFFFFF" : "#f4f3f4"}
               value={ability11}
-              onValueChange={() => setAbility11(!ability11)}
+              onValueChange={() => {
+                setAbility11(!ability11);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -369,7 +534,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability12 ? "#FFFFFF" : "#f4f3f4"}
               value={ability12}
-              onValueChange={() => setAbility12(!ability12)}
+              onValueChange={() => {
+                setAbility12(!ability12);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -379,7 +547,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={ability13 ? "#FFFFFF" : "#f4f3f4"}
               value={ability13}
-              onValueChange={() => setAbility13(!ability13)}
+              onValueChange={() => {
+                setAbility13(!ability13);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
 
@@ -396,7 +567,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={equipment1 ? "#FFFFFF" : "#f4f3f4"}
               value={equipment1}
-              onValueChange={() => setEquip1(!equipment1)}
+              onValueChange={() => {
+                setEquip1(!equipment1);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -406,7 +580,10 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={equipment2 ? "#FFFFFF" : "#f4f3f4"}
               value={equipment2}
-              onValueChange={() => setEquip2(!equipment2)}
+              onValueChange={() => {
+                setEquip2(!equipment2);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
           <View style={styles.aligned}>
@@ -416,20 +593,44 @@ export default function AccountScreen({ route, navigation }) {
               trackColor={{ false: "#808080", true: "#d92978" }}
               thumbColor={equipment3 ? "#FFFFFF" : "#f4f3f4"}
               value={equipment3}
-              onValueChange={() => setEquip3(!equipment3)}
+              onValueChange={() => {
+                setEquip3(!equipment3);
+                setEdit(true);
+              }}
             ></Switch>
           </View>
 
           <View style={styles.divider}>{/*****************************/}</View>
 
-          <View style={styles.saveButton}>
-            <Button
-              color="#da628c"
-              onPress={saveChanges}
-              title="Save Changes"
-            ></Button>
-          </View>
-        </KeyboardAwareScrollView>
+          {edited ? (
+            <View style={{ flex: 1, flexDirection: "row", marginTop: 20 }}>
+              <View style={styles.saveButton}>
+                <Button
+                  color="grey"
+                  onPress={() => {
+                    getUser();
+                    setEdit(false);
+                    scrollToTop();
+                  }}
+                  title="Cancel"
+                ></Button>
+              </View>
+              <View style={styles.saveButton}>
+                <Button
+                  color="#da628c"
+                  onPress={() => {
+                    saveChanges;
+                    setEdit(false);
+                    scrollToTop();
+                  }}
+                  title="Save Changes"
+                ></Button>
+              </View>
+            </View>
+          ) : (
+            <View></View>
+          )}
+        </ScrollView>
       </View>
 
       {/* Footer */}
