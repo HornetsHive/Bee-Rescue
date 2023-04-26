@@ -1,8 +1,13 @@
+import * as React from "react";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import HomeButtonFooter from "../components/HomeButtonFooter";
+import AccountHeader from "../components/AccountHeader";
 import * as ImagePicker from "expo-image-picker";
+import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
-import { useState } from "react";
+import Axios from "axios";
 import {
   Text,
   View,
@@ -14,17 +19,16 @@ import {
   StatusBar,
   StyleSheet,
   SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import HomeButtonFooter from "../components/HomeButtonFooter";
-import AccountHeader from "../components/AccountHeader";
 
 export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
 
   const [image, setImage] = useState("default");
-  const [name, setName] = useState();
+  const [fname, setFName] = useState("");
+  const [lname, setLName] = useState("");
+  const [email, setEmail] = useState("");
   const [loc, setLocation] = useState();
   const [maxHeight, setMaxHeight] = useState();
   const [cooperative, setCoop] = useState(false);
@@ -49,10 +53,36 @@ export default function AccountScreen({ route, navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  if (!loaded) {
-    return null;
-  }
   //////////////////DB QUERY
+  async function getUser() {
+    const res = await Axios.get("http://45.33.38.54:3001/bk_getUser", {
+      params: { bk_id: userID },
+    })
+      .then((res) => {
+        var id = res.data[0].bk_id;
+        console.log(res.data[0]);
+        if (id != null && id != undefined && id != "") {
+          console.log("user data snatched");
+          mapUserData(res.data);
+        } else {
+          console.log("sorry, didn't work");
+          return;
+        }
+      })
+      .catch(function (error) {
+        if (error) console.log(error);
+      });
+    return res;
+  }
+
+  function mapUserData(userData) {
+    userData.map((user) => {
+      setFName(user.fname);
+      setLName(user.fname);
+      setEmail(user.email);
+      setLocation(user.city);
+    });
+  }
 
   //////////////
   function saveChanges() {
@@ -108,6 +138,14 @@ export default function AccountScreen({ route, navigation }) {
     });
   }
 
+  useEffect(() => {
+    getUser();
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -139,18 +177,34 @@ export default function AccountScreen({ route, navigation }) {
             </TouchableOpacity>
           </View>
           <View style={styles.aligned}>
-            <Text style={styles.inputLabel}>Name</Text>
+            <Text style={styles.inputLabel}>First Name</Text>
             <TextInput
               style={styles.input}
-              placeholder="Your Name"
-              onChangeText={setName}
+              placeholder={fname}
+              onChangeText={setFName}
+            ></TextInput>
+          </View>
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>Last Name</Text>
+            <TextInput
+              style={styles.input}
+              placeholder={lname}
+              onChangeText={setLName}
+            ></TextInput>
+          </View>
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder={email}
+              onChangeText={setEmail}
             ></TextInput>
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Location</Text>
             <TextInput
               style={styles.input}
-              placeholder="Your Location"
+              placeholder={loc}
               onChangeText={setLocation}
             ></TextInput>
           </View>

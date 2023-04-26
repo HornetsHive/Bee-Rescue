@@ -1,27 +1,27 @@
 import * as React from "react";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
+import { useState, useEffect } from "react";
 import { useFonts } from "expo-font";
-import { useState } from "react";
 import {
   Text,
   View,
-  Switch,
   Button,
+  Switch,
+  StatusBar,
   TextInput,
   ScrollView,
   StyleSheet,
   SafeAreaView,
-  StatusBar,
+  TouchableOpacity,
 } from "react-native";
 
 export default function SettingsScreen({ route, navigation }) {
   const userID = route.params.bk_id;
   const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
   const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
-
-  const [text, onChangeText] = React.useState("example@gmail.com");
 
   const [isEnabled1, setIsEnabled1] = useState(true);
   const [isEnabled2, setIsEnabled2] = useState(true);
@@ -44,47 +44,21 @@ export default function SettingsScreen({ route, navigation }) {
       <View style={styles.middle}>
         <ScrollView>
           <Text style={styles.subTitle}>Security</Text>
-          <View style={{ alignItems: "center" }}>
-            <Text style={styles.text}>email:</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeText}
-              value={text}
+          <View style={{ alignItems: "center" }}></View>
+
+          <View style={{ marginTop: 15 }}>
+            <Button
+              title="Reset Password"
+              color="#d92978"
+              onPress={() =>
+                navigation.navigate("ForgotPassScreen", {
+                  screen: "ForgotPassScreen",
+                })
+              }
             />
           </View>
-          {/* password block */}
-          {shouldShow ? (
-            <View style={{ marginTop: 10 }}>
-              <Button
-                title="Reset Password"
-                color="#d92978"
-                onPress={() => setShouldShow(!shouldShow)}
-              />
-            </View>
-          ) : (
-            <View>
-              <View style={styles.passwordContainer}>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={onChangeText}
-                  placeholder={"current password"}
-                />
-                <Text style={{ fontFamily: "Comfortaa", fontSize: 12 }}>
-                  * at least 8 chars, one number and a special character
-                </Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={onChangeText}
-                  placeholder={"new password"}
-                />
-              </View>
-              <Button
-                title="Save"
-                color="#d92978"
-                onPress={() => setShouldShow(!shouldShow)}
-              />
-            </View>
-          )}
+
+          <View style={styles.divider}>{/*****************************/}</View>
 
           <Text style={styles.subTitle}>Notifications</Text>
           <View>
@@ -136,6 +110,26 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "gray",
   },
+  inputLabel: {
+    flex: 4,
+    textAlign: "center",
+    backgroundColor: "#d92978",
+    borderRadius: 10,
+    margin: "1%",
+    padding: "1%",
+    color: "white",
+    paddingVertical: "2%",
+    fontFamily: "Comfortaa",
+  },
+  divider: {
+    flex: 1,
+    flexDirection: "row",
+    alignSelf: "center",
+    width: "50%",
+    borderBottomWidth: 1,
+    borderBottomColor: "lightgrey",
+    marginVertical: 20,
+  },
   footer: {
     flex: 1,
   },
@@ -155,11 +149,11 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    width: "90%",
+    margin: 10,
     padding: 10,
-    margin: 5,
-    backgroundColor: "#d9d9d9",
-    borderColor: "black",
+    backgroundColor: "white",
+    borderColor: "white",
+    borderRadius: 5,
   },
   passwordContainer: {
     flex: 1,

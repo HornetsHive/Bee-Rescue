@@ -164,9 +164,7 @@ export default function HomeScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontFamily: "Comfortaa", fontSize: 16 }}>
-          Location: Orangevale
-        </Text>
+        <Text style={{ fontFamily: "Comfortaa", fontSize: 16 }}>Location:</Text>
         <TouchableOpacity
           onPress={() => {
             console.log("account id: " + userID);
