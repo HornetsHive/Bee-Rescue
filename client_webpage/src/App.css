@@ -71,6 +71,14 @@ html {
   text-align: left;
 }
 
+.checkboxError {
+  color: red;
+  font-size: 12px;
+  margin-left: 10px;
+  margin-top: 0px;
+  padding: 0px;
+}
+
 .submitbutton {
   background-color: #ff6600;
   color: #fff;

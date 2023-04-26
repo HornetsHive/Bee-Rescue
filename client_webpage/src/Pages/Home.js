@@ -12,7 +12,7 @@ function Home(){
   const isMobile = /Mobile/.test(window.navigator.userAgent);
 
   return (
-    <div className="App" display="flex" justifyContent="center">
+    <Pane className="App" display="flex" flexDirection="column" justifyContent="center">
 
       {isMobile ?
         <Pane className="bannerMobile" borderRadius="1em">
@@ -54,7 +54,7 @@ function Home(){
             margin={majorScale(2)}
             marginTop={isMobile ? 0 : majorScale(6)}
           >
-            <Heading fontFamily="Comfortaa-Bold" size="900">Bee Rescue - Hive Reporting</Heading>
+            <Heading fontFamily="Comfortaa-Bold" size={900}>Bee Rescue - Hive Reporting</Heading>
             <Heading paddingTop={majorScale(2)}>Welcome to the Bee Rescue Swarm reporting tool</Heading>
             <Paragraph
               fontFamily="Louis-George-Cafe"
@@ -141,7 +141,7 @@ function Home(){
 
       </Pane>
       <div id="bottom" />
-    </div>
+    </Pane>
   );
 }
 

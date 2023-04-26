@@ -1,5 +1,5 @@
 import { Pane } from 'evergreen-ui';
-import  React, { useEffect } from 'react';
+import  React, { useEffect, useState } from 'react';
 import { Routes, Route, Link, useLocation} from 'react-router-dom';
 import './fonts.css';
 import './App.css';
@@ -7,13 +7,14 @@ import MobileMenu from './components/MobileMenu';
 import Home from './Pages/Home';
 import About from './Pages/About';
 import Confirm from './Pages/Confirm';
+import Legal from './Pages/Legal';
 
 
 function App(){
 
   const location = useLocation();
   const isMobile = /Mobile/.test(window.navigator.userAgent);
-  const [isShown, setIsShown] = React.useState(false)
+  const [isShown, setIsShown] = useState(false)
   const { pathname, hash, key } = useLocation();
 
   useEffect(() => {
@@ -65,7 +66,7 @@ function App(){
         >
           {/*TODO: Make a logo */}
           {/*<img src="path/to/logo.png" alt="Bee Rescue logo" />*/}
-          <nav paddingLeft={100}>
+          <nav>
             <ul>
               {pathname === "/" ? <></>:
                 <li><Link to="/">Report a Swarm</Link></li>
@@ -81,6 +82,7 @@ function App(){
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/confirm' element={<Confirm/>} />
+        <Route path='/legal' element={<Legal/>} />
       </Routes>
     </Pane>
   );

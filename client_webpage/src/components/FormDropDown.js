@@ -22,13 +22,12 @@ function FormDropDown ({ form, setForm, errors, setErrors, label, name, defaultT
         label={label}
         margin={majorScale(1)}
         width={width || "65%"}
-        defaultValue=""
         value={form[name] || ''} 
         onChange={handleChange}
     >
         <option disabled={true} value="">{defaultText}</option>
-        {options.map(([val, text]) => (
-            <option value={val}>{text}</option>
+        {options.map(([val, text], key) => (
+            <option key={key} value={val}>{text}</option>
         ))}
         
     </SelectField> 
