@@ -22,6 +22,7 @@ import {
 
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
+  const [city, setCity] = useState("");
   const [formattedReportArray, updateReportArray] = React.useState([]);
   const [reportCoordinates, updateReportCoordinates] = React.useState([]);
   const isFocused = useIsFocused();
@@ -30,6 +31,11 @@ export default function HomeScreen({ route, navigation }) {
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
+
+  async function getUserCity() {
+    const city = "" + (await AsyncStorage.getItem("storedCity"));
+    setCity(city);
+  }
 
   function formattedReport(id, location, date, area) {
     this.reportID = id;
@@ -133,6 +139,7 @@ export default function HomeScreen({ route, navigation }) {
 
     // Call the function once before the interval starts to immediately fetch reports
     fetchAndRefreshReports();
+    getUserCity();
     console.log("beekeeper ID: " + userID);
     console.log("Num of reports: " + formattedReportArray.length);
 
@@ -164,7 +171,9 @@ export default function HomeScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={{ fontFamily: "Comfortaa", fontSize: 16 }}>Location:</Text>
+        <Text style={{ fontFamily: "Comfortaa", fontSize: 16 }}>
+          Location: {city}
+        </Text>
         <TouchableOpacity
           onPress={() => {
             console.log("account id: " + userID);

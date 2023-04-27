@@ -25,7 +25,8 @@ import {
 
 export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
-  const [edited, setEdit] = useState(false);
+  const [edited1, setEdit1] = useState(false);
+  const [edited2, setEdit2] = useState(false);
 
   const [image, setImage] = useState("default");
   const [fname, setFName] = useState("");
@@ -67,12 +68,12 @@ export default function AccountScreen({ route, navigation }) {
     })
       .then((res) => {
         var id = res.data[0].bk_id;
-        console.log(res.data[0]);
+        //console.log(res.data[0]);
         if (id != null && id != undefined && id != "") {
           console.log("user data snatched");
           mapUserData(res.data);
         } else {
-          console.log("sorry, didn't work");
+          console.log("error with request");
           return;
         }
       })
@@ -89,6 +90,8 @@ export default function AccountScreen({ route, navigation }) {
       setEmail(user.email);
       setCity(user.city);
       setZip(user.zip);
+
+      AsyncStorage.setItem("storedCity", JSON.stringify(user.city));
 
       /*setAbility1();
       setAbility2();
@@ -144,7 +147,11 @@ export default function AccountScreen({ route, navigation }) {
         }),
       ]);
 
-      console.log("changes saved");
+      Alert.alert("", "Changes Saved", [
+        {
+          text: "OK",
+        },
+      ]);
     } catch (error) {
       console.error("Error in updateNewUser: " + error);
       Alert.alert(
@@ -204,6 +211,7 @@ export default function AccountScreen({ route, navigation }) {
   async function logOut() {
     AsyncStorage.setItem("stayLoggedIn", "");
     AsyncStorage.setItem("storedEmail", "");
+    AsyncStorage.setItem("storedCity", "");
     AsyncStorage.setItem("bk_id", "");
     console.log("logging out");
 
@@ -262,7 +270,7 @@ export default function AccountScreen({ route, navigation }) {
               value={fname}
               onChangeText={(fname) => {
                 setFName(fname);
-                setEdit(true);
+                setEdit1(true);
               }}
             ></TextInput>
           </View>
@@ -273,7 +281,7 @@ export default function AccountScreen({ route, navigation }) {
               value={lname}
               onChangeText={(lname) => {
                 setLName(lname);
-                setEdit(true);
+                setEdit1(true);
               }}
             ></TextInput>
           </View>
@@ -284,7 +292,7 @@ export default function AccountScreen({ route, navigation }) {
               value={email}
               onChangeText={(email) => {
                 setEmail(email);
-                setEdit(true);
+                setEdit1(true);
               }}
             ></TextInput>
           </View>
@@ -295,7 +303,7 @@ export default function AccountScreen({ route, navigation }) {
               value={city}
               onChangeText={(city) => {
                 setCity(city);
-                setEdit(true);
+                setEdit1(true);
               }}
             ></TextInput>
             <Text style={styles.inputLabel}>Zip</Text>
@@ -304,7 +312,7 @@ export default function AccountScreen({ route, navigation }) {
               value={zip}
               onChangeText={(zip) => {
                 setZip(zip);
-                setEdit(true);
+                setEdit1(true);
               }}
             ></TextInput>
           </View>
@@ -312,14 +320,14 @@ export default function AccountScreen({ route, navigation }) {
             Note that the swarm notifications you receive are determined by this
             location entered.
           </Text>
-          {edited ? (
+          {edited1 ? (
             <View style={{ flex: 1, flexDirection: "row", marginTop: 20 }}>
               <View style={styles.saveButton}>
                 <Button
                   color="grey"
                   onPress={() => {
                     getUser();
-                    setEdit(false);
+                    setEdit1(false);
                   }}
                   title="Cancel"
                 ></Button>
@@ -328,8 +336,8 @@ export default function AccountScreen({ route, navigation }) {
                 <Button
                   color="#da628c"
                   onPress={() => {
-                    saveChanges;
-                    setEdit(false);
+                    saveChanges();
+                    setEdit1(false);
                   }}
                   title="Save Changes"
                 ></Button>
@@ -350,7 +358,7 @@ export default function AccountScreen({ route, navigation }) {
               placeholder="(e.g. 6 ft)"
               onChangeText={() => {
                 setMaxHeight;
-                setEdit(true);
+                setEdit2(true);
               }}
             ></TextInput>
           </View>
@@ -365,7 +373,7 @@ export default function AccountScreen({ route, navigation }) {
               value={cooperative}
               onValueChange={() => {
                 setCoop(!cooperative);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -385,7 +393,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability1}
               onValueChange={() => {
                 setAbility1(!ability1);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -398,7 +406,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability2}
               onValueChange={() => {
                 setAbility2(!ability2);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -411,7 +419,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability3}
               onValueChange={() => {
                 setAbility3(!ability3);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -424,7 +432,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability4}
               onValueChange={() => {
                 setAbility4(!ability4);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -439,7 +447,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability5}
               onValueChange={() => {
                 setAbility5(!ability5);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -452,7 +460,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability6}
               onValueChange={() => {
                 setAbility6(!ability6);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -465,7 +473,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability7}
               onValueChange={() => {
                 setAbility7(!ability7);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -480,7 +488,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability8}
               onValueChange={() => {
                 setAbility8(!ability8);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -495,7 +503,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability9}
               onValueChange={() => {
                 setAbility9(!ability9);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -508,7 +516,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability10}
               onValueChange={() => {
                 setAbility10(!ability10);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -523,7 +531,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability11}
               onValueChange={() => {
                 setAbility11(!ability11);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -536,7 +544,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability12}
               onValueChange={() => {
                 setAbility12(!ability12);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -549,7 +557,7 @@ export default function AccountScreen({ route, navigation }) {
               value={ability13}
               onValueChange={() => {
                 setAbility13(!ability13);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -569,7 +577,7 @@ export default function AccountScreen({ route, navigation }) {
               value={equipment1}
               onValueChange={() => {
                 setEquip1(!equipment1);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -582,7 +590,7 @@ export default function AccountScreen({ route, navigation }) {
               value={equipment2}
               onValueChange={() => {
                 setEquip2(!equipment2);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
@@ -595,21 +603,21 @@ export default function AccountScreen({ route, navigation }) {
               value={equipment3}
               onValueChange={() => {
                 setEquip3(!equipment3);
-                setEdit(true);
+                setEdit2(true);
               }}
             ></Switch>
           </View>
 
           <View style={styles.divider}>{/*****************************/}</View>
 
-          {edited ? (
+          {edited2 ? (
             <View style={{ flex: 1, flexDirection: "row", marginTop: 20 }}>
               <View style={styles.saveButton}>
                 <Button
                   color="grey"
                   onPress={() => {
                     getUser();
-                    setEdit(false);
+                    setEdit2(false);
                     scrollToTop();
                   }}
                   title="Cancel"
@@ -619,8 +627,8 @@ export default function AccountScreen({ route, navigation }) {
                 <Button
                   color="#da628c"
                   onPress={() => {
-                    saveChanges;
-                    setEdit(false);
+                    saveChanges();
+                    setEdit2(false);
                     scrollToTop();
                   }}
                   title="Save Changes"
