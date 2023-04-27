@@ -8,6 +8,7 @@ import { useFonts } from "expo-font";
 import {
   Text,
   View,
+  Alert,
   Button,
   Switch,
   StatusBar,
@@ -20,12 +21,9 @@ import {
 
 export default function SettingsScreen({ route, navigation }) {
   const userID = route.params.bk_id;
-  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
-  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-  const [isEnabled1, setIsEnabled1] = useState(true);
-  const [isEnabled2, setIsEnabled2] = useState(true);
-  const [shouldShow, setShouldShow] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(true);
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -33,6 +31,25 @@ export default function SettingsScreen({ route, navigation }) {
 
   if (!loaded) {
     return null;
+  }
+
+  function navToResetPass() {
+    Alert.alert("Reset Password", "Navigate to Forgot Password Screen?", [
+      {
+        text: "No",
+        onPress: () => {
+          return;
+        },
+        style: "cancel",
+      },
+      {
+        text: "Yes",
+        onPress: () =>
+          navigation.navigate("ForgotPassScreen", {
+            screen: "ForgotPassScreen",
+          }),
+      },
+    ]);
   }
 
   return (
@@ -46,15 +63,11 @@ export default function SettingsScreen({ route, navigation }) {
           <Text style={styles.subTitle}>Security</Text>
           <View style={{ alignItems: "center" }}></View>
 
-          <View style={{ marginTop: 15 }}>
+          <View>
             <Button
               title="Reset Password"
               color="#d92978"
-              onPress={() =>
-                navigation.navigate("ForgotPassScreen", {
-                  screen: "ForgotPassScreen",
-                })
-              }
+              onPress={navToResetPass}
             />
           </View>
 
@@ -67,21 +80,23 @@ export default function SettingsScreen({ route, navigation }) {
               style={styles.switch}
               name="swarmReport"
               trackColor={{ false: "#767577", true: "#d92978" }}
-              thumbColor={isEnabled1 ? "#f4f3f4" : "#f4f3f4"}
-              onValueChange={toggleSwitch1}
-              value={isEnabled1}
-            />
-            <Text style={styles.notificationText}>Report Dropped</Text>
-            <Switch
-              style={styles.switch}
-              name="reportDropped"
-              trackColor={{ false: "#767577", true: "#d92978" }}
-              thumbColor={isEnabled2 ? "#f4f3f4" : "#f4f3f4"}
-              onValueChange={toggleSwitch2}
-              value={isEnabled2}
+              thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
+              onValueChange={toggleSwitch}
+              value={isEnabled}
             />
           </View>
+
+          <View style={styles.divider}>{/*****************************/}</View>
         </ScrollView>
+        <View style={{ marginBottom: 15 }}>
+          <TouchableOpacity
+          //onPress={() =>
+          //navigation.navigate("", { screen: "" })
+          //}
+          >
+            <Text style={styles.hyperLinkText}>Privacy</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.footer}>
@@ -141,7 +156,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Comfortaa",
     fontSize: 20,
-    marginVertical: 10,
+    padding: 10,
+    marginBottom: 15,
   },
   text: {
     fontSize: 15,
@@ -154,11 +170,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderColor: "white",
     borderRadius: 5,
-  },
-  passwordContainer: {
-    flex: 1,
-    alignItems: "center",
-    marginTop: 20,
   },
   notificationText: {
     marginRight: "45%",

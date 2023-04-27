@@ -208,6 +208,17 @@ export default function AccountScreen({ route, navigation }) {
     );
   }
 
+  function editEmail() {
+    Alert.alert("", "Cannot edit email", [
+      {
+        text: "Ok",
+        onPress: () => {
+          return;
+        },
+      },
+    ]);
+  }
+
   async function logOut() {
     AsyncStorage.setItem("stayLoggedIn", "");
     AsyncStorage.setItem("storedEmail", "");
@@ -287,14 +298,9 @@ export default function AccountScreen({ route, navigation }) {
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Email</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={(email) => {
-                setEmail(email);
-                setEdit1(true);
-              }}
-            ></TextInput>
+            <TouchableOpacity style={styles.input} onPress={editEmail}>
+              <Text style={styles.greyText}>{email}</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>City</Text>
@@ -680,6 +686,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Comfortaa",
     textAlign: "center",
+  },
+  greyText: {
+    margin: "1%",
+    color: "grey",
+    fontSize: 14,
+    fontFamily: "Comfortaa",
+    textAlign: "left",
   },
   logoutContainer: {
     flex: 1,

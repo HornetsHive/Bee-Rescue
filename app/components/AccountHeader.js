@@ -43,6 +43,22 @@ export default class AccountHeader extends React.Component {
         ) : (
           <></>
         )}
+        {this.props.titleText === "Settings" ? (
+          <TouchableOpacity
+            onPress={() =>
+              this.props.nav.navigate("AccountScreen", {
+                screen: "AccountScreen",
+              })
+            }
+          >
+            <Image
+              source={require("../assets/person.png")}
+              style={styles.iconButtonSmall}
+            />
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
       </View>
     );
   }
@@ -60,6 +76,12 @@ const styles = StyleSheet.create({
     margin: 20,
     height: 38,
     width: 38,
+  },
+  iconButtonSmall: {
+    marginTop: 25,
+    margin: 20,
+    height: 28,
+    width: 28,
   },
   title: {
     align: "left",

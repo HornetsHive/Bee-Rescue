@@ -37,6 +37,8 @@ function formatCodeInput(value) {
 // -------------------- start of forgot pass screen -----------------------
 
 export default function ForgotPassScreen({ navigation }) {
+  const [userID, setID] = useState("");
+  const [email, setUserEmail] = useState("");
   const [pass, setPass] = useState("");
   const [passConfirm, confirmPass] = useState("");
 
@@ -44,9 +46,7 @@ export default function ForgotPassScreen({ navigation }) {
   const [enteredEmail, setEmail] = useState("");
   const [actualCode, setActualCode] = useState("");
 
-  const [userID, setID] = useState("");
   const [errors, setErrors] = useState("");
-  const [user, setUser] = React.useState([]);
   const [hidePass1, setHidePass1] = useState(true);
   const [hidePass2, setHidePass2] = useState(true);
   const [shouldShow, setShouldShow] = useState(true);
@@ -69,7 +69,7 @@ export default function ForgotPassScreen({ navigation }) {
     styles.input
   );
 
-  var email, bk_id, code;
+  var code;
 
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
@@ -87,33 +87,41 @@ export default function ForgotPassScreen({ navigation }) {
     }
 
     // check if the email entered is in the database
-    Axios.get("http://45.33.38.54:3001/bk_user", {
+    await Axios.get("http://45.33.38.54:3001/bk_user", {
       params: { email: enteredEmail },
-    }).then((res) => {
-      setUser(res.data);
-    });
+    })
+      .then((res) => {
+        if (res != null && res != undefined) {
+          //map email and id from database if found
+          mapUserData(res.data);
 
-    //map email and id from database if found
-    user.map((user) => {
-      email = user.email;
-      bk_id = user.bk_id;
-      setID(bk_id);
-    });
+          if (email == enteredEmail) {
+            //sendEmail();
+            setValidEmail(true);
+            setShouldShow2(!shouldShow2);
+            setShouldShow(!shouldShow);
+            console.log("email sent");
+          }
+        } else {
+          console.log("not a registered email");
+          setValidEmail(false);
+          setInputStyleEmail(styles.inputError);
+        }
+      })
+      .catch(function (error) {
+        if (error) console.log(error);
+      });
+  }
 
-    if ((email = enteredEmail)) {
-      sendEmail();
-      setValidEmail(true);
-      setShouldShow2(!shouldShow2);
-      setShouldShow(!shouldShow);
-      console.log("email sent");
-    } else {
-      console.log("not a registered email");
-      setValidEmail(false);
-    }
+  async function mapUserData(userData) {
+    userData.map((user) => {
+      setUserEmail(user.email);
+      setID(user.bk_id);
+    });
   }
 
   //send email to user with unique code
-  const sendEmail = () => {
+  async function sendEmail() {
     //generate unique code and show code text box
     genCode();
     //send email
@@ -123,7 +131,7 @@ export default function ForgotPassScreen({ navigation }) {
     }).then(() => {
       console.log("email sent");
     });
-  };
+  }
 
   const genCode = () => {
     var digits = "0123456789";
@@ -273,12 +281,19 @@ export default function ForgotPassScreen({ navigation }) {
             <Text style={styles.titleText}>Bee Rescue</Text>
             <Text style={styles.text}>Forgot Password?</Text>
 
-            <View style={{ width: 300, paddingTop: 10 }}>
+            <View style={{ width: 300, paddingTop: 15 }}>
               {shouldShow ? (
                 <View>
                   <Text style={styles.textRegular}>verify email</Text>
                   {inputErrEmail ? (
                     <Text style={styles.textError}>Please enter email</Text>
+                  ) : (
+                    <View></View>
+                  )}
+                  {!validEmail ? (
+                    <Text style={styles.textError}>
+                      Please enter a valid email
+                    </Text>
                   ) : (
                     <View></View>
                   )}
@@ -316,11 +331,6 @@ export default function ForgotPassScreen({ navigation }) {
                     <Text style={styles.textSmallTwo}>
                       enter the code sent to your email
                     </Text>
-                    {inputErrCode ? (
-                      <Text style={styles.textError}>Please enter a code</Text>
-                    ) : (
-                      <View></View>
-                    )}
                     <View
                       style={{
                         flex: 1,
@@ -353,6 +363,16 @@ export default function ForgotPassScreen({ navigation }) {
                         </TouchableOpacity>
                       </View>
                     </View>
+                    {inputErrCode ? (
+                      <Text style={styles.textError}>Please enter a code</Text>
+                    ) : (
+                      <View></View>
+                    )}
+                    {!validCode ? (
+                      <Text style={styles.textError}>Invalid code</Text>
+                    ) : (
+                      <View></View>
+                    )}
                   </View>
 
                   <View style={styles.button}>

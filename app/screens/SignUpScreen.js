@@ -41,6 +41,7 @@ export default function SignUpScreen({ navigation }) {
   const [inputErrPassConfirm, setInputErrPassConfirm] = useState(false);
   const [inputErrEmail, setInputErrEmail] = useState(false);
   const [validEmail, setValidEmail] = useState(true);
+  const [existingEmail, setExistingEmail] = useState(false);
   const [validPass, setValidPass] = useState(true);
   const [validPassConfirm, setValidPassConfirm] = useState(true);
   const [inputStylePass, setInputStylePass] = useState(styles.input);
@@ -104,8 +105,31 @@ export default function SignUpScreen({ navigation }) {
       });
   };
 
+  async function getUser() {
+    const newErrors = { ...errors };
+
+    const res = await Axios.get("http://45.33.38.54:3001/bk_user", {
+      params: { email: email },
+    })
+      .then((res) => {
+        var data = res.data;
+        if (data != null && data != undefined && data != "") {
+          if (data[0].email == email) {
+            console.log("email is already in use");
+            setInputStyleEmail(styles.inputError);
+            setExistingEmail(true);
+          }
+        }
+      })
+      .catch(function (error) {
+        if (error) console.log(error);
+      });
+    return res;
+  }
+
   const validate = () => {
     const newErrors = { ...errors };
+
     if (!email || !pass || !passConfirm) {
       if (!email) {
         newErrors.email = "This field is required";
@@ -143,8 +167,13 @@ export default function SignUpScreen({ navigation }) {
       setInputStylePassConfirm(styles.inputError);
       setValidPassConfirm(false);
     }
-    setErrors(newErrors);
+    //check if entered email is already in use
+    getUser();
+    if (existingEmail) {
+      newErrors.emailExists = "email already in use";
+    }
 
+    setErrors(newErrors);
     return !Object.values(newErrors).every((error) => error === "");
   };
 
@@ -155,6 +184,9 @@ export default function SignUpScreen({ navigation }) {
       setInputErrEmail(false);
       if (!validEmail) {
         setValidEmail(true);
+      }
+      if (existingEmail) {
+        setExistingEmail(false);
       }
     }
     if (errType === "pass") {
@@ -209,6 +241,11 @@ export default function SignUpScreen({ navigation }) {
               )}
               {!validEmail ? (
                 <Text style={styles.textError}>Please enter a valid email</Text>
+              ) : (
+                <View></View>
+              )}
+              {existingEmail ? (
+                <Text style={styles.textError}>Email is already in use</Text>
               ) : (
                 <View></View>
               )}
