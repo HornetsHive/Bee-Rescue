@@ -6,7 +6,7 @@ export default function Legal(){
 
   return(
     <Pane flexDirection="row" alignContent="center" display="flex" justifyContent="center">
-      <Pane width={isMobile ? "90%" : "50%"} flexDirection="column">
+      <Pane width={isMobile ? "90%" : "50%"} flexDirection="column" backgroundColor="#FFFFFF" margin="24px" marginTop="16px" padding="24px" borderRadius="1em" elevation="1">
         <h1>Terms and Conditions for Bee Rescue App Reporters</h1>
           <h3>Introduction</h3>
             <p>These Terms and Conditions ("Terms") govern the use of the Bee Rescue app ("App") by reporters, who are individuals reporting bee-related issues on their property, seeking assistance from beekeepers registered with the Sacramento Area Beekeeper's Association (SABA). By using the App, you agree to be bound by these Terms. If you do not agree with any part of these Terms, you must not use the App.</p>

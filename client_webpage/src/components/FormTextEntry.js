@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInputField, majorScale } from 'evergreen-ui';
 
-function FormTextEntry({ form, setForm, errors, setErrors, label, name, required, width, placeholder, phone=false, inputRef }) {
+function FormTextEntry({ form, setForm, errors, setErrors, label, name, required, width, placeholder, phone=false, state=false, inputRef }) {
   const error = errors[name];
   const isInvalid = Boolean(error);
   const validationMessage = error ? error : null;
@@ -9,7 +9,10 @@ function FormTextEntry({ form, setForm, errors, setErrors, label, name, required
   const handleChange = (e) => {
     var value = e.target.value;
     if(phone){
-      value = formatPhoneNumber(value)
+      value = formatPhoneNumber(value);
+    }
+    if(state){
+      value = formatState(value);
     }
     const newForm = { ...form, [name]: value };
     const newErrors = { ...errors, [name]: '' };
@@ -40,13 +43,26 @@ function FormTextEntry({ form, setForm, errors, setErrors, label, name, required
     )}-${phoneNumber.slice(6, 10)}`;
   }
 
-
+  function formatState(value) {
+    if (!value) return value;
+  
+    // clean and format state input
+    const state = value.replace(/[^\w]/g, "").toUpperCase();
+    const stateLength = state.length;
+  
+    //less than 3, do nothing
+    if (stateLength < 3) return state;
+  
+    //full format XX
+    return state.slice(0, 2);
+  }
 
   return (
     <TextInputField
       label={label}
       required = {required ? required : null}
       margin={majorScale(1)}
+      marginY="2px"
       width={width}
       placeholder={placeholder}
       isInvalid={isInvalid}

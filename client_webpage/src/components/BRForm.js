@@ -14,6 +14,7 @@ import usePlacesAutocomplete from './usePlacesAutocomplete';
 export default function BRForm() {
   const navigate = useNavigate();
   const addressInputRef = useRef(null);
+  const gmapsAPIKey = process.env.GMAPS_API_KEY;
   
 
 
@@ -21,6 +22,14 @@ export default function BRForm() {
     var regex = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
   }
+
+  function isValidZipCode(zipCode) {
+  // Regular expression pattern for a valid US zip code
+  var pattern = /^\d{3,5}(?:[-\s]\d{4})?$/;
+  
+  // Test the pattern against the input zip code
+  return pattern.test(zipCode);
+}
 
   const [form, setForm] = useState({
     fname: "",
@@ -111,18 +120,16 @@ export default function BRForm() {
     if(!form.fname){
       newErrors.fname = "This field is required"
     }
-    /*
     if(!form.lname){
       newErrors.lname = "This field is required"
     }
-    */
     if(!form.city){
       newErrors.city = "This field is required"
     }
     if(!form.zip){
       newErrors.zip = "This field is required"
     }
-    if(isNaN(form.zip) || form.zip.length < 3 || form.zip.length > 5){
+    if(!isValidZipCode(form.zip)){
       newErrors.zip = "Please enter a valid zip"
     }
     if(!isValidEmail(form.email)){
@@ -178,10 +185,13 @@ export default function BRForm() {
     }
   };
 
+  //callback function for usePlacesAutocomplete
+  //The API returns a place object with a bunch of properties which we can use to populate our form
   const onPlaceSelected = (place) => {
     let address1 = "";
     let postcode = "";
   
+    //loop through the address components returned by the API
     for (const component of place.address_components) {
       const componentType = component.types[0];
   
@@ -218,7 +228,8 @@ export default function BRForm() {
     setForm((prev) => ({ ...prev, address: address1, zip: postcode }));
   };  
 
-  usePlacesAutocomplete("AIzaSyATzRRPc7ZVSM1-SfM4EqA1NZ-SLt1Tt2c", addressInputRef, onPlaceSelected);
+  usePlacesAutocomplete(gmapsAPIKey, addressInputRef, onPlaceSelected);
+
   return(
     <Pane
       className="form"
@@ -248,7 +259,7 @@ export default function BRForm() {
       <Pane className="reporterInfo" elevation={2} margin='2em' padding='0.5em' borderRadius='1em'>
         {/*------------ NAME ------------*/}
         <Pane
-          width="75%"
+          width="60%"
           margin={majorScale(2)}
           float="center"
           display="flex"
@@ -267,7 +278,6 @@ export default function BRForm() {
             name="fname"
           />
 
-          {/*
           <FormTextEntry
             required={true}
             form={form}
@@ -277,7 +287,6 @@ export default function BRForm() {
             label="Last Name:"
             name="lname"
           />
-          */}
 
           <FormTextEntry
             required={true}
@@ -306,8 +315,8 @@ export default function BRForm() {
         <Pane
           margin={majorScale(1)}
           float="cnter"
-          width="75%"
-          marginTop={60}
+          width="60%"
+          marginTop={40}
           display="flex"
           justifyContent="normal"
           alignItems="normal"
@@ -353,6 +362,8 @@ export default function BRForm() {
             setErrors={setErrors}
             label="State:"
             name="state"
+            state={true}
+            placeholder={"State (ex: CA)"}
           />
           
           <FormTextEntry
