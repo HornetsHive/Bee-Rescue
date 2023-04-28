@@ -2,16 +2,18 @@ import { useState, useEffect } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 
 /*
-This hook is used to initialize the Google Maps Places Autocomplete API.
-It attempts to gracefully handle the case where the API fails to load.
+This hook is used to initialize the Google Maps Places Autocomplete API,
+it attempts to gracefully handle any API load errors.
 The useEffect hook is called whenever a new character is typed into the input field,
 so each keystroke is a unique API call that will do the whole initialization process.
 
-FUTURE: place also contains the latitude and longitude of the location, which could save us a call to the Geocoding API
+FUTURE: place also contains the latitude and longitude of the location,
+so if the user selects an autocomplete address we can make another DB insert which skips the
+Geocoding API
 */
 
-//inputRef is a reference to the input element
-//onPlaceSelected is a callback function that is called when a place is selected
+//inputRef is a reference to the input element (address field in form)
+//onPlaceSelected is a callback function that is called when a selection is made
 const usePlacesAutocomplete = (apiKey, inputRef, onPlaceSelected) => {
   const [autocomplete, setAutocomplete] = useState(null);
   const [apiError, setApiError] = useState(false); //state variable to track API load status

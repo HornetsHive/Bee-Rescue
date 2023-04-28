@@ -5,7 +5,6 @@ import '../fonts.css';
 import '../App.css';
 import InfoCard from '../components/InfoCard';
 import BRForm from '../components/BRForm'
-import BRFormMobile from '../components/BRFormMobile'
 
 function Home(){
 
@@ -131,12 +130,7 @@ function Home(){
         <Pane
           width={isMobile ? '100%' : '33%'}
         > 
-        {isMobile ?
-          <BRFormMobile/>
-          
-          :
-          <BRForm/>
-        }
+        <BRForm mobile={isMobile}/>
         </Pane>
 
       </Pane>

@@ -8,11 +8,10 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const axios = require("axios");
 
+//hardcode these values if you are running the server locally
 const gmapsAPIKey = process.env.GMAPS_API_KEY;
-//process.env...
 //SQL server connection
 const db = mysql.createConnection({
-  //to be changed later
   host: process.env.MYSQL_HOST,
   user: process.env.USER,
   password: process.env.PASSWORD,

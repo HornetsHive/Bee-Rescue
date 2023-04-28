@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom';
 import '../fonts.css';
 import '../App.css';
 
+//component which holds the expanding menu on mobile
+
 export default function MobileMenu({ isShown, setIsShown }) {
 
   return (
