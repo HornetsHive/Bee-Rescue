@@ -36,6 +36,7 @@ export default function SignUpScreen({ navigation }) {
   const [passConfirm, confirmPass] = useState("");
   const [hidePass1, setHidePass1] = useState(true);
   const [hidePass2, setHidePass2] = useState(true);
+  var emailExists = false;
 
   const [inputErrPass, setInputErrPass] = useState(false);
   const [inputErrPassConfirm, setInputErrPassConfirm] = useState(false);
@@ -55,12 +56,13 @@ export default function SignUpScreen({ navigation }) {
   });
 
   //submit email and password
-  const submitNewUser = (e) => {
+  async function submitNewUser(e) {
     e.preventDefault();
 
     //validate submission
-    const err = validate();
+    const err = await validate();
     if (err) {
+      console.log("error");
       return;
     }
 
@@ -103,32 +105,36 @@ export default function SignUpScreen({ navigation }) {
         //every .then needs a .catch
         console.log(error);
       });
-  };
+  }
 
   async function getUser() {
-    const newErrors = { ...errors };
-
-    const res = await Axios.get("http://45.33.38.54:3001/bk_user", {
+    await Axios.get("http://45.33.38.54:3001/bk_user", {
       params: { email: email },
     })
       .then((res) => {
         var data = res.data;
         if (data != null && data != undefined && data != "") {
           if (data[0].email == email) {
-            console.log("email is already in use");
             setInputStyleEmail(styles.inputError);
             setExistingEmail(true);
+            //emailExists = true;
+            console.log("email is already in use");
           }
         }
       })
       .catch(function (error) {
         if (error) console.log(error);
       });
-    return res;
   }
 
-  const validate = () => {
+  async function validate() {
     const newErrors = { ...errors };
+
+    //check if entered email is already in use
+    await getUser();
+    if (existingEmail) {
+      newErrors.email = "email in use";
+    }
 
     if (!email || !pass || !passConfirm) {
       if (!email) {
@@ -167,15 +173,12 @@ export default function SignUpScreen({ navigation }) {
       setInputStylePassConfirm(styles.inputError);
       setValidPassConfirm(false);
     }
-    //check if entered email is already in use
-    getUser();
-    if (existingEmail) {
-      newErrors.emailExists = "email already in use";
-    }
 
     setErrors(newErrors);
+    console.log(newErrors);
+
     return !Object.values(newErrors).every((error) => error === "");
-  };
+  }
 
   //resets error text and error box based on the parameters passed
   async function resetErrors(errType) {
@@ -187,6 +190,7 @@ export default function SignUpScreen({ navigation }) {
       }
       if (existingEmail) {
         setExistingEmail(false);
+        //emailExists = false;
       }
     }
     if (errType === "pass") {
