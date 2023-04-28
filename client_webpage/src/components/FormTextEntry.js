@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInputField, majorScale } from 'evergreen-ui';
 
-function FormTextEntry({ form, setForm, errors, setErrors, label, name, required, width, placeholder, phone=false }) {
+function FormTextEntry({ form, setForm, errors, setErrors, label, name, required, width, placeholder, phone=false, inputRef }) {
   const error = errors[name];
   const isInvalid = Boolean(error);
   const validationMessage = error ? error : null;
@@ -54,6 +54,7 @@ function FormTextEntry({ form, setForm, errors, setErrors, label, name, required
       type="text"
       name={name}
       value={form[name] || ''}
+      ref={inputRef}
       onChange={handleChange}
     />
   );

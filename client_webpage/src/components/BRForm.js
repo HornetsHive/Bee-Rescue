@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Pane, Text, Heading, majorScale, Button, toaster, Paragraph} from 'evergreen-ui'
 import { useNavigate, Link } from "react-router-dom";
 import Axios from 'axios';
@@ -8,11 +8,14 @@ import '../App.css';
 import FormTextEntry from './FormTextEntry';
 import FormDropDown from './FormDropDown';
 import HookCheckbox from './HookCheckbox';
-
+import usePlacesAutocomplete from './usePlacesAutocomplete';
 
 
 export default function BRForm() {
   const navigate = useNavigate();
+  const addressInputRef = useRef(null);
+  
+
 
   function isValidEmail(email) {
     var regex = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -20,10 +23,12 @@ export default function BRForm() {
   }
 
   const [form, setForm] = useState({
-    address: "",
     fname: "",
     lname: "",
+    address: "",
+    addressln2: "",
     city: "",
+    state: "",
     zip: "",
     email: "",
     phone_no: "",
@@ -52,10 +57,12 @@ export default function BRForm() {
       return;
     }else{
       Axios.post("http://45.33.38.54:3001/insert", {
-      address: form.address,
       fname: form.fname,
       lname: form.lname,
+      address: form.address,
+      addressln2: form.addressln2,
       city: form.city,
+      state: form.state,
       zip: form.zip,
       email: form.email,
       phone_no: form.phone_no,
@@ -171,6 +178,47 @@ export default function BRForm() {
     }
   };
 
+  const onPlaceSelected = (place) => {
+    let address1 = "";
+    let postcode = "";
+  
+    for (const component of place.address_components) {
+      const componentType = component.types[0];
+  
+      switch (componentType) {
+        case "street_number": {
+          address1 = `${component.long_name} ${address1}`;
+          break;
+        }
+  
+        case "route": {
+          address1 += component.short_name;
+          break;
+        }
+  
+        case "postal_code": {
+          postcode = `${component.long_name}${postcode}`;
+          break;
+        }
+  
+        case "postal_code_suffix": {
+          postcode = `${postcode}-${component.long_name}`;
+          break;
+        }
+        case "locality":
+          setForm((prev) => ({ ...prev, city: component.long_name }));
+          break;
+        case "administrative_area_level_1": {
+          setForm((prev) => ({ ...prev, state: component.short_name }));
+          break;
+        }
+      }
+    }
+  
+    setForm((prev) => ({ ...prev, address: address1, zip: postcode }));
+  };  
+
+  usePlacesAutocomplete("AIzaSyATzRRPc7ZVSM1-SfM4EqA1NZ-SLt1Tt2c", addressInputRef, onPlaceSelected);
   return(
     <Pane
       className="form"
@@ -200,7 +248,7 @@ export default function BRForm() {
       <Pane className="reporterInfo" elevation={2} margin='2em' padding='0.5em' borderRadius='1em'>
         {/*------------ NAME ------------*/}
         <Pane
-          width="60%"
+          width="75%"
           margin={majorScale(2)}
           float="center"
           display="flex"
@@ -257,8 +305,8 @@ export default function BRForm() {
         {/*------------ ADDRESS ------------*/}
         <Pane
           margin={majorScale(1)}
-          float="center"
-          width="60%"
+          float="cnter"
+          width="75%"
           marginTop={60}
           display="flex"
           justifyContent="normal"
@@ -272,8 +320,19 @@ export default function BRForm() {
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
-            label="Street Address:"
+            label="Address:"
             name="address"
+            inputRef={addressInputRef}
+          />
+
+          <FormTextEntry
+            required={true}
+            form={form}
+            setForm={setForm}
+            errors={errors}
+            setErrors={setErrors}
+            label="Address Line 2:"
+            name="addressln2"
           />
 
           <FormTextEntry
@@ -286,6 +345,16 @@ export default function BRForm() {
             name="city"
           />
 
+          <FormTextEntry
+            required={true}
+            form={form}
+            setForm={setForm}
+            errors={errors}
+            setErrors={setErrors}
+            label="State:"
+            name="state"
+          />
+          
           <FormTextEntry
             required={true}
             form={form}
