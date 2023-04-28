@@ -1,7 +1,8 @@
 import * as React from "react";
 
+import { styles } from "../StyleSheet";
 import { useFonts } from "expo-font";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Axios from "axios";
 import {
   Text,
@@ -10,9 +11,7 @@ import {
   Button,
   TextInput,
   ScrollView,
-  StyleSheet,
   SafeAreaView,
-  ImageBackground,
   Alert,
 } from "react-native";
 
@@ -38,7 +37,7 @@ export default function PreferencesScreen({ route, navigation }) {
   const userEmail = route.params.email;
   const userPass = route.params.pass;
 
-  const switchColor = { false: "#808080", true: "#d92978" };
+  const switchColor = { false: "#808080", true: "#7dad23" };
   const [userID, setUserID] = useState([]);
   const [errors, setErrors] = useState("");
   const newErrors = { ...errors };
@@ -51,12 +50,12 @@ export default function PreferencesScreen({ route, navigation }) {
   const [inputErrCity, setInputErrCity] = useState(false);
   const [inputErrZip, setInputErrZip] = useState(false);
 
-  const [inputStyleFName, setInputStyleFName] = useState(styles.input);
-  const [inputStyleLName, setInputStyleLName] = useState(styles.input);
-  const [inputStylePhone, setInputStylePhone] = useState(styles.input);
-  const [inputStyleAddr, setInputStyleAddr] = useState(styles.input);
-  const [inputStyleCity, setInputStyleCity] = useState(styles.input);
-  const [inputStyleZip, setInputStyleZip] = useState(styles.input);
+  const [inputStyleFName, setInputStyleFName] = useState(styles.inputRounded);
+  const [inputStyleLName, setInputStyleLName] = useState(styles.inputRounded);
+  const [inputStylePhone, setInputStylePhone] = useState(styles.inputRounded);
+  const [inputStyleAddr, setInputStyleAddr] = useState(styles.inputRounded);
+  const [inputStyleCity, setInputStyleCity] = useState(styles.inputRounded);
+  const [inputStyleZip, setInputStyleZip] = useState(styles.inputRounded);
 
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
@@ -218,27 +217,27 @@ export default function PreferencesScreen({ route, navigation }) {
   //resets error text and error box based on the parameters passed
   async function resetErrors(errType) {
     if (errType === "fName") {
-      setInputStyleFName(styles.input);
+      setInputStyleFName(styles.inputRounded);
       setInputErrFName(false);
     }
     if (errType === "lName") {
-      setInputStyleLName(styles.input);
+      setInputStyleLName(styles.inputRounded);
       setInputErrLName(false);
     }
     if (errType === "phone") {
-      setInputStylePhone(styles.input);
+      setInputStylePhone(styles.inputRounded);
       setInputErrPhone(false);
     }
     if (errType === "addr") {
-      setInputStyleAddr(styles.input);
+      setInputStyleAddr(styles.inputRounded);
       setInputErrAddr(false);
     }
     if (errType === "city") {
-      setInputStyleCity(styles.input);
+      setInputStyleCity(styles.inputRounded);
       setInputErrCity(false);
     }
     if (errType === "zip") {
-      setInputStyleZip(styles.input);
+      setInputStyleZip(styles.inputRounded);
       setInputErrZip(false);
     }
   }
@@ -255,424 +254,421 @@ export default function PreferencesScreen({ route, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        style={styles.container}
-        source={require("../assets/gradient4.png")}
-        resizeMode="cover"
-      >
-        <View style={styles.headerTxt}>
-          <Text style={styles.titleText}>Preferences</Text>
-        </View>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.textLarge}>Preferences</Text>
+      </View>
 
+      {/* Body */}
+      <View style={styles.body}>
         <ScrollView
-          style={styles.middle}
           ref={(scroller) => {
             this.scroller = scroller;
           }}
         >
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <View
-              style={{
-                flexDirection: "column",
-                alignItems: "center",
-                width: 200,
-              }}
-            >
-              <Text style={styles.textRegular}>
-                <Text style={styles.asterisk}>* </Text>First Name
-              </Text>
-              {inputErrFName ? (
-                <Text style={styles.textError}>
-                  Please enter your first name
-                </Text>
-              ) : (
-                <View></View>
-              )}
-              <TextInput
-                style={inputStyleFName}
-                label="fname"
-                required
-                isInvalid={Boolean(errors.fname)}
-                type="text"
-                onChangeText={(fname) => {
-                  setFName(fname);
-                  setErrors({ ...errors, fname: "" });
-                  resetErrors("fName");
-                }}
-              />
-            </View>
+          <Text style={styles.textRegularPink}>Personal Information</Text>
 
-            <View
-              style={{
-                flexDirection: "column",
-                alignItems: "center",
-                width: 200,
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>First Name</Text>
+            <TextInput
+              style={inputStyleFName}
+              label="fname"
+              placeholder="Your First Name"
+              required
+              isInvalid={Boolean(errors.fname)}
+              type="text"
+              onChangeText={(fname) => {
+                setFName(fname);
+                setErrors({ ...errors, fname: "" });
+                resetErrors("fName");
               }}
-            >
-              <Text style={styles.textRegular}>
-                <Text style={styles.asterisk}>* </Text>Last Name
-              </Text>
-              {inputErrLName ? (
-                <Text style={styles.textError}>
-                  Please enter your last name
-                </Text>
-              ) : (
-                <View></View>
-              )}
-              <TextInput
-                style={inputStyleLName}
-                label="lname"
-                required
-                isInvalid={Boolean(errors.lname)}
-                type="text"
-                onChangeText={(lname) => {
-                  setLName(lname);
-                  setErrors({ ...errors, lname: "" });
-                  resetErrors("lName");
-                }}
-              />
-            </View>
+            />
           </View>
+          {inputErrFName ? (
+            <Text style={styles.textErrorRight}>
+              Please enter your first name
+            </Text>
+          ) : (
+            <View></View>
+          )}
 
-          <Text style={styles.textRegular}>
-            <Text style={styles.asterisk}>* </Text>Phone Number
-          </Text>
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>Last Name</Text>
+            <TextInput
+              style={inputStyleLName}
+              label="lname"
+              placeholder="Your Last Name"
+              required
+              isInvalid={Boolean(errors.lname)}
+              type="text"
+              onChangeText={(lname) => {
+                setLName(lname);
+                setErrors({ ...errors, lname: "" });
+                resetErrors("lName");
+              }}
+            />
+          </View>
+          {inputErrLName ? (
+            <Text style={styles.textErrorRight}>
+              Please enter your last name
+            </Text>
+          ) : (
+            <View></View>
+          )}
+
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>Phone Number</Text>
+            <TextInput
+              style={inputStylePhone}
+              label="phone_no"
+              required
+              isInvalid={Boolean(errors.phone_no)}
+              type="text"
+              placeholder="+1 (XXX) XXX - XXXX"
+              onChangeText={(e) => {
+                handleInput(e), setErrors({ ...errors, phone_no: "" });
+                resetErrors("phone");
+              }}
+              value={phone_no}
+            />
+          </View>
           {inputErrPhone ? (
-            <Text style={styles.textError}>Please enter your phone number</Text>
+            <Text style={styles.textErrorRight}>
+              Please enter your phone number
+            </Text>
           ) : (
             <View></View>
           )}
-          <TextInput
-            style={inputStylePhone}
-            label="phone_no"
-            required
-            isInvalid={Boolean(errors.phone_no)}
-            type="text"
-            placeholder="+1 (XXX) XXX - XXXX"
-            onChangeText={(e) => {
-              handleInput(e), setErrors({ ...errors, phone_no: "" });
-              resetErrors("phone");
-            }}
-            value={phone_no}
-          />
 
-          <Text style={styles.textRegular}>
-            <Text style={styles.asterisk}>* </Text>Address
-          </Text>
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>Address</Text>
+            <TextInput
+              style={inputStyleAddr}
+              label="address"
+              placeholder="Your Address"
+              required
+              isInvalid={Boolean(errors.address)}
+              type="text"
+              onChangeText={(address) => {
+                setAddress(address);
+                setErrors({ ...errors, address: "" });
+                resetErrors("addr");
+              }}
+            />
+          </View>
           {inputErrAddr ? (
-            <Text style={styles.textError}>Please enter an address</Text>
+            <Text style={styles.textErrorRight}>Please enter an address</Text>
           ) : (
             <View></View>
           )}
-          <TextInput
-            style={inputStyleAddr}
-            label="address"
-            required
-            isInvalid={Boolean(errors.address)}
-            type="text"
-            onChangeText={(address) => {
-              setAddress(address);
-              setErrors({ ...errors, address: "" });
-              resetErrors("addr");
-            }}
-          />
-          <Text style={styles.textRegular}>
-            <Text style={styles.asterisk}>* </Text>City
-          </Text>
+
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>City</Text>
+            <TextInput
+              style={inputStyleCity}
+              label="city"
+              placeholder="Your City"
+              required
+              isInvalid={Boolean(errors.city)}
+              type="text"
+              onChangeText={(city) => {
+                setCity(city);
+                setErrors({ ...errors, city: "" });
+                resetErrors("city");
+              }}
+            />
+          </View>
           {inputErrCity ? (
-            <Text style={styles.textError}>Please enter a city</Text>
+            <Text style={styles.textErrorRight}>Please enter a city</Text>
           ) : (
             <View></View>
           )}
-          <TextInput
-            style={inputStyleCity}
-            label="city"
-            required
-            isInvalid={Boolean(errors.city)}
-            type="text"
-            onChangeText={(city) => {
-              setCity(city);
-              setErrors({ ...errors, city: "" });
-              resetErrors("city");
-            }}
-          />
-          <Text style={styles.textRegular}>
-            <Text style={styles.asterisk}>* </Text>Zip Code
-          </Text>
+
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>Zip Code</Text>
+            <TextInput
+              style={inputStyleZip}
+              label="zip"
+              required
+              isInvalid={Boolean(errors.zip)}
+              type="text"
+              placeholder="(e.g., 12345)"
+              onChangeText={(zip) => {
+                setZip(zip);
+                setErrors({ ...errors, zip: "" });
+                resetErrors("zip");
+                setValidZip(true);
+              }}
+            />
+          </View>
           {inputErrZip ? (
-            <Text style={styles.textError}>Please enter a zip code</Text>
+            <Text style={styles.textErrorRight}>Please enter a zip code</Text>
           ) : (
             <View></View>
           )}
           {!validZip ? (
-            <Text style={styles.textError}>Please enter a valid zip code</Text>
+            <Text style={styles.textErrorRight}>
+              Please enter a valid zip code
+            </Text>
           ) : (
             <View></View>
           )}
-          <TextInput
-            style={inputStyleZip}
-            label="zip"
-            required
-            isInvalid={Boolean(errors.zip)}
-            type="text"
-            placeholder="(e.g., 12345)"
-            onChangeText={(zip) => {
-              setZip(zip);
-              setErrors({ ...errors, zip: "" });
-              resetErrors("zip");
-              setValidZip(true);
-            }}
-          />
 
           <View style={styles.divider}>{/*****************************/}</View>
 
-          <Text style={styles.textRegular}>
+          <Text style={styles.textRegularPink}>
+            What is your max swarm height preference?
+          </Text>
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>Max Swarm Height</Text>
+            <TextInput
+              style={styles.inputRounded}
+              label="maxHeight"
+              required
+              type="text"
+              placeholder="e.g., 12in, 2ft"
+              onChangeText={(maxHeight) => {
+                setMaxHeight(maxHeight);
+              }}
+            />
+          </View>
+          <Text style={styles.textRegularPink}>
+            Are you willing to work with other beekeepers?
+          </Text>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>
+              {cooperative ? (
+                <Text style={styles.inputLabel}>Yes</Text>
+              ) : (
+                <Text style={styles.inputLabel}>No</Text>
+              )}
+            </Text>
+            <View style={styles.row}>
+              <View style={styles.switch}>
+                <Switch
+                  value={cooperative}
+                  trackColor={switchColor}
+                  thumbColor={cooperative ? "#f4f3f4" : "#f4f3f4"}
+                  onValueChange={() => setCoop(!cooperative)}
+                ></Switch>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.divider}>{/*****************************/}</View>
+
+          <Text style={styles.textRegularPink}>
             Please indicate the locations you are skilled at gathering swarm
             clusters.
           </Text>
 
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Ground Swarms</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability1}
-                trackColor={switchColor}
-                thumbColor={ability1 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility1(!ability1)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Ground Swarms</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability1 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability1}
+              onValueChange={() => {
+                setAbility1(!ability1);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Valve Box/Water Main</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability2}
-                trackColor={switchColor}
-                thumbColor={ability2 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility2(!ability2)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Valve Box/Water Main</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability2 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability2}
+              onValueChange={() => {
+                setAbility2(!ability2);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Shrubs</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability3}
-                trackColor={switchColor}
-                thumbColor={ability3 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility3(!ability3)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Shrubs</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability3 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability3}
+              onValueChange={() => {
+                setAbility3(!ability3);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Low Tree (Up to 10 feet)</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability4}
-                trackColor={switchColor}
-                thumbColor={ability4 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility4(!ability4)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Low Tree (Up to 10 feet)</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability4 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability4}
+              onValueChange={() => {
+                setAbility4(!ability4);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Mid Size Tree (Up to 20 feet)</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability5}
-                trackColor={switchColor}
-                thumbColor={ability5 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility5(!ability5)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>
+              Mid Size Tree (Up to 20 feet)
+            </Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability5 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability5}
+              onValueChange={() => {
+                setAbility5(!ability5);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Tall Tree (Over 20 feet)</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability6}
-                trackColor={switchColor}
-                thumbColor={ability6 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility6(!ability6)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Tall Tree (Over 20 feet)</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability6 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability6}
+              onValueChange={() => {
+                setAbility6(!ability6);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Fences</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability7}
-                trackColor={switchColor}
-                thumbColor={ability7 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility7(!ability7)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Fences</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability7 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability7}
+              onValueChange={() => {
+                setAbility7(!ability7);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Low Structure (Up to 10 feet)</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability8}
-                trackColor={switchColor}
-                thumbColor={ability8 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility8(!ability8)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>
+              Low Structure (Up to 10 feet)
+            </Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability8 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability8}
+              onValueChange={() => {
+                setAbility8(!ability8);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>
               Medium Tall Structure (up to 20 feet)
             </Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability9}
-                trackColor={switchColor}
-                thumbColor={ability9 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility9(!ability9)}
-              ></Switch>
-            </View>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability9 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability9}
+              onValueChange={() => {
+                setAbility9(!ability9);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Chimney</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability10}
-                trackColor={switchColor}
-                thumbColor={ability10 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility10(!ability10)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Chimney</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability10 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability10}
+              onValueChange={() => {
+                setAbility10(!ability10);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>
-              Interior (House, Shed, Garage, etc.)
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>
+              Interior (Office, House, Shed, Garage, etc)
             </Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability11}
-                trackColor={switchColor}
-                thumbColor={ability11 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility11(!ability11)}
-              ></Switch>
-            </View>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability11 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability11}
+              onValueChange={() => {
+                setAbility11(!ability11);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Cut Out/Trap Out</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability12}
-                trackColor={switchColor}
-                thumbColor={ability12 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility12(!ability12)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Cut Out/Trap Out</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability12 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability12}
+              onValueChange={() => {
+                setAbility12(!ability12);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Traffic Accidents</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={ability13}
-                trackColor={switchColor}
-                thumbColor={ability13 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setAbility13(!ability13)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Traffic Accidents</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={ability13 ? "#FFFFFF" : "#f4f3f4"}
+              value={ability13}
+              onValueChange={() => {
+                setAbility13(!ability13);
+              }}
+            ></Switch>
           </View>
 
           <View style={styles.divider}>{/*****************************/}</View>
 
-          <Text style={styles.textRegular}>
+          <Text style={styles.textRegularPink}>
             What special equipment do you have at your disposal to gather swarm
             clusters?
           </Text>
 
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Bucket with pole</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={equipment1}
-                trackColor={switchColor}
-                thumbColor={equipment1 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setEquip1(!equipment1)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Bucket with pole</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={equipment1 ? "#FFFFFF" : "#f4f3f4"}
+              value={equipment1}
+              onValueChange={() => {
+                setEquip1(!equipment1);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Ladders</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={equipment2}
-                trackColor={switchColor}
-                thumbColor={equipment2 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setEquip2(!equipment2)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Ladders</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={equipment2 ? "#FFFFFF" : "#f4f3f4"}
+              value={equipment2}
+              onValueChange={() => {
+                setEquip2(!equipment2);
+              }}
+            ></Switch>
           </View>
-
-          <View style={styles.row}>
-            <Text style={styles.textSmall}>Mechanical Lift</Text>
-            <View style={styles.switch}>
-              <Switch
-                value={equipment3}
-                trackColor={switchColor}
-                thumbColor={equipment3 ? "#FFFFFF" : "#f4f3f4"}
-                onValueChange={() => setEquip3(!equipment3)}
-              ></Switch>
-            </View>
-          </View>
-
-          <View style={styles.divider}>{/*****************************/}</View>
-
-          <Text style={styles.textRegular}>
-            What is your max swarm height preference?
-          </Text>
-          <TextInput
-            style={styles.input}
-            label="maxHeight"
-            required
-            type="text"
-            placeholder="e.g., 12in, 2ft"
-            onChangeText={(maxHeight) => {
-              setMaxHeight(maxHeight);
-            }}
-          />
-
-          <View style={styles.divider}>{/*****************************/}</View>
-
-          <Text style={styles.textRegular}>
-            Are you willing to work with other beekeepers?
-          </Text>
-          <View style={styles.row}>
-            {cooperative ? (
-              <View>
-                <Text style={styles.textSmall}>Yes</Text>
-              </View>
-            ) : (
-              <Text style={styles.textSmall}>No</Text>
-            )}
-            <View style={styles.switch}>
-              <Switch
-                value={cooperative}
-                trackColor={switchColor}
-                thumbColor={cooperative ? "#f4f3f4" : "#f4f3f4"}
-                onValueChange={() => setCoop(!cooperative)}
-              ></Switch>
-            </View>
+          <View style={styles.aligned}>
+            <Text style={styles.switchLabel}>Mechanical Lift</Text>
+            <Switch
+              style={styles.switch}
+              trackColor={switchColor}
+              thumbColor={equipment3 ? "#FFFFFF" : "#f4f3f4"}
+              value={equipment3}
+              onValueChange={() => {
+                setEquip3(!equipment3);
+              }}
+            ></Switch>
           </View>
 
           <View style={styles.divider}>{/*****************************/}</View>
@@ -681,128 +677,13 @@ export default function PreferencesScreen({ route, navigation }) {
             <Button
               color="#da628c"
               title="Save Changes & Continue"
-              //updateNewUser()
               onPress={() => {
                 updateNewUser();
               }}
             ></Button>
           </View>
         </ScrollView>
-      </ImageBackground>
+      </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 10,
-    flexDirection: "column",
-  },
-  headerTxt: {
-    flex: 0.1,
-    justifyContent: "center",
-    flexDirection: "row",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "white",
-    marginBottom: 10,
-    backgroundColor: "white",
-    paddingHorizontal: 10,
-  },
-  middle: {
-    flex: 1,
-    paddingTop: 10,
-    paddingHorizontal: 10,
-    alignSelf: "center",
-  },
-  textError: {
-    fontSize: 14,
-    paddingLeft: 10,
-    color: "red",
-    textAlign: "center",
-    fontFamily: "Comfortaa",
-  },
-  footer: {
-    flex: 0.5,
-    alignSelf: "flex-start",
-    marginLeft: 10,
-    marginTop: 20,
-  },
-  titleText: {
-    fontSize: 25,
-    fontFamily: "Comfortaa",
-  },
-  textRegular: {
-    fontSize: 18,
-    paddingVertical: 5,
-    textAlign: "center",
-    fontFamily: "ComfortaaBold",
-  },
-  textSmall: {
-    fontSize: 16,
-    fontFamily: "Comfortaa",
-  },
-  asterisk: { fontFamily: "", color: "#ed601f" },
-  inputError2: {
-    flex: 1,
-    flexDirection: "row",
-    alignSelf: "center",
-    height: 50,
-    width: "80%",
-    padding: 10,
-    margin: 5,
-    backgroundColor: "white",
-    borderColor: "#ff4d36",
-    borderWidth: 2.1,
-    borderRadius: 5,
-  },
-  input: {
-    flex: 1,
-    flexDirection: "row",
-    alignSelf: "center",
-    height: 50,
-    width: "80%",
-    padding: 10,
-    margin: 5,
-    backgroundColor: "white",
-    borderColor: "white",
-    borderRadius: 5,
-  },
-  notificationText: {
-    left: 12,
-    fontFamily: "Comfortaa",
-    fontSize: 15,
-  },
-  switch: {
-    flex: 1,
-    marginRight: 10,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  row: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  saveButton: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 40,
-  },
-  assetButton: {
-    resizeMode: "contain",
-    height: 30,
-    width: 30,
-  },
-  divider: {
-    flex: 1,
-    flexDirection: "row",
-    alignSelf: "center",
-    width: "50%",
-    borderBottomWidth: 1,
-    borderBottomColor: "white",
-    marginVertical: 20,
-  },
-});

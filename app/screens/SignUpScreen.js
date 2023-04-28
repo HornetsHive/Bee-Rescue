@@ -168,7 +168,7 @@ export default function SignUpScreen({ navigation }) {
       setValidEmail(false);
     }
     if (isValidPassword(pass) && pass != passConfirm) {
-      newErrors.passConfirm = "passwords don't match";
+      newErrors.pass = "passwords don't match";
       console.log("passwords don't match");
       setInputStylePassConfirm(styles.inputError);
       setValidPassConfirm(false);
@@ -190,7 +190,6 @@ export default function SignUpScreen({ navigation }) {
       }
       if (existingEmail) {
         setExistingEmail(false);
-        //emailExists = false;
       }
     }
     if (errType === "pass") {
@@ -363,7 +362,7 @@ export default function SignUpScreen({ navigation }) {
                   type="text"
                   onChangeText={(passConfirm) => {
                     confirmPass(passConfirm);
-                    setErrors({ ...errors, passConfirm: "" });
+                    setErrors({ ...errors, pass: "" });
                     resetErrors("passConfirm");
                   }}
                 />

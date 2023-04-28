@@ -32,6 +32,7 @@ export default function AccountScreen({ route, navigation }) {
   const [fname, setFName] = useState("");
   const [lname, setLName] = useState("");
   const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
   const [maxHeight, setMaxHeight] = useState();
@@ -88,6 +89,7 @@ export default function AccountScreen({ route, navigation }) {
       setFName(user.fname);
       setLName(user.lname);
       setEmail(user.email);
+      setAddress(user.address);
       setCity(user.city);
       setZip(user.zip);
 
@@ -120,6 +122,7 @@ export default function AccountScreen({ route, navigation }) {
         Axios.post("http://45.33.38.54:3001/bk_update", {
           fname: fname,
           lname: lname,
+          address: address,
           city: city,
           zip: zip,
           bk_id: userID,
@@ -301,6 +304,17 @@ export default function AccountScreen({ route, navigation }) {
             <TouchableOpacity style={styles.input} onPress={editEmail}>
               <Text style={styles.greyText}>{email}</Text>
             </TouchableOpacity>
+          </View>
+          <View style={styles.aligned}>
+            <Text style={styles.inputLabel}>Address</Text>
+            <TextInput
+              style={styles.input}
+              value={address}
+              onChangeText={(address) => {
+                setAddress(address);
+                setEdit1(true);
+              }}
+            ></TextInput>
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>City</Text>

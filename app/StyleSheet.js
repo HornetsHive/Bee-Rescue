@@ -1,6 +1,7 @@
 import { StyleSheet, StatusBar } from "react-native";
 
 const styles = StyleSheet.create({
+  //------------------------ main style containers
   container: {
     display: "flex",
     flex: 1,
@@ -10,6 +11,10 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 1,
+  },
+  body: {
+    flex: 8,
+    borderTopWidth: 1,
   },
   middle: {
     flex: 0.5,
@@ -22,6 +27,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 20,
   },
+
+  //------------------------ text
   titleText: {
     marginTop: "1%",
     alignItems: "center",
@@ -34,17 +41,22 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: "Comfortaa",
   },
+  textLarge: {
+    fontSize: 25,
+    fontFamily: "Comfortaa",
+  },
   textRegular: {
     fontSize: 18,
     paddingLeft: 10,
     fontFamily: "Comfortaa",
   },
-  textError: {
-    fontSize: 14,
-    paddingLeft: 10,
-    color: "red",
+  textRegularPink: {
+    fontSize: 16,
+    marginBottom: 10,
+    paddingVertical: 5,
+    color: "#fc6a8c",
     textAlign: "center",
-    fontFamily: "Comfortaa",
+    fontFamily: "ComfortaaBold",
   },
   textSmall: {
     fontSize: 12,
@@ -62,6 +74,22 @@ const styles = StyleSheet.create({
     color: "#d92978",
     fontWeight: "bold",
   },
+  textError: {
+    fontSize: 14,
+    paddingLeft: 10,
+    color: "red",
+    textAlign: "center",
+    fontFamily: "Comfortaa",
+  },
+  textErrorRight: {
+    fontSize: 14,
+    paddingLeft: 10,
+    color: "red",
+    textAlign: "right",
+    fontFamily: "Comfortaa",
+  },
+
+  //------------------------ inputs & buttons
   input: {
     height: 50,
     margin: 10,
@@ -69,6 +97,27 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderColor: "white",
     borderRadius: 5,
+  },
+  inputRounded: {
+    flex: 6,
+    borderWidth: 1,
+    borderColor: "grey",
+    borderRadius: 10,
+    textAlign: "left",
+    fontFamily: "Comfortaa",
+    margin: "1%",
+    padding: "1%",
+  },
+  inputLabel: {
+    flex: 4,
+    textAlign: "center",
+    backgroundColor: "#d92978",
+    borderRadius: 10,
+    margin: "1%",
+    padding: "1%",
+    color: "white",
+    paddingVertical: "2%",
+    fontFamily: "Comfortaa",
   },
   inputError: {
     height: 50,
@@ -79,12 +128,15 @@ const styles = StyleSheet.create({
     borderWidth: 2.1,
     borderRadius: 5,
   },
-  passContainer: {
-    flex: 1,
-    bottom: 15,
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-end",
+  inputError2: {
+    flex: 6,
+    borderWidth: 1,
+    borderColor: "#ff4d36",
+    borderRadius: 10,
+    textAlign: "left",
+    fontFamily: "Comfortaa",
+    margin: "1%",
+    padding: "1%",
   },
   inputCode: {
     height: 50,
@@ -115,11 +167,37 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 10,
   },
-  img: {
-    alignSelf: "center",
-    resizeMode: "contain",
-    height: 145,
-    width: 500,
+  saveButton: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 40,
+  },
+  switch: {
+    flex: 1,
+    marginRight: 10,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  switchLabel: {
+    flex: 2,
+    textAlign: "center",
+    backgroundColor: "#d92978",
+    borderRadius: 10,
+    margin: "1%",
+    padding: "1%",
+    color: "white",
+    paddingVertical: "2%",
+    fontFamily: "Comfortaa",
+  },
+
+  //------------------------ containers
+  passContainer: {
+    flex: 1,
+    bottom: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-end",
   },
   logoutContainer: {
     flex: 1,
@@ -128,6 +206,32 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
     paddingHorizontal: 15,
     borderRadius: 10,
+  },
+
+  //------------------------ miscellaneous
+  row: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  aligned: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  img: {
+    alignSelf: "center",
+    resizeMode: "contain",
+    height: 145,
+    width: 500,
+  },
+  divider: {
+    flex: 1,
+    flexDirection: "row",
+    alignSelf: "center",
+    width: "50%",
+    borderBottomWidth: 1,
+    borderBottomColor: "lightgrey",
+    marginVertical: 20,
   },
   eyeIcon: { width: 20, height: 20 },
 });
