@@ -2,21 +2,17 @@ import React from 'react';
 import { Card, Heading, Paragraph, majorScale } from 'evergreen-ui';
 import '../fonts.css';
 
-export default class InfoCard extends React.Component {
-    constructor(props) {
-      super(props);
-    }
 
-    render() {
-      return(
-        <Card style={styles.card} elevation={2}>
-              <Heading style={styles.heading}>{this.props.heading}</Heading>
-              <Paragraph size={500} style={styles.paragraph}>
-              {this.props.text}
-              </Paragraph>
-        </Card>
-      )
-    }
+//basic holder for text. Props set the heading and body for the panel.
+export default function InfoCard ({heading, text}) {
+  return(
+    <Card style={styles.card} elevation={2}>
+          <Heading style={styles.heading}>{heading}</Heading>
+          <Paragraph size={500} style={styles.paragraph}>
+          {text}
+          </Paragraph>
+    </Card>
+  )
 }
 
 const styles = {
@@ -36,7 +32,6 @@ const styles = {
       fontFamily: "Louis-George-Cafe",
       color: "#000000",
       margin: majorScale(1),
-      size: 500, //this doesn't do anything change size in render. (??)
       textAlign: "left",
   }
 };

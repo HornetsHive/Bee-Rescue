@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Pane, Text, Heading, majorScale, Button, toaster, Paragraph} from 'evergreen-ui'
+import { Pane, Heading, majorScale, Button, toaster, Paragraph} from 'evergreen-ui'
 import { useNavigate, Link } from "react-router-dom";
 import Axios from 'axios';
 
@@ -10,8 +10,8 @@ import FormDropDown from './FormDropDown';
 import HookCheckbox from './HookCheckbox';
 import usePlacesAutocomplete from './usePlacesAutocomplete';
 
-
-export default function BRForm() {
+//mobile: boolean, have form render in mobile friendly format
+export default function BRForm({mobile}) {
   const navigate = useNavigate();
   const addressInputRef = useRef(null);
   const gmapsAPIKey = process.env.GMAPS_API_KEY;
@@ -29,8 +29,9 @@ export default function BRForm() {
   
   // Test the pattern against the input zip code
   return pattern.test(zipCode);
-}
+  }
 
+  //hook for tracking form values
   const [form, setForm] = useState({
     fname: "",
     lname: "",
@@ -49,6 +50,7 @@ export default function BRForm() {
     image: ""
   });
 
+  //hooks to track if the checkboxes on the bottom of the form are checked
   const [owner, setOwner] = useState(false);
   const [honeyBees, setHoneyBees] = useState(false);
   const [terms, setTerms] = useState(false);
@@ -86,18 +88,20 @@ export default function BRForm() {
       toaster.success("Your form has been submitted!");
       navigate('/confirm');
     }).catch(error => {
-      toaster.danger("Something went wrong submitting your report");
+      toaster.danger("Something went wrong submitting your report, try checking your connection and refreshing the page");
       console.error(error);
     });
     }
 
   }
 
+  //hook for tracking input validation
   const [errors, setErrors] = useState({
     address: "",
     fname: "",
     lname: "",
     city: "",
+    state: "",
     zip: "",
     email: "",
     phone_no: "",
@@ -111,7 +115,6 @@ export default function BRForm() {
   
 
   const validate = () => {
-
     //form validation
     const newErrors = {...errors};
     if(!form.address){
@@ -125,6 +128,9 @@ export default function BRForm() {
     }
     if(!form.city){
       newErrors.city = "This field is required"
+    }
+    if(!form.state){
+      newErrors.state = "This field is required"
     }
     if(!form.zip){
       newErrors.zip = "This field is required"
@@ -180,6 +186,7 @@ export default function BRForm() {
     }
 
     setErrors(newErrors)
+    //If any field in newErrors is not empty or a box isn't checked return true (has error)
     if(!Object.values(newErrors).every(error => error === '') || !owner || !honeyBees || !terms){
       return true;
     }
@@ -228,6 +235,9 @@ export default function BRForm() {
     setForm((prev) => ({ ...prev, address: address1, zip: postcode }));
   };  
 
+  //initialize the google maps places autocomplete with our API key,
+  //a reference to the address field, and a callback function to update the
+  //form with the new selected values
   usePlacesAutocomplete(gmapsAPIKey, addressInputRef, onPlaceSelected);
 
   return(
@@ -259,7 +269,7 @@ export default function BRForm() {
       <Pane className="reporterInfo" elevation={2} margin='2em' padding='0.5em' borderRadius='1em'>
         {/*------------ NAME ------------*/}
         <Pane
-          width="60%"
+          width={mobile ? "90%" : "60%"}
           margin={majorScale(2)}
           float="center"
           display="flex"
@@ -314,9 +324,9 @@ export default function BRForm() {
         {/*------------ ADDRESS ------------*/}
         <Pane
           margin={majorScale(1)}
-          float="cnter"
-          width="60%"
-          marginTop={40}
+          float="center"
+          width={mobile ? "90%" : "60%"}
+          marginTop={mobile ? 60 : 40}
           display="flex"
           justifyContent="normal"
           alignItems="normal"
@@ -381,8 +391,8 @@ export default function BRForm() {
       {/*------------ PROPERTY INFO ------------*/}
       <Pane className="propertyInfo" elevation={2} margin='2em' padding='0.5em' borderRadius='1em'>
         <Pane
-          width="60%"
-          margin={majorScale(2)}
+          width={mobile ? "fit-content" : "60%"}
+          margin={mobile ? majorScale(1) : majorScale(2)}
           float="center"
           display="flex"
           justifyContent="normal"
@@ -396,7 +406,7 @@ export default function BRForm() {
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
-            width="100%"
+            width={mobile ? "90%" : "100%"}
             label="Type of Property"
             name="propertyType"
             defaultText="Select a property type"
@@ -414,7 +424,7 @@ export default function BRForm() {
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
-            width="100%"
+            width={mobile ? "90%" : "100%"}
             label="Where is the hive located on the property?"
             name="propertyLoc"
             defaultText="Select a location"
@@ -435,7 +445,7 @@ export default function BRForm() {
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
-            width="100%"
+            width={mobile ? "90%" : "100%"}
             label="How high up is the hive"
             name="height"
             defaultText="Select a height"
@@ -452,7 +462,7 @@ export default function BRForm() {
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
-            width="100%"
+            width={mobile ? "90%" : "100%"}
             label="How large is the hive?"
             name="size"
             defaultText="Select a size"
@@ -468,7 +478,7 @@ export default function BRForm() {
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
-            width="100%"
+            width={mobile ? "90%" : "100%"}
             placeholder={"Numeric only, ie. '4'"}
             label="Approximately how many days has the hive been present?:"
             name="duration"
@@ -516,7 +526,6 @@ export default function BRForm() {
           controlledState={terms}
           setControlledState={setTerms}
           label={<>I have read and agree to the <Link to="/legal">terms and conditions</Link></>}
-          errorMessage={"You must agree to the terms and conditions to submit a report."}
           error={{state: termsError, message: "Please accept the terms & conditions before submitting"}}
           setErrorState={setTermsError}
         />
