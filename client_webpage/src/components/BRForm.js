@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Pane, Text, Heading, majorScale, Button, toaster, Paragraph} from 'evergreen-ui'
 import { useNavigate, Link } from "react-router-dom";
 import Axios from 'axios';
@@ -8,22 +8,36 @@ import '../App.css';
 import FormTextEntry from './FormTextEntry';
 import FormDropDown from './FormDropDown';
 import HookCheckbox from './HookCheckbox';
-
+import usePlacesAutocomplete from './usePlacesAutocomplete';
 
 
 export default function BRForm() {
   const navigate = useNavigate();
+  const addressInputRef = useRef(null);
+  const gmapsAPIKey = process.env.GMAPS_API_KEY;
+  
+
 
   function isValidEmail(email) {
     var regex = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
   }
 
+  function isValidZipCode(zipCode) {
+  // Regular expression pattern for a valid US zip code
+  var pattern = /^\d{3,5}(?:[-\s]\d{4})?$/;
+  
+  // Test the pattern against the input zip code
+  return pattern.test(zipCode);
+}
+
   const [form, setForm] = useState({
-    address: "",
     fname: "",
     lname: "",
+    address: "",
+    addressln2: "",
     city: "",
+    state: "",
     zip: "",
     email: "",
     phone_no: "",
@@ -52,10 +66,12 @@ export default function BRForm() {
       return;
     }else{
       Axios.post("http://45.33.38.54:3001/insert", {
-      address: form.address,
       fname: form.fname,
       lname: form.lname,
+      address: form.address,
+      addressln2: form.addressln2,
       city: form.city,
+      state: form.state,
       zip: form.zip,
       email: form.email,
       phone_no: form.phone_no,
@@ -104,18 +120,16 @@ export default function BRForm() {
     if(!form.fname){
       newErrors.fname = "This field is required"
     }
-    /*
     if(!form.lname){
       newErrors.lname = "This field is required"
     }
-    */
     if(!form.city){
       newErrors.city = "This field is required"
     }
     if(!form.zip){
       newErrors.zip = "This field is required"
     }
-    if(isNaN(form.zip) || form.zip.length < 3 || form.zip.length > 5){
+    if(!isValidZipCode(form.zip)){
       newErrors.zip = "Please enter a valid zip"
     }
     if(!isValidEmail(form.email)){
@@ -171,6 +185,51 @@ export default function BRForm() {
     }
   };
 
+  //callback function for usePlacesAutocomplete
+  //The API returns a place object with a bunch of properties which we can use to populate our form
+  const onPlaceSelected = (place) => {
+    let address1 = "";
+    let postcode = "";
+  
+    //loop through the address components returned by the API
+    for (const component of place.address_components) {
+      const componentType = component.types[0];
+  
+      switch (componentType) {
+        case "street_number": {
+          address1 = `${component.long_name} ${address1}`;
+          break;
+        }
+  
+        case "route": {
+          address1 += component.short_name;
+          break;
+        }
+  
+        case "postal_code": {
+          postcode = `${component.long_name}${postcode}`;
+          break;
+        }
+  
+        case "postal_code_suffix": {
+          postcode = `${postcode}-${component.long_name}`;
+          break;
+        }
+        case "locality":
+          setForm((prev) => ({ ...prev, city: component.long_name }));
+          break;
+        case "administrative_area_level_1": {
+          setForm((prev) => ({ ...prev, state: component.short_name }));
+          break;
+        }
+      }
+    }
+  
+    setForm((prev) => ({ ...prev, address: address1, zip: postcode }));
+  };  
+
+  usePlacesAutocomplete(gmapsAPIKey, addressInputRef, onPlaceSelected);
+
   return(
     <Pane
       className="form"
@@ -219,7 +278,6 @@ export default function BRForm() {
             name="fname"
           />
 
-          {/*
           <FormTextEntry
             required={true}
             form={form}
@@ -229,7 +287,6 @@ export default function BRForm() {
             label="Last Name:"
             name="lname"
           />
-          */}
 
           <FormTextEntry
             required={true}
@@ -257,9 +314,9 @@ export default function BRForm() {
         {/*------------ ADDRESS ------------*/}
         <Pane
           margin={majorScale(1)}
-          float="center"
+          float="cnter"
           width="60%"
-          marginTop={60}
+          marginTop={40}
           display="flex"
           justifyContent="normal"
           alignItems="normal"
@@ -272,8 +329,19 @@ export default function BRForm() {
             setForm={setForm}
             errors={errors}
             setErrors={setErrors}
-            label="Street Address:"
+            label="Address:"
             name="address"
+            inputRef={addressInputRef}
+          />
+
+          <FormTextEntry
+            required={true}
+            form={form}
+            setForm={setForm}
+            errors={errors}
+            setErrors={setErrors}
+            label="Address Line 2:"
+            name="addressln2"
           />
 
           <FormTextEntry
@@ -286,6 +354,18 @@ export default function BRForm() {
             name="city"
           />
 
+          <FormTextEntry
+            required={true}
+            form={form}
+            setForm={setForm}
+            errors={errors}
+            setErrors={setErrors}
+            label="State:"
+            name="state"
+            state={true}
+            placeholder={"State (ex: CA)"}
+          />
+          
           <FormTextEntry
             required={true}
             form={form}

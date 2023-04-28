@@ -63,19 +63,21 @@ app.post("/insert", async (req, res) => {
 
   try {
     const coords = await getCoordinates(
-      req.body.address + ", " + req.body.city,
+      req.body.address + ", " + req.body.city + ", " + req.body.state + " " + req.body.zip,
       gmapsAPIKey
     );
 
     const sqlINSERT =
-      "INSERT INTO reports (address, city, zip, lat, lng, phone_no, fname, lname, email, duration, p_type, location, height, size, category, image, conf_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO reports (address, addressln2, city, state, zip, lat, lng, phone_no, fname, lname, email, duration, p_type, location, height, size, category, image, conf_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     const insertReport = new Promise((resolve, reject) => {
       db.query(
         sqlINSERT,
         [
           req.body.address,
+          req.body.addressln2,
           req.body.city,
+          req.body.state,
           req.body.zip,
           coords.latitude,
           coords.longitude,
@@ -105,8 +107,8 @@ app.post("/insert", async (req, res) => {
     const result = await insertReport;
     console.log("Successfully inserted record");
     console.log(result);
-    return res.status(200).send("Insert Successful");
     sendConfirmationEmail(req.body.email, req.body.fname, conf_code);
+    return res.status(200).send("Insert Successful");
   } catch (error) {
     console.error("Error:", error.message);
     return res.status(500).send("Failed to submit report");
@@ -146,7 +148,10 @@ async function getCoordinates(address, apiKey) {
     `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
       address
     )}&key=${apiKey}`
-  );
+  ).catch((err) => {
+    console.log(err);
+    throw new Error("Failed to get coordinates");
+  });
   const { results } = response.data;
 
   if (results.length > 0) {
