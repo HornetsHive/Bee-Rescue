@@ -7,6 +7,8 @@ const mysql = require("mysql");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const axios = require("axios");
+const https = require("https");
+const fs = request("fs");
 
 //hardcode these values if you are running the server locally
 const gmapsAPIKey = process.env.GMAPS_API_KEY;
