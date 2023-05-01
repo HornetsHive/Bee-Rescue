@@ -14,9 +14,7 @@ import usePlacesAutocomplete from './usePlacesAutocomplete';
 export default function BRForm({mobile}) {
   const navigate = useNavigate();
   const addressInputRef = useRef(null);
-  const gmapsAPIKey = process.env.GMAPS_API_KEY;
-  
-
+  const gmapsAPIKey = process.env.REACT_APP_GMAPS_API_KEY;
 
   function isValidEmail(email) {
     var regex = /^([a-zA-Z0-9_.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
