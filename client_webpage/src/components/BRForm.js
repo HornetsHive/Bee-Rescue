@@ -65,7 +65,7 @@ export default function BRForm({mobile}) {
       toaster.danger('Please input all required fields and accept the terms & conditions');
       return;
     }else{
-      Axios.post("http://45.33.38.54:3001/insert", {
+      Axios.post("https://beerescue.net:3001/insert", {
       fname: form.fname,
       lname: form.lname,
       address: form.address,
