@@ -94,7 +94,7 @@ export default function PreferencesScreen({ route, navigation }) {
   const updateNewUser = async () => {
     try {
       // Get the beekeeper id that matches entered email and pass to verify login
-      const res = await Axios.get("http://45.33.38.54:3001/bk_get", {
+      const res = await Axios.get("https://beerescue.net:3001/bk_get", {
         params: { email: userEmail, pass: userPass },
       }).catch(function (error) {
         console.log(error);
@@ -118,7 +118,7 @@ export default function PreferencesScreen({ route, navigation }) {
       // Use Promise.all to wait for both posts to resolve
       await Promise.all([
         //axios.post to update beekeeper personal info
-        Axios.post("http://45.33.38.54:3001/bk_update", {
+        Axios.post("https://beerescue.net:3001/bk_update", {
           fname: fname,
           lname: lname,
           phone_no: phone_no,
@@ -129,7 +129,7 @@ export default function PreferencesScreen({ route, navigation }) {
         }),
 
         //axios post again to update beekeeper qualifications
-        Axios.post("http://45.33.38.54:3001/bk_qualif_update", {
+        Axios.post("https://beerescue.net:3001/bk_qualif_update", {
           ground_swarms: ability1,
           valve_or_water_main: ability2,
           shrubs: ability3,

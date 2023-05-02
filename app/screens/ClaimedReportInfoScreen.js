@@ -24,7 +24,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
   // Complete the report
   const completeReport = () => {
     console.log("Completing report.");
-    Axios.post("http://45.33.38.54:3001/complete_report", {
+    Axios.post("https://beerescue.net:3001/complete_report", {
       r_id: reportID,
     })
       .then(function (response) {
@@ -42,7 +42,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
   // Abandon the report
   const abandonReport = () => {
     console.log("Abandoning report.");
-    Axios.post("http://45.33.38.54:3001/abandon_report", {
+    Axios.post("https://beerescue.net:3001/abandon_report", {
       r_id: reportID,
     })
       .then(function (response) {
@@ -183,7 +183,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
   useEffect(() => {
     // Get report data from server
     console.log("Getting report data for reportID: ", reportID);
-    Axios.get("http://45.33.38.54:3001/report_data", {
+    Axios.get("https://beerescue.net:3001/report_data", {
       params: {
         r_id: reportID,
       },

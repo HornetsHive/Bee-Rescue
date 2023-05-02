@@ -23,7 +23,7 @@ export default function MyReportsHomeScreen({ route, navigation }) {
   const [formattedReportArray, updateReportArray] = useState(new Array());
 
   const getClaimedReports = async () => {
-    await Axios.get("http://45.33.38.54:3001/bk_claimedReports", {
+    await Axios.get("https://beerescue.net:3001/bk_claimedReports", {
       params: { bk_id: userID },
     })
       .then((res) => {
