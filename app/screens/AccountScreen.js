@@ -27,7 +27,7 @@ export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
   const [initialData, setInitialData] = useState([]);
   const [edited1, setEdit1] = useState(false);
-  const [edited2, setEdit2] = useState(false);
+  //const [edited2, setEdit2] = useState(false);
 
   const [image, setImage] = useState("default");
   const [fname, setFName] = useState("");
@@ -36,6 +36,8 @@ export default function AccountScreen({ route, navigation }) {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
+
+  /*
   const [maxHeight, setMaxHeight] = useState();
   const [cooperative, setCoop] = useState(false);
   const [ability1, setAbility1] = useState(false);
@@ -54,6 +56,7 @@ export default function AccountScreen({ route, navigation }) {
   const [equipment1, setEquip1] = useState(false);
   const [equipment2, setEquip2] = useState(false);
   const [equipment3, setEquip3] = useState(false);
+  */
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
@@ -373,7 +376,8 @@ export default function AccountScreen({ route, navigation }) {
             <View></View>
           )}
 
-          <View style={styles.divider}>{/*****************************/}</View>
+          {/* 
+          <View style={styles.divider}></View>
 
           <Text style={styles.bigText}>Preferences</Text>
           <View style={styles.aligned}>
@@ -404,7 +408,7 @@ export default function AccountScreen({ route, navigation }) {
             ></Switch>
           </View>
 
-          <View style={styles.divider}>{/*****************************/}</View>
+          <View style={styles.divider}></View>
 
           <Text style={styles.bigText}>Self-Qualifications</Text>
           <Text style={styles.smallText}>
@@ -588,7 +592,7 @@ export default function AccountScreen({ route, navigation }) {
             ></Switch>
           </View>
 
-          <View style={styles.divider}>{/*****************************/}</View>
+          <View style={styles.divider}></View>
 
           <Text style={styles.smallText}>
             What special equipment do you have at your disposal to gather swarm
@@ -634,7 +638,7 @@ export default function AccountScreen({ route, navigation }) {
             ></Switch>
           </View>
 
-          <View style={styles.divider}>{/*****************************/}</View>
+          <View style={styles.divider}></View>
 
           {edited2 ? (
             <View style={{ flex: 1, flexDirection: "row", marginTop: 20 }}>
@@ -664,6 +668,7 @@ export default function AccountScreen({ route, navigation }) {
           ) : (
             <View></View>
           )}
+          */}
         </ScrollView>
       </View>
 

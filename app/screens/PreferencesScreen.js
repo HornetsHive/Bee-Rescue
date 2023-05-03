@@ -257,7 +257,7 @@ export default function PreferencesScreen({ route, navigation }) {
 
   return (
     <KeyboardAwareScrollView ref={scroller}>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} width={"90%"}>
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.textLarge}>Preferences</Text>
@@ -266,9 +266,7 @@ export default function PreferencesScreen({ route, navigation }) {
         {/* Body */}
         <View style={styles.body}>
           <ScrollView
-            ref={(scroller) => {
-              this.scroller = scroller;
-            }}
+            ref={scroller}
           >
             <Text style={styles.textRegularPink}>Personal Information</Text>
 
@@ -418,7 +416,8 @@ export default function PreferencesScreen({ route, navigation }) {
               <View></View>
             )}
 
-            <View style={styles.divider}>{/*****************************/}</View>
+            {/*
+            <View style={styles.divider}>{}</View>
 
             <Text style={styles.textRegularPink}>
               What is your max swarm height preference?
@@ -458,8 +457,10 @@ export default function PreferencesScreen({ route, navigation }) {
                 </View>
               </View>
             </View>
+            */}
 
-            <View style={styles.divider}>{/*****************************/}</View>
+            {/*
+            <View style={styles.divider}></View>
 
             <Text style={styles.textRegularPink}>
               Please indicate the locations you are skilled at gathering swarm
@@ -630,8 +631,10 @@ export default function PreferencesScreen({ route, navigation }) {
                 }}
               ></Switch>
             </View>
-
-            <View style={styles.divider}>{/*****************************/}</View>
+            */}
+            
+            {/*
+            <View style={styles.divider}></View>
 
             <Text style={styles.textRegularPink}>
               What special equipment do you have at your disposal to gather swarm
@@ -674,8 +677,10 @@ export default function PreferencesScreen({ route, navigation }) {
                 }}
               ></Switch>
             </View>
+            */}
 
-            <View style={styles.divider}>{/*****************************/}</View>
+            <View style={styles.divider}></View>
+            
 
             <View style={styles.saveButton}>
               <Button
