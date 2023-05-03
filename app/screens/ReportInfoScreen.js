@@ -32,8 +32,9 @@ export default function ReportInfoScreen({ route, navigation }) {
     })
       .then(function (response) {
         console.log(response.data);
-        navigation.navigate("HomeScreen", {
-          screen: "HomeScreen",
+        navigation.replace("ClaimedReportInfoScreen", {
+          screen: "ClaimedReportInfoScreen",
+          r_id: reportID,
           bk_id: userID,
         });
       })
