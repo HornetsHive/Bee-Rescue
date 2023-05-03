@@ -14,7 +14,6 @@ import {
   SafeAreaView,
   ImageBackground,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 
 function isValidEmail(email) {

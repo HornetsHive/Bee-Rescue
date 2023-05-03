@@ -25,6 +25,7 @@ import {
 
 export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
+
   const [initialData, setInitialData] = useState([]);
   const [edited1, setEdit1] = useState(false);
   //const [edited2, setEdit2] = useState(false);
@@ -69,18 +70,17 @@ export default function AccountScreen({ route, navigation }) {
     }
   };
 
-  //////////////////DB QUERY
   async function getUser() {
     const res = await Axios.get("https://beerescue.net:3001/bk_getUser", {
       params: { bk_id: userID },
     })
       .then((res) => {
         var id = res.data[0].bk_id;
-        //console.log(res.data[0]);
+
         if (id != null && id != undefined && id != "") {
           console.log("received user data");
           console.log(res.data);
-          setInitialData(res.data)
+          setInitialData(res.data);
           mapUserData(res.data);
         } else {
           console.log("error with request");
@@ -102,7 +102,7 @@ export default function AccountScreen({ route, navigation }) {
       setCity(user.city);
       setZip(user.zip);
 
-      AsyncStorage.setItem("storedCity", JSON.stringify(user.city));
+      //AsyncStorage.setItem("storedCity", JSON.stringify(user.city));
 
       /*setAbility1();
       setAbility2();
@@ -128,8 +128,7 @@ export default function AccountScreen({ route, navigation }) {
       //get home coordinates
       await Axios.get("https://beerescue.net:3001/get_coords", {
         params: { address: address, city: city, zip: zip },
-      })
-      .then((res) => {
+      }).then((res) => {
         console.log("Home coordinates received: ", res.data);
         const lat = res.data.latitude;
         const lng = res.data.longitude;
@@ -138,64 +137,49 @@ export default function AccountScreen({ route, navigation }) {
         AsyncStorage.setItem("homeLng", JSON.stringify(lng));
         AsyncStorage.setItem("storedCity", JSON.stringify(city));
         console.log("Home coordinates saved to storage");
-      })
-    }
-    catch (error) {
+      });
+    } catch (error) {
       console.log(error);
-      if(error.response.data === "Failed to get coordinates"){
-        Alert.alert( "Invalid Address", "Please enter a valid address", [{ text: "OK" }] );
+      if (error.response.data === "Failed to get coordinates") {
+        Alert.alert("Invalid Address", "Please enter a valid address", [
+          { text: "OK" },
+        ]);
         console.log("user", initialData);
         mapUserData(initialData);
         return;
-      }
-      else{
-        Alert.alert( error.message, "Something went wrong processing your request", [{text: "OK",}] );
+      } else {
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
         mapUserData(initialData);
         return;
       }
     }
 
-
     try {
-      // Use Promise.all to wait for both posts to resolve
-        //axios.post to update beekeeper personal info
-        Axios.post("https://beerescue.net:3001/bk_update", {
-          fname: fname,
-          lname: lname,
-          address: address,
-          city: city,
-          zip: zip,
-          bk_id: userID,
-        }),
-
-        //axios post again to update beekeeper qualifications
-        Axios.post("https://beerescue.net:3001/bk_qualif_update", {
-          ground_swarms: ability1,
-          valve_or_water_main: ability2,
-          shrubs: ability3,
-          low_tree: ability4,
-          mid_tree: ability5,
-          tall_tree: ability6,
-          fences: ability7,
-          low_structure: ability8,
-          mid_structure: ability9,
-          chimney: ability10,
-          interior: ability11,
-          cut_or_trap_out: ability12,
-          traffic_accidents: ability13,
-          bucket_w_pole: equipment1,
-          ladder: equipment2,
-          mechanical_lift: equipment3,
-          bk_id: userID,
-        })
-      Alert.alert("", "Changes Saved", [{text: "OK"}]);
+      //axios.post to update beekeeper personal info
+      Axios.post("http://10.0.2.2:3001/bk_update", {
+        fname: fname,
+        lname: lname,
+        email: email,
+        address: address,
+        city: city,
+        zip: zip,
+        bk_id: userID,
+      }),
+        Alert.alert("", "Changes Saved", [{ text: "OK" }]);
     } catch (error) {
       console.error("Error in updateNewUser: " + error.response.data);
-      Alert.alert( error.message, "Something went wrong processing your request", [{text: "OK",}] );
+      Alert.alert(
+        error.message,
+        "Something went wrong processing your request",
+        [{ text: "OK" }]
+      );
       mapUserData(initialData);
     }
   };
-  //////////////
 
   const uploadImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -213,7 +197,7 @@ export default function AccountScreen({ route, navigation }) {
   async function editCredentials() {
     navigation.navigate("SettingsScreen", {
       screen: "SettingsScreen",
-      bk_id: userID
+      bk_id: userID,
     });
   }
 
@@ -222,21 +206,22 @@ export default function AccountScreen({ route, navigation }) {
       "",
       "Do you want to log out?",
       [
-        { text: "No",onPress: () => { return; },style: "cancel",},
+        {
+          text: "No",
+          onPress: () => {
+            return;
+          },
+          style: "cancel",
+        },
         { text: "Yes", onPress: () => logOut() },
       ],
       { cancelable: false }
     );
   }
 
-  function editEmail() {
-    Alert.alert("", "Cannot edit email", [{text: "Ok", onPress: () => {return;}}] );
-  }
-
   async function logOut() {
     AsyncStorage.setItem("stayLoggedIn", "");
     AsyncStorage.setItem("storedEmail", "");
-    AsyncStorage.setItem("storedCity", "");
     AsyncStorage.setItem("bk_id", "");
     console.log("logging out");
 
@@ -262,10 +247,7 @@ export default function AccountScreen({ route, navigation }) {
 
       {/* Body */}
       <View style={styles.body}>
-        <ScrollView
-          style={styles.middle}
-          ref={scroller}
-        >
+        <ScrollView style={styles.middle} ref={scroller}>
           <Image
             source={
               image == "default"
@@ -310,9 +292,14 @@ export default function AccountScreen({ route, navigation }) {
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Email</Text>
-            <TouchableOpacity style={styles.input} onPress={editEmail}>
-              <Text style={styles.greyText}>{email}</Text>
-            </TouchableOpacity>
+            <TextInput
+              style={styles.input}
+              value={email}
+              onChangeText={(email) => {
+                setEmail(email);
+                setEdit1(true);
+              }}
+            ></TextInput>
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Address</Text>

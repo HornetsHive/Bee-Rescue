@@ -1,8 +1,9 @@
 import * as React from "react";
+
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useState, useRef } from "react";
 import { styles } from "../StyleSheet";
 import { useFonts } from "expo-font";
-import { useState, useRef } from "react";
 import Axios from "axios";
 import {
   Text,
@@ -39,7 +40,6 @@ export default function PreferencesScreen({ route, navigation }) {
 
   const newErrors = { ...errors };
   const [errors, setErrors] = useState("");
-  const switchColor = { false: "#808080", true: "#7dad23" };
 
   const [validZip, setValidZip] = useState(true);
   const [inputErrFName, setInputErrFName] = useState(false);
@@ -62,6 +62,8 @@ export default function PreferencesScreen({ route, navigation }) {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
+
+  /*const switchColor = { false: "#808080", true: "#7dad23" };
   const [maxHeight, setMaxHeight] = useState("");
   const [cooperative, setCoop] = useState(false);
   const [ability1, setAbility1] = useState(false);
@@ -79,7 +81,7 @@ export default function PreferencesScreen({ route, navigation }) {
   const [ability13, setAbility13] = useState(false);
   const [equipment1, setEquip1] = useState(false);
   const [equipment2, setEquip2] = useState(false);
-  const [equipment3, setEquip3] = useState(false);
+  const [equipment3, setEquip3] = useState(false);*/
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
     ComfortaaBold: require("../assets/fonts/Comfortaa-Bold.ttf"),
