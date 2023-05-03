@@ -8,6 +8,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const axios = require("axios");
 const https = require("https");
+const http = require("http");
 const fs = request("fs");
 
 //hardcode these values if you are running the server locally
@@ -617,15 +618,21 @@ app.get("/report_data", (req, res) => {
   });
 });
 
-//server port, change later
-const server = app.listen(3001, () => {
-  console.log("Running on port 3001");
+app.get("/bk_getFull", (req, res) => {
+  const bk_id = req.query.bk_id;
+
+  const sqlQuery = "select * from beekeepers NATURAL JOIN qualifications WHERE bk_id = ?;"
+  db.query(sqlQuery, [bk_id], (err, result) => {
+    if (err) return res.status(500).send(err.message);
+    return res.status(200).send(result);
+  });
 });
 
-module.exports = {
-  app,
-  server,
-  closeServer: () => {
-    server.close();
-  },
-};
+var options = {
+  key: fs.readFileSync('/etc/ssl/privkey.pem'),
+  cert: fs.readFileSync('/etc/ssl/fullchain.pem'),
+}
+
+https.createServer(options, app).listen(3001, () => {
+  console.log("Running on port 3001");
+});
