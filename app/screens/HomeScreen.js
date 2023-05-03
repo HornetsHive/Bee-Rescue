@@ -98,40 +98,26 @@ export default function HomeScreen({ route, navigation }) {
   }
 
   function makeReadableDate(dateString) {
-    //split date and time
-    var date = dateString.split("T")[0];
-    var time = dateString.split("T")[1];
-
-    //length 3 array, 0 = year, 1 = month, 2 = day
-    date = date.split("-");
-
-    var year = date[0];
-    //remove trailing zeros
-    var month = parseInt(date[1]);
-    var day = parseInt(date[2]);
-
-    var formattedDate = month + "/" + day + "/" + year.slice(2);
-
-    //length 3 array, 0 = hour, 1 = minute, 2 = second
-    time = time.split(":");
-    var hour = parseInt(time[0]);
-    var minute = parseInt(time[1]);
-
-    //translate from UTC to west coast time; <------ Should probably change this later to be accurate to timezone
-    hour -= 8;
-    //determine AM or PM
-    var am_pm = "am";
-    if (hour >= 12) {
-      am_pm = "pm";
-    }
-
-    hour = hour % 12;
-    if (hour == 0) {
-      hour = 12;
-    }
-    var formattedTime = hour + ":" + minute + " " + am_pm;
-
-    return formattedDate + " at " + formattedTime;
+    // Create a Date object from the dateString (in local time)
+    const dateInUTC = new Date(dateString);
+    const localOffsetInMs = dateInUTC.getTimezoneOffset() * 60 * 1000;
+    const date = new Date(dateInUTC.getTime() + localOffsetInMs);
+  
+    // Format the date components
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear().toString().slice(2);
+  
+    // Format the time components
+    const hours24 = date.getHours();
+    const hours12 = hours24 % 12 === 0 ? 12 : hours24 % 12;
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours24 >= 12 ? 'PM' : 'AM';
+  
+    // Assemble the formatted date string
+    const formattedDate = `${month}/${day}/${year} ${hours12}:${minutes} ${ampm}`;
+  
+    return formattedDate;
   }
 
   //get reports on page load every 10 seconds
