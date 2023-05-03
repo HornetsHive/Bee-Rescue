@@ -15,12 +15,12 @@ const styles = StyleSheet.create({
   },
 });
 
-function MapScreen({ reportCoordinates, bk_id}) {
-  const initialRegion = {
-    latitude: 38.56,
-    longitude: -121.42,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+function MapScreen({ reportCoordinates, homeCoordinates, bk_id}) {
+  const region = {
+    latitude: homeCoordinates.latitude,
+    longitude: homeCoordinates.longitude,
+    latitudeDelta: 0.175,
+    longitudeDelta: 0.175,
   };
 
   const navigation = useNavigation();
@@ -36,7 +36,7 @@ function MapScreen({ reportCoordinates, bk_id}) {
 
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} initialRegion={initialRegion}>
+      <MapView style={styles.map} region={region}>
         {reportCoordinates.map((coord) => (
           <Marker
             key={coord.id}

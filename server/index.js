@@ -145,24 +145,51 @@ function sendConfirmationEmail(email, fname, conf_code) {
   });
 }
 
-async function getCoordinates(address, apiKey) {
-  const response = await axios.get(
-    `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
-      address
-    )}&key=${apiKey}`
-  ).catch((err) => {
-    console.log(err);
-    throw new Error("Failed to get coordinates");
-  });
-  const { results } = response.data;
+app.get("/get_coords", async (req, res) => {
+  const { address, city, zip } = req.query;
 
-  if (results.length > 0) {
+  try {
+    if (!address || !city || !zip) {
+      throw new Error("Missing required parameters");
+    }
+
+    const addressString = `${address}, ${city}, ${zip}`;
+    console.log("Getting coordinates for: ", addressString);
+
+    const coords = await getCoordinates(addressString, gmapsAPIKey);
+    console.log("Coordinates: ", coords);
+
+    return res.status(200).send(coords);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Failed to get coordinates");
+  }
+});
+
+async function getCoordinates(address, apiKey) {
+  try {
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(
+        address
+      )}&key=${apiKey}`
+    );
+
+    if (response.status != 200) {
+      throw new Error("Failed to get coordinates - status code: " + response.status);
+    }
+    const { results } = response.data;
+
+    if (results.length === 0) {
+      throw new Error("No coordinates found");
+    }
+
     const { lat, lng } = results[0].geometry.location;
     console.log("lat: ", lat, "lng: ", lng);
-
     return { latitude: lat, longitude: lng };
-  } else {
-    throw new Error("No coordinates found");
+
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to get coordinates");
   }
 }
 
@@ -628,6 +655,13 @@ app.get("/bk_getFull", (req, res) => {
   });
 });
 
+/*
+const server = app.listen(3001, () => {
+  console.log("Running on port 3001");
+});
+*/
+
+//comment out below and uncomment above to run locally
 var options = {
   key: fs.readFileSync('/etc/ssl/privkey.pem'),
   cert: fs.readFileSync('/etc/ssl/fullchain.pem'),

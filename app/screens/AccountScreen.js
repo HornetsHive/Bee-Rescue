@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
 import * as ImagePicker from "expo-image-picker";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useFonts } from "expo-font";
 import Axios from "axios";
 import {
@@ -25,6 +25,7 @@ import {
 
 export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
+  const [initialData, setInitialData] = useState([]);
   const [edited1, setEdit1] = useState(false);
   const [edited2, setEdit2] = useState(false);
 
@@ -58,8 +59,11 @@ export default function AccountScreen({ route, navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
-  scrollToTop = () => {
-    scroller.scrollTo({ x: 0, y: 0 });
+  const scroller = useRef(null);
+  const scrollToTop = () => {
+    if (scroller.current) {
+      scroller.current.scrollTo({ x: 0, y: 0, animated: true });
+    }
   };
 
   //////////////////DB QUERY
@@ -71,7 +75,9 @@ export default function AccountScreen({ route, navigation }) {
         var id = res.data[0].bk_id;
         //console.log(res.data[0]);
         if (id != null && id != undefined && id != "") {
-          console.log("user data snatched");
+          console.log("received user data");
+          console.log(res.data);
+          setInitialData(res.data)
           mapUserData(res.data);
         } else {
           console.log("error with request");
@@ -116,8 +122,39 @@ export default function AccountScreen({ route, navigation }) {
   //--------------------- update beekeeper info
   const updateNewUser = async () => {
     try {
+      //get home coordinates
+      await Axios.get("https://beerescue.net:3001/get_coords", {
+        params: { address: address, city: city, zip: zip },
+      })
+      .then((res) => {
+        console.log("Home coordinates received: ", res.data);
+        const lat = res.data.latitude;
+        const lng = res.data.longitude;
+        console.log("lat: " + lat + " lng: " + lng);
+        AsyncStorage.setItem("homeLat", JSON.stringify(lat));
+        AsyncStorage.setItem("homeLng", JSON.stringify(lng));
+        AsyncStorage.setItem("storedCity", JSON.stringify(city));
+        console.log("Home coordinates saved to storage");
+      })
+    }
+    catch (error) {
+      console.log(error);
+      if(error.response.data === "Failed to get coordinates"){
+        Alert.alert( "Invalid Address", "Please enter a valid address", [{ text: "OK" }] );
+        console.log("user", initialData);
+        mapUserData(initialData);
+        return;
+      }
+      else{
+        Alert.alert( error.message, "Something went wrong processing your request", [{text: "OK",}] );
+        mapUserData(initialData);
+        return;
+      }
+    }
+
+
+    try {
       // Use Promise.all to wait for both posts to resolve
-      await Promise.all([
         //axios.post to update beekeeper personal info
         Axios.post("https://beerescue.net:3001/bk_update", {
           fname: fname,
@@ -147,32 +184,15 @@ export default function AccountScreen({ route, navigation }) {
           ladder: equipment2,
           mechanical_lift: equipment3,
           bk_id: userID,
-        }),
-      ]);
-
-      Alert.alert("", "Changes Saved", [
-        {
-          text: "OK",
-        },
-      ]);
+        })
+      Alert.alert("", "Changes Saved", [{text: "OK"}]);
     } catch (error) {
-      console.error("Error in updateNewUser: " + error);
-      Alert.alert(
-        error.message,
-        "Something went wrong processing your request",
-        [
-          {
-            text: "OK",
-          },
-        ]
-      );
+      console.error("Error in updateNewUser: " + error.response.data);
+      Alert.alert( error.message, "Something went wrong processing your request", [{text: "OK",}] );
+      mapUserData(initialData);
     }
   };
   //////////////
-
-  function saveChanges() {
-    updateNewUser();
-  }
 
   const uploadImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -190,6 +210,7 @@ export default function AccountScreen({ route, navigation }) {
   async function editCredentials() {
     navigation.navigate("SettingsScreen", {
       screen: "SettingsScreen",
+      bk_id: userID
     });
   }
 
@@ -198,13 +219,7 @@ export default function AccountScreen({ route, navigation }) {
       "",
       "Do you want to log out?",
       [
-        {
-          text: "No",
-          onPress: () => {
-            return;
-          },
-          style: "cancel",
-        },
+        { text: "No",onPress: () => { return; },style: "cancel",},
         { text: "Yes", onPress: () => logOut() },
       ],
       { cancelable: false }
@@ -212,14 +227,7 @@ export default function AccountScreen({ route, navigation }) {
   }
 
   function editEmail() {
-    Alert.alert("", "Cannot edit email", [
-      {
-        text: "Ok",
-        onPress: () => {
-          return;
-        },
-      },
-    ]);
+    Alert.alert("", "Cannot edit email", [{text: "Ok", onPress: () => {return;}}] );
   }
 
   async function logOut() {
@@ -253,9 +261,7 @@ export default function AccountScreen({ route, navigation }) {
       <View style={styles.body}>
         <ScrollView
           style={styles.middle}
-          ref={(scroller) => {
-            this.scroller = scroller;
-          }}
+          ref={scroller}
         >
           <Image
             source={
@@ -356,7 +362,7 @@ export default function AccountScreen({ route, navigation }) {
                 <Button
                   color="#da628c"
                   onPress={() => {
-                    saveChanges();
+                    updateNewUser();
                     setEdit1(false);
                   }}
                   title="Save Changes"
@@ -647,7 +653,7 @@ export default function AccountScreen({ route, navigation }) {
                 <Button
                   color="#da628c"
                   onPress={() => {
-                    saveChanges();
+                    updateNewUser();
                     setEdit2(false);
                     scrollToTop();
                   }}

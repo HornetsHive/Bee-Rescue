@@ -23,8 +23,9 @@ import {
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
   const [city, setCity] = useState("");
-  const [formattedReportArray, updateReportArray] = React.useState([]);
-  const [reportCoordinates, updateReportCoordinates] = React.useState([]);
+  const [homeCoords, setHomeCoords] = useState({latitude: 38.56, longitude: -121.42});
+  const [formattedReportArray, updateReportArray] = useState([]);
+  const [reportCoordinates, updateReportCoordinates] = useState([]);
   const isFocused = useIsFocused();
 
   const [loaded] = useFonts({
@@ -35,6 +36,15 @@ export default function HomeScreen({ route, navigation }) {
   async function getUserCity() {
     const city = "" + (await AsyncStorage.getItem("storedCity"));
     setCity(city);
+  }
+
+  async function getuserHomeCoordinates() {
+    const lat = JSON.parse(await AsyncStorage.getItem("homeLat"));
+    const lng = JSON.parse(await AsyncStorage.getItem("homeLng"));
+    console.log("getuserHomeCoordinates: " + lat + ", " + lng);
+    if(lat != null && lng != null){
+      setHomeCoords({latitude: lat, longitude: lng});
+    }
   }
 
   function formattedReport(id, location, date, area) {
@@ -139,13 +149,18 @@ export default function HomeScreen({ route, navigation }) {
 
     // Call the function once before the interval starts to immediately fetch reports
     fetchAndRefreshReports();
-    getUserCity();
     console.log("beekeeper ID: " + userID);
     console.log("Num of reports: " + formattedReportArray.length);
 
     // Clear the interval timer when the component unmount
     return () => clearInterval(interval);
   }, [isFocused]);
+
+  //get user city on page load
+  useEffect(() => {
+    getUserCity();
+    getuserHomeCoordinates();
+  }, []);
 
   //clear the report data when the component is unfocused
   useEffect(() => {
@@ -161,6 +176,8 @@ export default function HomeScreen({ route, navigation }) {
       updateReportArray([]);
       updateReportCoordinates([]);
       fetchReports();
+      getUserCity();
+      getuserHomeCoordinates();
     }, [])
   );
 
@@ -219,9 +236,11 @@ export default function HomeScreen({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
+
         <View height="40%">
-          <MapScreen reportCoordinates={reportCoordinates} bk_id={userID} />
+          <MapScreen reportCoordinates={reportCoordinates} homeCoordinates={homeCoords} bk_id={userID} />
         </View>
+
         <View
           style={{
             flexDirection: "row",
