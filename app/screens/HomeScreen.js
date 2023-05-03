@@ -47,7 +47,7 @@ export default function HomeScreen({ route, navigation }) {
   //fetching reports from database to display
   const fetchReports = async () => {
     try {
-      const res = await Axios.get("http://45.33.38.54:3001/bk_appReports");
+      const res = await Axios.get("https://beerescue.net:3001/bk_appReports");
       if (Array.isArray(res.data) && res.data.length > 0) {
         updateReportArray(extractReportInfo(res.data));
         updateReportCoordinates(extractReportCoordinates(res.data));

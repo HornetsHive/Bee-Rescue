@@ -26,7 +26,7 @@ export default function ReportInfoScreen({ route, navigation }) {
   // Sends claim_report post request to the server
   const claimReport = () => {
     console.log("Claiming report.");
-    Axios.post("http://45.33.38.54:3001/claim_report", {
+    Axios.post("https://beerescue.net:3001/claim_report", {
       r_id: reportID,
       bk_id: userID,
     })
@@ -124,7 +124,7 @@ export default function ReportInfoScreen({ route, navigation }) {
   useEffect(() => {
     // Get report data from server
     console.log("Getting report data...");
-    Axios.get("http://45.33.38.54:3001/report_data", {
+    Axios.get("https://beerescue.net:3001/report_data", {
       params: {
         r_id: reportID,
       },

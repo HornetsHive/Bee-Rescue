@@ -64,7 +64,7 @@ export default function AccountScreen({ route, navigation }) {
 
   //////////////////DB QUERY
   async function getUser() {
-    const res = await Axios.get("http://45.33.38.54:3001/bk_getUser", {
+    const res = await Axios.get("https://beerescue.net:3001/bk_getUser", {
       params: { bk_id: userID },
     })
       .then((res) => {
@@ -119,7 +119,7 @@ export default function AccountScreen({ route, navigation }) {
       // Use Promise.all to wait for both posts to resolve
       await Promise.all([
         //axios.post to update beekeeper personal info
-        Axios.post("http://45.33.38.54:3001/bk_update", {
+        Axios.post("https://beerescue.net:3001/bk_update", {
           fname: fname,
           lname: lname,
           address: address,
@@ -129,7 +129,7 @@ export default function AccountScreen({ route, navigation }) {
         }),
 
         //axios post again to update beekeeper qualifications
-        Axios.post("http://45.33.38.54:3001/bk_qualif_update", {
+        Axios.post("https://beerescue.net:3001/bk_qualif_update", {
           ground_swarms: ability1,
           valve_or_water_main: ability2,
           shrubs: ability3,

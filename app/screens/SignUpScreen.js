@@ -67,7 +67,7 @@ export default function SignUpScreen({ navigation }) {
     }
 
     new Promise((resolve, reject) => {
-      Axios.post("http://45.33.38.54:3001/bk_insert", {
+      Axios.post("https://beerescue.net:3001/bk_insert", {
         email: email,
         pass: pass,
       })
@@ -108,7 +108,7 @@ export default function SignUpScreen({ navigation }) {
   }
 
   async function getUser() {
-    await Axios.get("http://45.33.38.54:3001/bk_user", {
+    await Axios.get("https://beerescue.net:3001/bk_user", {
       params: { email: email },
     })
       .then((res) => {
