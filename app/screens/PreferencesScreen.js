@@ -7,12 +7,12 @@ import Axios from "axios";
 import {
   Text,
   View,
+  Alert,
   Switch,
   Button,
   TextInput,
   ScrollView,
   SafeAreaView,
-  Alert,
 } from "react-native";
 
 //set the format for the phone number text entry
@@ -37,10 +37,9 @@ export default function PreferencesScreen({ route, navigation }) {
   const userEmail = route.params.email;
   const userPass = route.params.pass;
 
-  const switchColor = { false: "#808080", true: "#7dad23" };
-  const [userID, setUserID] = useState([]);
-  const [errors, setErrors] = useState("");
   const newErrors = { ...errors };
+  const [errors, setErrors] = useState("");
+  const switchColor = { false: "#808080", true: "#7dad23" };
 
   const [validZip, setValidZip] = useState(true);
   const [inputErrFName, setInputErrFName] = useState(false);
@@ -94,22 +93,8 @@ export default function PreferencesScreen({ route, navigation }) {
     }
   };
 
-  const updateNewUser = async () => {
+  const createUser = async () => {
     try {
-      // Get the beekeeper id that matches entered email and pass to verify login
-      const res = await Axios.get("https://beerescue.net:3001/bk_get", {
-        params: { email: userEmail, pass: userPass },
-      }).catch(function (error) {
-        console.log(error);
-        return null;
-      });
-
-      if (!res || !res.data || res.data.length === 0) {
-        console.error("Beekeeper not found");
-        return;
-      }
-      const beekeeperId = res.data[0].bk_id;
-
       //validate preference input
       const err = validate();
       if (err) {
@@ -118,49 +103,44 @@ export default function PreferencesScreen({ route, navigation }) {
         return;
       }
 
-      // Use Promise.all to wait for both posts to resolve
-      await Promise.all([
-        //axios.post to update beekeeper personal info
-        Axios.post("https://beerescue.net:3001/bk_update", {
+      new Promise((resolve, reject) => {
+        Axios.post("https://beerescue.net:3001/bk_insert", {
+          email: userEmail,
+          pass: userPass,
           fname: fname,
           lname: lname,
           phone_no: phone_no,
           address: address,
           city: city,
           zip: zip,
-          bk_id: beekeeperId,
-        }),
-
-        //axios post again to update beekeeper qualifications
-        Axios.post("https://beerescue.net:3001/bk_qualif_update", {
-          ground_swarms: ability1,
-          valve_or_water_main: ability2,
-          shrubs: ability3,
-          low_tree: ability4,
-          mid_tree: ability5,
-          tall_tree: ability6,
-          fences: ability7,
-          low_structure: ability8,
-          mid_structure: ability9,
-          chimney: ability10,
-          interior: ability11,
-          cut_or_trap_out: ability12,
-          traffic_accidents: ability13,
-          bucket_w_pole: equipment1,
-          ladder: equipment2,
-          mechanical_lift: equipment3,
-          bk_id: beekeeperId,
-        }),
-      ]);
-
-      console.log("successful insert");
-      //navigate to home screen and pass bk_id
-      navigation.replace("HomeScreen", {
-        screen: "HomeScreen",
-        bk_id: beekeeperId,
-      });
+        })
+          .then(() => {
+            resolve();
+          })
+          .catch(function (error) {
+            console.log(error);
+            Alert.alert(
+              error.message,
+              "Something went wrong processing your request",
+              [
+                {
+                  text: "OK",
+                },
+              ]
+            );
+            reject();
+          });
+      })
+        .then(() => {
+          console.log("User created!");
+          //get bk_id and navigate to home screen
+          navigateHome();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } catch (error) {
-      console.error("Error in updateNewUser: " + error);
+      console.error("Error in createUser: " + error);
       Alert.alert(
         error.message,
         "Something went wrong processing your request",
@@ -172,6 +152,29 @@ export default function PreferencesScreen({ route, navigation }) {
       );
     }
   };
+
+  async function navigateHome() {
+    // Get the beekeeper id that matches entered email and pass to verify login
+    const res = await Axios.get("https://beerescue.net:3001/bk_get", {
+      params: { email: userEmail, pass: userPass },
+    }).catch(function (error) {
+      console.log(error);
+      return null;
+    });
+
+    if (!res || !res.data || res.data.length === 0) {
+      console.error("Beekeeper not found");
+      return;
+    } else {
+      console.log("successful insert");
+
+      //navigate to home screen and pass bk_id
+      navigation.replace("HomeScreen", {
+        screen: "HomeScreen",
+        bk_id: res.data[0].bk_id,
+      });
+    }
+  }
 
   const validate = () => {
     //check for errors and set them if found
@@ -418,7 +421,9 @@ export default function PreferencesScreen({ route, navigation }) {
               <View></View>
             )}
 
-            <View style={styles.divider}>{/*****************************/}</View>
+            <View style={styles.divider}>
+              {/*****************************/}
+            </View>
 
             <Text style={styles.textRegularPink}>
               What is your max swarm height preference?
@@ -459,7 +464,9 @@ export default function PreferencesScreen({ route, navigation }) {
               </View>
             </View>
 
-            <View style={styles.divider}>{/*****************************/}</View>
+            <View style={styles.divider}>
+              {/*****************************/}
+            </View>
 
             <Text style={styles.textRegularPink}>
               Please indicate the locations you are skilled at gathering swarm
@@ -631,11 +638,13 @@ export default function PreferencesScreen({ route, navigation }) {
               ></Switch>
             </View>
 
-            <View style={styles.divider}>{/*****************************/}</View>
+            <View style={styles.divider}>
+              {/*****************************/}
+            </View>
 
             <Text style={styles.textRegularPink}>
-              What special equipment do you have at your disposal to gather swarm
-              clusters?
+              What special equipment do you have at your disposal to gather
+              swarm clusters?
             </Text>
 
             <View style={styles.aligned}>
@@ -675,14 +684,16 @@ export default function PreferencesScreen({ route, navigation }) {
               ></Switch>
             </View>
 
-            <View style={styles.divider}>{/*****************************/}</View>
+            <View style={styles.divider}>
+              {/*****************************/}
+            </View>
 
             <View style={styles.saveButton}>
               <Button
                 color="#da628c"
                 title="Save Changes & Continue"
                 onPress={() => {
-                  updateNewUser();
+                  createUser();
                 }}
               ></Button>
             </View>

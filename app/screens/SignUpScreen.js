@@ -61,50 +61,21 @@ export default function SignUpScreen({ navigation }) {
 
     //validate submission
     const err = await validate();
-    if (err) {
+    if (err || emailExists == true) {
       console.log("error");
       return;
-    }
-
-    new Promise((resolve, reject) => {
-      Axios.post("https://beerescue.net:3001/bk_insert", {
-        email: email,
-        pass: pass,
-      })
-        .then(() => {
-          resolve();
-        })
-        .catch(function (error) {
-          console.log(error);
-          Alert.alert(
-            error.message,
-            "Something went wrong processing your request",
-            [
-              {
-                text: "OK",
-              },
-            ]
-          );
-          reject();
-        });
-    })
-      .then(() => {
-        console.log("User created!");
-        //navigate to preferences page
-        navigation.reset({
-          index: 0,
-          routes: [
-            {
-              name: "PreferencesScreen",
-              params: { email: email, pass: pass },
-            },
-          ],
-        });
-      })
-      .catch((error) => {
-        //every .then needs a .catch
-        console.log(error);
+    } else {
+      //navigate to preferences page
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: "PreferencesScreen",
+            params: { email: email, pass: pass },
+          },
+        ],
       });
+    }
   }
 
   async function getUser() {
@@ -117,8 +88,7 @@ export default function SignUpScreen({ navigation }) {
           if (data[0].email == email) {
             setInputStyleEmail(styles.inputError);
             setExistingEmail(true);
-            //emailExists = true;
-            console.log("email is already in use");
+            emailExists = true;
           }
         }
       })
@@ -133,6 +103,7 @@ export default function SignUpScreen({ navigation }) {
     //check if entered email is already in use
     await getUser();
     if (existingEmail) {
+      console.log("email is already in use");
       newErrors.email = "email in use";
     }
 
@@ -175,8 +146,6 @@ export default function SignUpScreen({ navigation }) {
     }
 
     setErrors(newErrors);
-    console.log(newErrors);
-
     return !Object.values(newErrors).every((error) => error === "");
   }
 
@@ -190,6 +159,7 @@ export default function SignUpScreen({ navigation }) {
       }
       if (existingEmail) {
         setExistingEmail(false);
+        emailExists == false;
       }
     }
     if (errType === "pass") {

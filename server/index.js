@@ -49,7 +49,7 @@ app.get("/mailtest", (req, res) => {
   };
   transporter.sendMail(mailoptionstest, function (err, info) {
     if (err) {
-      console.log(err); 
+      console.log(err);
       return;
     }
     console.log("Sent: " + info.response);
@@ -65,7 +65,13 @@ app.post("/insert", async (req, res) => {
 
   try {
     const coords = await getCoordinates(
-      req.body.address + ", " + req.body.city + ", " + req.body.state + " " + req.body.zip,
+      req.body.address +
+        ", " +
+        req.body.city +
+        ", " +
+        req.body.state +
+        " " +
+        req.body.zip,
       gmapsAPIKey
     );
 
@@ -175,7 +181,9 @@ async function getCoordinates(address, apiKey) {
     );
 
     if (response.status != 200) {
-      throw new Error("Failed to get coordinates - status code: " + response.status);
+      throw new Error(
+        "Failed to get coordinates - status code: " + response.status
+      );
     }
     const { results } = response.data;
 
@@ -186,7 +194,6 @@ async function getCoordinates(address, apiKey) {
     const { lat, lng } = results[0].geometry.location;
     console.log("lat: ", lat, "lng: ", lng);
     return { latitude: lat, longitude: lng };
-
   } catch (err) {
     console.log(err);
     throw new Error("Failed to get coordinates");
@@ -246,7 +253,13 @@ app.post("/sendCode", (req, res) => {
 
 //Inserts a new Beekeeper
 app.post("/bk_insert", (req, res) => {
+  const fname = req.body.fname;
+  const lname = req.body.lname;
   const email = req.body.email;
+  const phone_no = req.body.phone_no;
+  const address = req.body.address;
+  const city = req.body.city;
+  const zip = req.body.zip;
   const pass = req.body.pass;
 
   bcrypt.genSalt(10, function (err, salt) {
@@ -256,12 +269,16 @@ app.post("/bk_insert", (req, res) => {
 
       //insert hashed password and salt into database
       const sqlINSERT =
-        "INSERT INTO beekeepers (email, pass, salt) VALUES (?, ?, ?);";
-      db.query(sqlINSERT, [email, hash, salt], (err, result) => {
-        if (err) return res.status(500).send(err.message);
-        console.log(result);
-        return res.status(200).send("Insert Successful");
-      });
+        "INSERT INTO beekeepers (fname, lname, email, phone_no, address, city, zip, pass, salt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+      db.query(
+        sqlINSERT,
+        [fname, lname, email, phone_no, address, city, zip, hash, salt],
+        (err, result) => {
+          if (err) return res.status(500).send(err.message);
+          console.log(result);
+          return res.status(200).send("Insert Successful");
+        }
+      );
     });
   });
 });
@@ -424,7 +441,7 @@ app.post("/abandon_report", (req, res) => {
   const sqlUpdate = "UPDATE reports SET active = FALSE WHERE r_id = ?;";
   db.query(sqlUpdate, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
-    
+
     return res.status(200).send("Report has been abandoned.");
   });
 
@@ -451,7 +468,8 @@ app.post("/remove_report", (req, res) => {
   });
 
   // Set success to false
-  const sqlUpdate2 = "UPDATE report_archive SET success = false WHERE r_id = ?;";
+  const sqlUpdate2 =
+    "UPDATE report_archive SET success = false WHERE r_id = ?;";
   db.query(sqlUpdate2, [r_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
   });
@@ -648,7 +666,8 @@ app.get("/report_data", (req, res) => {
 app.get("/bk_getFull", (req, res) => {
   const bk_id = req.query.bk_id;
 
-  const sqlQuery = "select * from beekeepers NATURAL JOIN qualifications WHERE bk_id = ?;"
+  const sqlQuery =
+    "select * from beekeepers NATURAL JOIN qualifications WHERE bk_id = ?;";
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
     return res.status(200).send(result);
@@ -663,9 +682,9 @@ const server = app.listen(3001, () => {
 
 //comment out below and uncomment above to run locally
 var options = {
-  key: fs.readFileSync('/etc/ssl/privkey.pem'),
-  cert: fs.readFileSync('/etc/ssl/fullchain.pem'),
-}
+  key: fs.readFileSync("/etc/ssl/privkey.pem"),
+  cert: fs.readFileSync("/etc/ssl/fullchain.pem"),
+};
 
 https.createServer(options, app).listen(3001, () => {
   console.log("Running on port 3001");
