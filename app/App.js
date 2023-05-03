@@ -17,6 +17,7 @@ import PreferencesScreen from "./screens/PreferencesScreen";
 import ReportInfoScreen from "./screens/ReportInfoScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import SignUpScreen from "./screens/SignUpScreen";
+import PrivacyScreen from "./screens/PrivacyScreen";
 
 const Stack = createNativeStackNavigator();
 Notifications.setNotificationHandler({
@@ -117,20 +118,15 @@ export default function App() {
       >
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen
-          name="MyReportsHomeScreen"
-          component={MyReportsHomeScreen}
-        />
+        <Stack.Screen name="MyReportsHomeScreen" component={MyReportsHomeScreen} />
         <Stack.Screen name="PreferencesScreen" component={PreferencesScreen} />
         <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
         <Stack.Screen name="ForgotPassScreen" component={ForgotPassScreen} />
         <Stack.Screen name="ReportInfoScreen" component={ReportInfoScreen} />
-        <Stack.Screen
-          name="ClaimedReportInfoScreen"
-          component={ClaimedReportInfoScreen}
-        />
+        <Stack.Screen name="ClaimedReportInfoScreen" component={ClaimedReportInfoScreen}/>
         <Stack.Screen name="AccountScreen" component={AccountScreen} />
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+        <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

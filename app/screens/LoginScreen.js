@@ -319,7 +319,9 @@ export default function LoginScreen({ navigation }) {
               //navigation.navigate("", { screen: "" })
               //}
               >
-                <Text style={styles.hyperLinkText}>Privacy</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("PrivacyScreen", { screen: "PrivacyScreen"})}>
+                  <Text style={styles.hyperLinkText}>Privacy</Text>
+                </TouchableOpacity>
               </TouchableOpacity>
             </View>
           </View>

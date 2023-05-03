@@ -89,11 +89,7 @@ export default function SettingsScreen({ route, navigation }) {
           <View style={styles.divider}>{/*****************************/}</View>
         </ScrollView>
         <View style={{ marginBottom: 15 }}>
-          <TouchableOpacity
-          //onPress={() =>
-          //navigation.navigate("", { screen: "" })
-          //}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate("PrivacyScreen", { screen: "PrivacyScreen", bk_id: userID})}>
             <Text style={styles.hyperLinkText}>Privacy</Text>
           </TouchableOpacity>
         </View>
