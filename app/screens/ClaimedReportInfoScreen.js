@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Alert,
+  Linking
 } from "react-native";
 
 export default function ClaimedReportInfoScreen({ route, navigation }) {
@@ -182,6 +183,25 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
     }
   }
 
+  const handleMapPress = (address, city, zip) => {
+    const fullAddress = `${address}, ${city}, ${zip}`;
+    const encodedAddress = encodeURIComponent(fullAddress);
+    Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`);
+  };
+
+  const handleEmailPress = (emailAddress) => {
+    const emailSubject = 'Follow-up on your Bee Rescue report';
+    Linking.openURL(`mailto:${emailAddress}?subject=${encodeURIComponent(emailSubject)}`);
+  };
+
+  function handlePhonePress(phoneNumber) {
+    Linking.openURL(`tel:${removePhoneNumberFormatting(phoneNumber)}`);
+  };
+
+  function removePhoneNumberFormatting(phoneNumber) {
+    return phoneNumber.replace(/\D/g,'');
+  }
+
   useEffect(() => {
     // Get report data from server
     console.log("Getting report data for reportID: ", reportID);
@@ -254,14 +274,20 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
 
         <ScrollView>
           <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() => 
+                handleMapPress(reportData.address, reportData.city, reportData.zip)
+              }
+            >
             <View style={styles.nameContainer}>
               <Text style={styles.nameTxt}>Address</Text>
             </View>
             <View>
-              <Text style={styles.text}>
+              <Text style={styles.textLink}>
                 {reportData.address}, {reportData.city} {reportData.zip}
               </Text>
             </View>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.row}>
@@ -325,20 +351,32 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
             </View>
           </View>
           <View style={styles.row}>
-            <View style={styles.nameContainer}>
-              <Text style={styles.nameTxt}>Reporter Phone Number</Text>
-            </View>
-            <View>
-              <Text style={styles.text}>{reportData.phone_no}</Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => 
+                handlePhonePress(reportData.phone_no)
+              }
+            >
+              <View style={styles.nameContainer}>
+                <Text style={styles.nameTxt}>Reporter Phone Number</Text>
+              </View>
+              <View>
+                <Text style={styles.textLink}>{reportData.phone_no}</Text>
+              </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() => 
+                handleEmailPress(reportData.email)
+              }
+            >
             <View style={styles.nameContainer}>
               <Text style={styles.nameTxt}>Reporter Email</Text>
             </View>
             <View>
-              <Text style={styles.text}>{reportData.email}</Text>
+              <Text style={styles.textLink}>{reportData.email}</Text>
             </View>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
@@ -431,5 +469,9 @@ const styles = StyleSheet.create({
   },
   text: {
     paddingLeft: 15,
+  },
+  textLink: {
+    paddingLeft: 15,
+    color: "blue",
   },
 });

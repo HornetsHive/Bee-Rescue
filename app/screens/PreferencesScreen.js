@@ -341,7 +341,7 @@ export default function PreferencesScreen({ route, navigation }) {
                 required
                 isInvalid={Boolean(errors.phone_no)}
                 type="text"
-                placeholder="+1 (XXX) XXX - XXXX"
+                placeholder="(XXX) XXX - XXXX"
                 onChangeText={(e) => {
                   handleInput(e), setErrors({ ...errors, phone_no: "" });
                   resetErrors("phone");
