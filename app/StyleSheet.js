@@ -35,6 +35,9 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginTop: 20,
   },
+  footer2: {
+    flex: 1,
+  },
 
   //------------------------ text
   titleText: {

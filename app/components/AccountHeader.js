@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Image, View, TouchableOpacity, Text } from "react-native";
 
 // Account header component contains: menu button, a title, and a bell button
-export default function AccountHeader ({nav, titleText}) {
+export default function AccountHeader({ nav, titleText }) {
   return (
     <View style={styles.header}>
       <Text style={styles.title}>{titleText}</Text>
@@ -38,22 +38,7 @@ export default function AccountHeader ({nav, titleText}) {
       ) : (
         <></>
       )}
-      {titleText === "Settings" ? (
-        <TouchableOpacity
-          onPress={() =>
-            nav.navigate("AccountScreen", {
-              screen: "AccountScreen",
-            })
-          }
-        >
-          <Image
-            source={require("../assets/person.png")}
-            style={styles.iconButtonSmall}
-          />
-        </TouchableOpacity>
-      ) : (
-        <></>
-      )}
+      {titleText === "Settings" ? <View></View> : <></>}
     </View>
   );
 }

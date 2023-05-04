@@ -113,13 +113,9 @@ export default function PrivacyScreen({ route, navigation }) {
         </ScrollView>
       </View>
 
-      {userID ? (
-        <View style={styles.footer}>
-          <HomeButtonFooter nav={navigation} bk_id={userID} />
-        </View>
-      ) : (
-        <></>
-      )}
+      <View style={styles.footer2}>
+        {userID ? <HomeButtonFooter nav={navigation} bk_id={userID} /> : <></>}
+      </View>
     </SafeAreaView>
   );
 }
