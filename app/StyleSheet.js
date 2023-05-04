@@ -30,10 +30,14 @@ const styles = StyleSheet.create({
     borderColor: "gray",
   },
   footer: {
-    flex: 0.5,
-    alignSelf: "flex-start",
-    marginLeft: 10,
-    marginTop: 20,
+    alignSelf: "center",
+    width: "45%",
+    borderColor: "black",
+    borderWidth: 1,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    flex: 0.6,
+    overflow: "hidden",
   },
   footer2: {
     flex: 1,

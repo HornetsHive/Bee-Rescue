@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
+import SinglePinGoogleMap from "../components/SinglePinGoogleMap";
 
 export default function ReportInfoScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -185,12 +186,19 @@ export default function ReportInfoScreen({ route, navigation }) {
               borderRadius: 10,
               backgroundColor: "#d3e954",
             }}
-            onPress={() => confirmClaim()} // change this to actually claim a report
+            onPress={() => confirmClaim()}
           >
             <Text style={{ textAlign: "center", fontFamily: "Comfortaa" }}>
               Claim Report
             </Text>
           </TouchableOpacity>
+        </View>
+
+        <View style={styles.mapContainer}>
+          <SinglePinGoogleMap
+            reportLat={reportData.lat} 
+            reportLong={reportData.lng}
+          />
         </View>
 
         <ScrollView>
@@ -266,6 +274,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
+  mapContainer: {
+    flex: 8,
+    borderColor: "gray",
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    marginVertical: 10,
+  },
   header: {
     flex: 1,
     flexDirection: "row",
@@ -281,7 +296,14 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   footer: {
-    flex: 1,
+    alignSelf: "center",
+    width: "45%",
+    borderColor: "black",
+    borderWidth: 1,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    flex: 0.6,
+    overflow: "hidden",
   },
   item: {
     flexDirection: "row",

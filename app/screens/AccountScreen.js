@@ -2,8 +2,6 @@ import * as React from "react";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import HomeButtonFooter from "../components/HomeButtonFooter";
-import AccountHeader from "../components/AccountHeader";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState, useRef } from "react";
 import { useFonts } from "expo-font";
@@ -22,6 +20,9 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+
+import HomeButtonFooter from "../components/HomeButtonFooter";
+import AccountHeader from "../components/AccountHeader";
 
 export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -763,6 +764,13 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   footer: {
-    flex: 1,
+    alignSelf: "center",
+    width: "45%",
+    borderColor: "black",
+    borderWidth: 1,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    flex: 0.6,
+    overflow: "hidden",
   },
 });

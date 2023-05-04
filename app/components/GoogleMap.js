@@ -3,7 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 
-export default function MapScreen({ reportCoordinates, homeCoordinates, bk_id}) {
+export default function GoogleMap({ reportCoordinates, homeCoordinates, bk_id}) {
   const region = {
     latitude: homeCoordinates.latitude,
     longitude: homeCoordinates.longitude,

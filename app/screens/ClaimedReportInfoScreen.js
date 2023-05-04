@@ -2,6 +2,7 @@ import * as React from "react";
 
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
+import SinglePinGoogleMap from "../components/SinglePinGoogleMap";
 import { useState, useEffect } from "react";
 import { useFonts } from "expo-font";
 import Axios from "axios";
@@ -272,6 +273,13 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.mapContainer}>
+          <SinglePinGoogleMap
+            reportLat={reportData.lat} 
+            reportLong={reportData.lng}
+          />
+        </View>
+
         <ScrollView>
           <View style={styles.row}>
             <TouchableOpacity
@@ -390,11 +398,17 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
     flex: 1,
     flexDirection: "column",
     backgroundColor: "#fff",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+  mapContainer: {
+    height: "25%",
+    borderColor: "gray",
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    marginVertical: 10,
   },
   header: {
     flex: 1,
@@ -409,11 +423,18 @@ const styles = StyleSheet.create({
     flex: 8,
     borderColor: "gray",
     borderTopWidth: 1,
-    padding: 10,
-    overflow: "scroll",
+    //padding: 10,
+    //overflow: "scroll",
   },
   footer: {
-    flex: 1,
+    alignSelf: "center",
+    width: "45%",
+    borderColor: "black",
+    borderWidth: 1,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    flex: 0.6,
+    overflow: "hidden",
   },
   item: {
     flexDirection: "row",

@@ -157,7 +157,14 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   footer: {
-    flex: 1,
+    alignSelf: "center",
+    width: "45%",
+    borderColor: "black",
+    borderWidth: 1,
+    borderTopRightRadius: 40,
+    borderTopLeftRadius: 40,
+    flex: 0.6,
+    overflow: "hidden",
   },
   titleText: {
     fontSize: 26,

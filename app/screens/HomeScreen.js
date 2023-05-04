@@ -5,7 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useEffect, useState, useCallback } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import ReportRibbon from "../components/ReportRibbon";
-import MapScreen from "../components/MapScreen";
+import GoogleMap from "../components/GoogleMap";
 import { useFonts } from "expo-font";
 import Axios from "axios";
 import {
@@ -260,7 +260,7 @@ export default function HomeScreen({ route, navigation }) {
 
       <View style={styles.body}>
         <View height="40%">
-          <MapScreen
+          <GoogleMap
             reportCoordinates={reportCoordinates}
             homeCoordinates={homeCoords}
             bk_id={userID}
