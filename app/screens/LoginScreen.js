@@ -25,6 +25,7 @@ export default function LoginScreen({ navigation }) {
   const [hidePass, setHidePass] = useState(true);
   const [storedEmail, setStoredEmail] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [checkingIfLoggedIn, setCheckingIfLoggedIn] = useState(true); //used to check if user is logged in before rendering screen
   const [inputErrPass, setInputErrPass] = useState(false);
   const [inputErrEmail, setInputErrEmail] = useState(false);
   const [validCredentials, setValidCredentials] = useState(true);
@@ -46,6 +47,7 @@ export default function LoginScreen({ navigation }) {
     if (isLoggedIn) {
       console.log("logged in");
     }
+    setCheckingIfLoggedIn(false);
   }
 
   // Get the beekeeper id that matches entered email and pass to verify login
@@ -146,20 +148,20 @@ export default function LoginScreen({ navigation }) {
 
   useEffect(() => {
     setLogin();
-    try {
       if (isLoggedIn) {
         //navigate if already logged in
         navigation.replace("HomeScreen", {
           screen: "HomeScreen",
           bk_id: userID,
         });
-      }
-    } catch {
-      return console.log("error logging in");
-    }
+      } 
   });
 
   if (!loaded) {
+    return null;
+  }
+
+  if(checkingIfLoggedIn){
     return null;
   }
 
