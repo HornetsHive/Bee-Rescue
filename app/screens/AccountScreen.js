@@ -141,12 +141,13 @@ export default function AccountScreen({ route, navigation }) {
     } catch (error) {
       console.log(error);
       if (error.response.data === "Failed to get coordinates") {
-        Alert.alert("Invalid Address", "Please enter a valid address", [
-          { text: "OK" },
-        ]);
+        Alert.alert(
+          "Invalid Address",
+          "Please enter a valid address",
+          [{ text: "OK" }]
+        );
         console.log("user", initialData);
         mapUserData(initialData);
-        return;
       } else {
         Alert.alert(
           error.message,
@@ -154,7 +155,6 @@ export default function AccountScreen({ route, navigation }) {
           [{ text: "OK" }]
         );
         mapUserData(initialData);
-        return;
       }
     }
 

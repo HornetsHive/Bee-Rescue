@@ -7,30 +7,24 @@ import {
 } from "react-native";
 
 // Footer with a home button
-export default class HomeButtonFooter extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (        
-        <ImageBackground
-            source={require("../assets/gradient1.png")}
-            style={styles.imgBackground}
-        >
-            <TouchableOpacity
-                onPress={() =>
-                this.props.nav.navigate("HomeScreen", { screen: "HomeScreen", bk_id: this.props.bk_id })
-                }
-            >
-                <Image
-                    source={require("../assets/home.png")}
-                    style={styles.img}
-                />
-            </TouchableOpacity>
-        </ImageBackground>
-    );
-  }
+export default function HomeButtonFooter ({bk_id, nav}) {
+  return (        
+      <ImageBackground
+          source={require("../assets/gradient1.png")}
+          style={styles.imgBackground}
+      >
+          <TouchableOpacity
+              onPress={() =>
+              nav.navigate("HomeScreen", { screen: "HomeScreen", bk_id: bk_id })
+              }
+          >
+              <Image
+                  source={require("../assets/home.png")}
+                  style={styles.img}
+              />
+          </TouchableOpacity>
+      </ImageBackground>
+  );
 }
 
 const styles = StyleSheet.create({

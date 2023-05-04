@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useRef } from "react";
 import { styles } from "../StyleSheet";
 import { useFonts } from "expo-font";
@@ -88,6 +89,7 @@ export default function PreferencesScreen({ route, navigation }) {
     RoundSerif: require("../assets/fonts/rounded-sans-serif.ttf"),
   });
 
+  //these scrollers love to break, not used currently
   const scroller = useRef(null);
   const scrollToTop = () => {
     if (scroller.current) {
@@ -97,16 +99,22 @@ export default function PreferencesScreen({ route, navigation }) {
 
   const createUser = async () => {
     try {
-      //validate preference input
       const err = validate();
       if (err) {
         console.log("input errors");
-        scrollToTop();
+        //scrollToTop();
         return;
       }
-
-      new Promise((resolve, reject) => {
-        Axios.post("https://beerescue.net:3001/bk_insert", {
+  
+      try {
+        await saveAddressCoordsInStorage(address, city, zip);
+      } catch (error) {
+        console.log("Error in saveAddressCoordsInStorage: " + error);
+        return;
+      }
+  
+      try {
+        await Axios.post("https://beerescue.net:3001/bk_insert", {
           email: userEmail,
           pass: userPass,
           fname: fname,
@@ -115,45 +123,48 @@ export default function PreferencesScreen({ route, navigation }) {
           address: address,
           city: city,
           zip: zip,
-        })
-          .then(() => {
-            resolve();
-          })
-          .catch(function (error) {
-            console.log(error);
-            Alert.alert(
-              error.message,
-              "Something went wrong processing your request",
-              [
-                {
-                  text: "OK",
-                },
-              ]
-            );
-            reject();
-          });
-      })
-        .then(() => {
-          console.log("User created!");
-          //get bk_id and navigate to home screen
-          navigateHome();
-        })
-        .catch((error) => {
-          console.log(error);
         });
+  
+        console.log("User created!");
+        navigateHome();
+      } catch (error) {
+        console.log(error);
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+      }
     } catch (error) {
       console.error("Error in createUser: " + error);
-      Alert.alert(
-        error.message,
-        "Something went wrong processing your request",
-        [
-          {
-            text: "OK",
-          },
-        ]
-      );
+      Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
     }
   };
+  
+  const saveAddressCoordsInStorage = async (address, city, zip) => {
+    try {
+      const res = await Axios.get("https://beerescue.net:3001/get_coords", {
+        params: { address: address, city: city, zip: zip },
+      });
+  
+      console.log("Home coordinates received: ", res.data);
+      const lat = res.data.latitude;
+      const lng = res.data.longitude;
+      console.log("lat: " + lat + " lng: " + lng);
+      await AsyncStorage.setItem("homeLat", JSON.stringify(lat));
+      await AsyncStorage.setItem("homeLng", JSON.stringify(lng));
+      await AsyncStorage.setItem("storedAddress", JSON.stringify(address));
+      await AsyncStorage.setItem("storedCity", JSON.stringify(city));
+      await AsyncStorage.setItem("storedZip", JSON.stringify(zip));
+      console.log("Home coordinates saved to storage");
+    } catch (error) {
+      console.log(error);
+      if (error.response.data === "Failed to get coordinates") {
+        Alert.alert("Unknown Address", "Please enter a different address", [{ text: "OK" }]);
+        throw new Error("Failed to get coordinates");
+      } else {
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        throw new Error("Failed to get coordinates");
+      }
+    }
+  };
+  
 
   async function navigateHome() {
     // Get the beekeeper id that matches entered email and pass to verify login

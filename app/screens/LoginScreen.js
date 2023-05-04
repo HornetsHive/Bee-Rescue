@@ -50,6 +50,7 @@ export default function LoginScreen({ navigation }) {
 
   // Get the beekeeper id that matches entered email and pass to verify login
   async function attemptLogin() {
+    console.log("attempting login");
     //reset errors
     resetErrors();
 
@@ -102,6 +103,11 @@ export default function LoginScreen({ navigation }) {
         })
         .catch(function (error) {
           if (error) console.log(error);
+          Alert.alert(
+            error.message,
+            "Something went wrong processing your request",
+            [{ text: "OK" }]
+          );
         });
       return res;
     }

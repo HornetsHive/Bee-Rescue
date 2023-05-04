@@ -7,33 +7,27 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default class ReportRibbon extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          this.props.nav.navigate("ReportInfoScreen", {
-            screen: "ReportInfoScreen",
-            r_id: this.props.id,
-            bk_id: this.props.bk_id,
-          });
-        }}
-      >
-        <View style={styles.task}>
-          <View style={styles.taskText}>
-            <Text value={{}} style={{ fontSize: 16 }}>
-              A swarm has been reported in {this.props.area}
-            </Text>
-          </View>
-          <Text>{this.props.date}</Text>
+export default function ReportRibbon ({id, bk_id, area, date, nav}) {
+return (
+    <TouchableOpacity
+      onPress={() => {
+        nav.navigate("ReportInfoScreen", {
+          screen: "ReportInfoScreen",
+          r_id: id,
+          bk_id: bk_id,
+        });
+      }}
+    >
+      <View style={styles.task}>
+        <View style={styles.taskText}>
+          <Text value={{}} style={{ fontSize: 16 }}>
+            Swarm reported in {area}
+          </Text>
         </View>
-      </TouchableOpacity>
-    );
-  }
+        <Text>{date}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({

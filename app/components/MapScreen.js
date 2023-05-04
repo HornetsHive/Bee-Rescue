@@ -3,19 +3,7 @@ import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  map: {
-    width: '100%',
-    height: '100%',
-  },
-});
-
-function MapScreen({ reportCoordinates, homeCoordinates, bk_id}) {
+export default function MapScreen({ reportCoordinates, homeCoordinates, bk_id}) {
   const region = {
     latitude: homeCoordinates.latitude,
     longitude: homeCoordinates.longitude,
@@ -59,4 +47,14 @@ function MapScreen({ reportCoordinates, homeCoordinates, bk_id}) {
   );
 }
 
-export default MapScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  map: {
+    width: '100%',
+    height: '100%',
+  },
+});

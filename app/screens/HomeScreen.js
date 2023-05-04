@@ -37,7 +37,7 @@ export default function HomeScreen({ route, navigation }) {
 
   async function getUserCity() {
     const city = "" + (await AsyncStorage.getItem("storedCity"));
-    setCity(city);
+    if(city != "null") { setCity(city); }
   }
 
   async function getuserHomeCoordinates() {
@@ -45,9 +45,39 @@ export default function HomeScreen({ route, navigation }) {
     const lng = JSON.parse(await AsyncStorage.getItem("homeLng"));
     console.log("getuserHomeCoordinates: " + lat + ", " + lng);
     if (lat != null && lng != null) {
+      console.log("Home coordinates loaded from storage");
       setHomeCoords({ latitude: lat, longitude: lng });
+    } else {
+      console.log("Home coordinates not found in storage, getting from server");
+      try {
+        const res = await Axios.get("https://beerescue.net:3001/bk_getUser", { params: { bk_id: userID } });
+        console.log(res.data);
+        const address = res.data[0].address;
+        const city = res.data[0].city;
+        const zip = res.data[0].zip;
+
+        const res2 = await Axios.get("https://beerescue.net:3001/get_coords", {
+          params: { address: address, city: city, zip: zip },
+        });
+        console.log(res2.data);
+
+        await AsyncStorage.setItem("homeLat", JSON.stringify(res2.data.latitude));
+        await AsyncStorage.setItem("homeLng", JSON.stringify(res2.data.longitude));
+        await AsyncStorage.setItem("storedAddress", JSON.stringify(address));
+        await AsyncStorage.setItem("storedCity", JSON.stringify(city));
+        await AsyncStorage.setItem("storedZip", JSON.stringify(zip));
+        console.log("Home coordinates saved to storage")
+
+        navigation.replace("HomeScreen", {
+          screen: "HomeScreen",
+          bk_id: userID,
+        });
+      } catch (err) {
+        console.log(err.response.data);
+      }
     }
   }
+
 
   function formattedReport(id, location, date, area) {
     this.reportID = id;
@@ -149,12 +179,6 @@ export default function HomeScreen({ route, navigation }) {
     return () => clearInterval(interval);
   }, [isFocused]);
 
-  //get user city on page load
-  useEffect(() => {
-    getUserCity();
-    getuserHomeCoordinates();
-  }, []);
-
   //clear the report data when the component is unfocused
   useEffect(() => {
     if (!isFocused) {
@@ -247,13 +271,14 @@ export default function HomeScreen({ route, navigation }) {
             borderColor: "gray",
           }}
         >
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              reverseReportOrder();
+            }}
+          >
             <Image
               source={require("../assets/sort.png")}
               style={styles.iconButton}
-              onPress={() => {
-                reverseReportOrder();
-              }}
             ></Image>
           </TouchableOpacity>
 
