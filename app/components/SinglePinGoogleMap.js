@@ -12,7 +12,7 @@ export default function SinglePinGoogleMap({reportLat, reportLong}) {
 
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} region={region}>
+      <MapView style={styles.map} region={region} scrollEnabled={false}>
           <Marker
             coordinate={{ latitude: reportLat, longitude: reportLong }}
           >
