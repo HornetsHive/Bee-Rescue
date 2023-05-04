@@ -21,6 +21,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
   },
+  middle2: {
+    flex: 8,
+    width: "100%",
+    paddingHorizontal: 20,
+    alignSelf: "center",
+    borderTopWidth: 1,
+    borderColor: "gray",
+  },
   footer: {
     flex: 0.5,
     alignSelf: "flex-start",
@@ -34,6 +42,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     fontSize: 40,
     fontFamily: "RoundSerif",
+  },
+  subTitle: {
+    textAlign: "left",
+    fontFamily: "ComfortaaBold",
+    fontSize: 20,
+    marginBottom: 5,
+    marginTop: 10,
+  },
+  textBasic: {
+    padding: 5,
+    fontSize: 15,
+    fontFamily: "",
   },
   text: {
     alignItems: "center",

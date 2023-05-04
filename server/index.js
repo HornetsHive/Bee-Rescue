@@ -287,7 +287,6 @@ app.post("/bk_insert", (req, res) => {
 app.post("/bk_update", (req, res) => {
   const fname = req.body.fname;
   const lname = req.body.lname;
-  const email = req.body.email;
   const phone_no = req.body.phone_no;
   const address = req.body.address;
   const city = req.body.city;
@@ -295,10 +294,10 @@ app.post("/bk_update", (req, res) => {
   const bk_id = req.body.bk_id;
 
   const sqlUPDATE =
-    "UPDATE beekeepers SET fname = ?, lname = ?, email = ?, phone_no = ?, address = ?, city = ?, zip = ? WHERE bk_id = ?;";
+    "UPDATE beekeepers SET fname = ?, lname = ?, phone_no = ?, address = ?, city = ?, zip = ? WHERE bk_id = ?;";
   db.query(
     sqlUPDATE,
-    [fname, lname, email, phone_no, address, city, zip, bk_id],
+    [fname, lname, phone_no, address, city, zip, bk_id],
     (err, result) => {
       if (err) return res.status(500).send(err.message);
       console.log(result);

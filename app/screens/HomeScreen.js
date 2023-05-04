@@ -12,18 +12,20 @@ import {
   Text,
   View,
   Image,
+  StatusBar,
   ScrollView,
   StyleSheet,
   SafeAreaView,
-  ImageBackground,
   TouchableOpacity,
-  StatusBar,
 } from "react-native";
 
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
   const [city, setCity] = useState("");
-  const [homeCoords, setHomeCoords] = useState({latitude: 38.56, longitude: -121.42});
+  const [homeCoords, setHomeCoords] = useState({
+    latitude: 38.56,
+    longitude: -121.42,
+  });
   const [formattedReportArray, updateReportArray] = useState([]);
   const [reportCoordinates, updateReportCoordinates] = useState([]);
   const isFocused = useIsFocused();
@@ -42,8 +44,8 @@ export default function HomeScreen({ route, navigation }) {
     const lat = JSON.parse(await AsyncStorage.getItem("homeLat"));
     const lng = JSON.parse(await AsyncStorage.getItem("homeLng"));
     console.log("getuserHomeCoordinates: " + lat + ", " + lng);
-    if(lat != null && lng != null){
-      setHomeCoords({latitude: lat, longitude: lng});
+    if (lat != null && lng != null) {
+      setHomeCoords({ latitude: lat, longitude: lng });
     }
   }
 
@@ -97,26 +99,31 @@ export default function HomeScreen({ route, navigation }) {
     });
   }
 
+  const reverseReportOrder = () => {
+    //reversing the array does not reverse the placement of reports on the screen
+    //updateReportArray(formattedReportArray.reverse());
+  };
+
   function makeReadableDate(dateString) {
     // Create a Date object from the dateString (in local time)
     const dateInUTC = new Date(dateString);
     const localOffsetInMs = dateInUTC.getTimezoneOffset() * 60 * 1000;
     const date = new Date(dateInUTC.getTime() + localOffsetInMs);
-  
+
     // Format the date components
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const year = date.getFullYear().toString().slice(2);
-  
+
     // Format the time components
     const hours24 = date.getHours();
     const hours12 = hours24 % 12 === 0 ? 12 : hours24 % 12;
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const ampm = hours24 >= 12 ? 'PM' : 'AM';
-  
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const ampm = hours24 >= 12 ? "PM" : "AM";
+
     // Assemble the formatted date string
     const formattedDate = `${month}/${day}/${year} ${hours12}:${minutes} ${ampm}`;
-  
+
     return formattedDate;
   }
 
@@ -222,9 +229,12 @@ export default function HomeScreen({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
-
         <View height="40%">
-          <MapScreen reportCoordinates={reportCoordinates} homeCoordinates={homeCoords} bk_id={userID} />
+          <MapScreen
+            reportCoordinates={reportCoordinates}
+            homeCoordinates={homeCoords}
+            bk_id={userID}
+          />
         </View>
 
         <View
@@ -241,6 +251,9 @@ export default function HomeScreen({ route, navigation }) {
             <Image
               source={require("../assets/sort.png")}
               style={styles.iconButton}
+              onPress={() => {
+                reverseReportOrder();
+              }}
             ></Image>
           </TouchableOpacity>
 

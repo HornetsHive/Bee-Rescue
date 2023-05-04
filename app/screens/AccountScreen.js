@@ -160,10 +160,9 @@ export default function AccountScreen({ route, navigation }) {
 
     try {
       //axios.post to update beekeeper personal info
-      Axios.post("http://10.0.2.2:3001/bk_update", {
+      Axios.post("https://beerescue.net:3001/bk_update", {
         fname: fname,
         lname: lname,
-        email: email,
         address: address,
         city: city,
         zip: zip,
@@ -199,6 +198,17 @@ export default function AccountScreen({ route, navigation }) {
       screen: "SettingsScreen",
       bk_id: userID,
     });
+  }
+
+  function editEmail() {
+    Alert.alert("", "Cannot edit email", [
+      {
+        text: "Ok",
+        onPress: () => {
+          return;
+        },
+      },
+    ]);
   }
 
   async function attemptLogOut() {
@@ -292,14 +302,9 @@ export default function AccountScreen({ route, navigation }) {
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Email</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={(email) => {
-                setEmail(email);
-                setEdit1(true);
-              }}
-            ></TextInput>
+            <TouchableOpacity style={styles.input} onPress={editEmail}>
+              <Text style={styles.greyText}>{email}</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>Address</Text>

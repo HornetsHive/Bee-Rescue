@@ -1,10 +1,9 @@
 import * as React from "react";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
-import { useState, useEffect } from "react";
 import { useFonts } from "expo-font";
+import { useState } from "react";
 import {
   Text,
   View,
@@ -12,7 +11,6 @@ import {
   Button,
   Switch,
   StatusBar,
-  TextInput,
   ScrollView,
   StyleSheet,
   SafeAreaView,
@@ -85,11 +83,23 @@ export default function SettingsScreen({ route, navigation }) {
               value={isEnabled}
             />
           </View>
-
-          <View style={styles.divider}>{/*****************************/}</View>
         </ScrollView>
-        <View style={{ marginBottom: 15 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("PrivacyScreen", { screen: "PrivacyScreen", bk_id: userID})}>
+        <View
+          style={{
+            flex: 1,
+            alignSelf: "center",
+            justifyContent: "flex-end",
+            marginBottom: 25,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("PrivacyScreen", {
+                screen: "PrivacyScreen",
+                bk_id: userID,
+              })
+            }
+          >
             <Text style={styles.hyperLinkText}>Privacy</Text>
           </TouchableOpacity>
         </View>
@@ -112,6 +122,11 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 1,
+  },
+  hyperLinkText: {
+    fontFamily: "Comfortaa",
+    color: "#d92978",
+    fontWeight: "bold",
   },
   middle: {
     flex: 8,
