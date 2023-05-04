@@ -105,11 +105,7 @@ export default function LoginScreen({ navigation }) {
         })
         .catch(function (error) {
           if (error) console.log(error);
-          Alert.alert(
-            error.message,
-            "Something went wrong processing your request",
-            [{ text: "OK" }]
-          );
+          Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
         });
       return res;
     }

@@ -40,6 +40,7 @@ export default function ReportInfoScreen({ route, navigation }) {
       })
       .catch(function (error) {
         console.log(error);
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
       });
   };
 
@@ -137,6 +138,7 @@ export default function ReportInfoScreen({ route, navigation }) {
       })
       .catch((error) => {
         console.log(error.message);
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
       });
   }, []);
 

@@ -36,6 +36,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       })
       .catch(function (error) {
         console.log(error);
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
       });
   };
 
@@ -55,6 +56,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       .catch(function (error) {
         // If error, print the error
         console.log(error);
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
       });
   };
 
@@ -195,6 +197,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       })
       .catch((error) => {
         console.log(error.message);
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
       });
   }, []);
 

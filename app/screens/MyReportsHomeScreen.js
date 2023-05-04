@@ -32,9 +32,8 @@ export default function MyReportsHomeScreen({ route, navigation }) {
         }
       })
       .catch(function (error) {
-        if (error.response) {
-          console.log("Error: ", error.message);
-        }
+        if (error.response) { console.log("Error: ", error.message); }
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
       });
   };
 

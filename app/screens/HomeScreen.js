@@ -74,6 +74,7 @@ export default function HomeScreen({ route, navigation }) {
         });
       } catch (err) {
         console.log(err.response.data);
+        Alert.alert(err.message, "Something went wrong processing your request", [{ text: "OK" }]);
       }
     }
   }
@@ -89,7 +90,12 @@ export default function HomeScreen({ route, navigation }) {
   //fetching reports from database to display
   const fetchReports = async () => {
     try {
-      const res = await Axios.get("https://beerescue.net:3001/bk_appReports");
+      const res = await Axios.get("https://beerescue.net:3001/bk_appReports")
+      .catch((error) => {
+        console.log(error);
+        //leaving this one commented because it will spam the user with alerts if no connection
+        //Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+      });
       if (Array.isArray(res.data) && res.data.length > 0) {
         updateReportArray(extractReportInfo(res.data));
         updateReportCoordinates(extractReportCoordinates(res.data));

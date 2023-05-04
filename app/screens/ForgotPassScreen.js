@@ -110,6 +110,7 @@ export default function ForgotPassScreen({ navigation }) {
       })
       .catch(function (error) {
         if (error) console.log(error);
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
       });
   }
 

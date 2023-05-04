@@ -172,6 +172,7 @@ export default function PreferencesScreen({ route, navigation }) {
       params: { email: userEmail, pass: userPass },
     }).catch(function (error) {
       console.log(error);
+      Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
       return null;
     });
 
