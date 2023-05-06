@@ -1,3 +1,5 @@
+<p align="center"> <img width="150" src="https://user-images.githubusercontent.com/31836580/236601725-e9c02dcd-b5d5-45cd-866a-bc7cdd8a082c.png" alt="beeRescueLogo"></p>
+
 # Bee Rescue
 > Developed by team Hornet's Hive
 
@@ -6,9 +8,9 @@
  **Technology stack**: Standalone application and website
   - **Frontend**: Javascript/HTML/CSS, Visual Studio (IDE), React Native and React Native add ons (SDK)
   - **Backend**: MySQL - relational, NodeJS
-  - **API**: Google Maps static map
+  - **API**: Google Maps interactive map
   - **Server**: Testing: Local/Linode, Official product: AWS *(not finalized)*
-  - **Status**: Working Beta
+  - **Status**: Almost deployed
 
 **Website Screenshot**:
 
@@ -28,6 +30,7 @@
 To check package dependencies, type `npm list` in the `app`, `client_webpage`, or `server` directories.
 
 ## Installation
+> *once app is launched, downoad it from app the google paay store or apple store*
 
 1. install nodejs libraries https://nodejs.org/en/download/
    - download for your OS and install
@@ -77,7 +80,7 @@ start mobile app
    3. run `expo start`. Your android VM should be detected automatically. 
 
 ## How to test the software
-WIP, To be updated
+> Testing manual: [System-Test-Report_Hornets_Hive.pdf](https://github.com/HornetsHive/Bee_Project/files/11411411/System-Test-Report_Hornets_Hive.pdf)
 
 ## Known issues
 WIP, To be updated
@@ -105,9 +108,13 @@ February 2023 - May 2023
 ## Getting help
 If there is a bug report please file at https://github.com/HornetsHive/Bee_Project/issues
 
-To get in contact with the developers please send an email to mrsmith@csus.edu
-----
-
 ## Credits and references
 **Hornet's Hive Team**
-> Matthew Smith, Jarod Cavagnaro, Steven Maggs, John Wishek, Kiana Bruberg, Dane Leineke, Lawrence Matias, Sean Hackett
+> Matthew Smith: mrsmith@csus.edu </br>
+> Dane Leineke: dleineke@csus.edu </br>
+> Kiana Brunberg: brunbergkiana@gmail.com </br>
+> Jarod Cavagnaro: jcavagnaro@csus.edu </br>
+> John Wishek: johnwishek@csus.edu </br>
+> Steven Maggs: stevenmaggs@csus.edu </br>
+> Sean Hackett: shackett@csus.edu </br>
+> Lawrence Matias: lmatias@csus.edu </br>
