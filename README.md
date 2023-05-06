@@ -12,7 +12,7 @@
 
 **Website Screenshot**:
 
-![image](https://user-images.githubusercontent.com/31836580/205386331-446fddb4-d866-4358-a9fb-48b4f22cc698.png)
+![Screenshot 2023-05-05 220622](https://user-images.githubusercontent.com/31836580/236601123-2efa34a4-d842-4efd-bbb3-1975b36aab6e.png)
 
 **Application Screenshots**:
 
