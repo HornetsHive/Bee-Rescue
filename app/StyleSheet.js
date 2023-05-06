@@ -42,7 +42,12 @@ const styles = StyleSheet.create({
   footer2: {
     flex: 1,
   },
-
+  footer3: {
+    flex: 0.5,
+    alignSelf: "flex-start",
+    marginLeft: 10,
+    marginTop: 40,
+  },
   //------------------------ text
   titleText: {
     marginTop: "1%",
