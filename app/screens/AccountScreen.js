@@ -235,6 +235,8 @@ export default function AccountScreen({ route, navigation }) {
       {/* Body */}
       <View style={styles.body}>
         <ScrollView style={styles.middle} ref={scroller}>
+
+          {/* Profile picture UI and upload.
           <Image
             source={
               image == "default"
@@ -250,11 +252,14 @@ export default function AccountScreen({ route, navigation }) {
           <TouchableOpacity onPress={editCredentials}>
             <Text style={styles.smallText}>Security/Notification Settings</Text>
           </TouchableOpacity>
-          <View style={styles.logoutContainer}>
-            <TouchableOpacity onPress={attemptLogOut}>
-              <Text style={styles.smallText}>Log Out</Text>
-            </TouchableOpacity>
-          </View>
+          */}
+
+      <View style={styles.logoutContainer}>
+        <TouchableOpacity onPress={attemptLogOut}>
+          <Text style={styles.smallText}>Log Out</Text>
+        </TouchableOpacity>
+      </View>
+
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>First Name</Text>
             <TextInput
@@ -689,7 +694,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   logoutContainer: {
-    flex: 1,
+    flex: 0.2,
     alignSelf: "center",
     marginVertical: 13,
     width: "20%",

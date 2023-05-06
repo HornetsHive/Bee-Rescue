@@ -36,8 +36,13 @@ export default function HomeScreen({ route, navigation }) {
   });
 
   async function getUserCity() {
-    const city = "" + (await AsyncStorage.getItem("storedCity"));
-    if(city != "null") { setCity(city); }
+    const extractTextBetweenQuotes = str => str.match(/"(.*?)"/)?.[1] || "";
+
+    const city = extractTextBetweenQuotes(await AsyncStorage.getItem("storedCity"));
+    console.log(city);
+    if (city) {
+      setCity(city);
+    }
   }
 
   async function getuserHomeCoordinates() {

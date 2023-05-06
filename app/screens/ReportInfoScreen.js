@@ -274,8 +274,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
+  //Making this exactly the same on the claimed report screen may cause issues. Double check formatting
   mapContainer: {
-    flex: 8,
+    height: "30%",
     borderColor: "gray",
     borderTopWidth: 1,
     borderBottomWidth: 1,

@@ -299,11 +299,43 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
           </View>
 
           <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() => 
+                handleEmailPress(reportData.email)
+              }
+            >
             <View style={styles.nameContainer}>
-              <Text style={styles.nameTxt}>Time present</Text>
+              <Text style={styles.nameTxt}>Reporter Email</Text>
             </View>
             <View>
-              <Text style={styles.text}>{reportData.duration} days</Text>
+              <Text style={styles.textLink}>{reportData.email}</Text>
+            </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() => 
+                handlePhonePress(reportData.phone_no)
+              }
+            >
+              <View style={styles.nameContainer}>
+                <Text style={styles.nameTxt}>Reporter Phone Number</Text>
+              </View>
+              <View>
+                <Text style={styles.textLink}>{reportData.phone_no}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Reporter Name</Text>
+            </View>
+            <View>
+              <Text style={styles.text}>
+                {reportData.fname + " " + reportData.lname + " "}
+              </Text>
             </View>
           </View>
 
@@ -314,6 +346,17 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
             <View>
               <Text style={styles.text}>
                 {convertPropertyLocation(reportData.location)}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <Text style={styles.nameTxt}>Property Type</Text>
+            </View>
+            <View>
+              <Text style={styles.text}>
+                {convertPropertyType(reportData.p_type)}
               </Text>
             </View>
           </View>
@@ -338,54 +381,16 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
             </View>
           </View>
 
+
           <View style={styles.row}>
             <View style={styles.nameContainer}>
-              <Text style={styles.nameTxt}>Property Type</Text>
+              <Text style={styles.nameTxt}>Time present</Text>
             </View>
             <View>
-              <Text style={styles.text}>
-                {convertPropertyType(reportData.p_type)}
-              </Text>
+              <Text style={styles.text}>{reportData.duration} days</Text>
             </View>
           </View>
-          <View style={styles.row}>
-            <View style={styles.nameContainer}>
-              <Text style={styles.nameTxt}>Reporter Name</Text>
-            </View>
-            <View>
-              <Text style={styles.text}>
-                {reportData.fname + " " + reportData.lname + " "}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => 
-                handlePhonePress(reportData.phone_no)
-              }
-            >
-              <View style={styles.nameContainer}>
-                <Text style={styles.nameTxt}>Reporter Phone Number</Text>
-              </View>
-              <View>
-                <Text style={styles.textLink}>{reportData.phone_no}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => 
-                handleEmailPress(reportData.email)
-              }
-            >
-            <View style={styles.nameContainer}>
-              <Text style={styles.nameTxt}>Reporter Email</Text>
-            </View>
-            <View>
-              <Text style={styles.textLink}>{reportData.email}</Text>
-            </View>
-            </TouchableOpacity>
-          </View>
+
         </ScrollView>
       </View>
 
@@ -404,7 +409,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   mapContainer: {
-    height: "25%",
+    height: "30%",
     borderColor: "gray",
     borderTopWidth: 1,
     borderBottomWidth: 1,
