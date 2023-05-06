@@ -15,6 +15,8 @@
 **Website Screenshot**:
 
 ![Screenshot 2023-05-05 220622](https://user-images.githubusercontent.com/31836580/236601123-2efa34a4-d842-4efd-bbb3-1975b36aab6e.png)
+![Screenshot_20230505-225738](https://user-images.githubusercontent.com/31836580/236603391-92786eb5-f58d-47af-bc1b-d7652b5a5c9e.png)
+![Screenshot_20230505-225745](https://user-images.githubusercontent.com/31836580/236603393-6e88e7b4-9678-4fbc-9cf3-82ff5cbd50d3.png)
 
 **Application Screenshots**: </br>
 <img width="300" src="https://user-images.githubusercontent.com/31836580/236602930-261be2f2-4d41-4cc7-9e0b-8158baed9f51.png">
@@ -28,7 +30,7 @@
 To check package dependencies, type `npm list` in the `app`, `client_webpage`, or `server` directories.
 
 ## Installation
-> *once app is launched, downoad it from app the google paay store or apple store*
+> *once app is launched, download it from app the google paay store or apple store*
 
 1. install nodejs libraries https://nodejs.org/en/download/
    - download for your OS and install
@@ -59,9 +61,6 @@ To check package dependencies, type `npm list` in the `app`, `client_webpage`, o
    `cd ..`  
    `cd server`  
    `npm install`  
-
-## Configuration
-   - There are currently no configuration settings
 
 ## Usage
 start webpage  
@@ -99,9 +98,9 @@ September 2022 - December 2022
 February 2023 - May 2023
  1. Finalze UI design and implementation
  2. Implement detailed email updates for reporters and beekeepers
- 3. Google maps (or other map API) integration with live updates of report locations
+ 3. Google maps integration with live updates of report locations
  4. misc. bugfixing
- 5. Final release
+ 5. Final release on app store
 
 ## Getting help
 If there is a bug report please file at https://github.com/HornetsHive/Bee_Project/issues
