@@ -80,7 +80,7 @@ start mobile app
 ## How to test the software
 > Testing manual: [System-Test-Report_Hornets_Hive.pdf](https://github.com/HornetsHive/Bee_Project/files/11411411/System-Test-Report_Hornets_Hive.pdf)
 
-## Known issues
+## Known Issues
 WIP, To be updated
 
 ## Deployment
