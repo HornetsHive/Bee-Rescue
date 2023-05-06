@@ -1,5 +1,5 @@
 const express = require("express");
-const nodemailer = require("nodemailer");
+const sendmail = require('sendmail')();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
@@ -21,16 +21,8 @@ const db = mysql.createConnection({
   database: process.env.DATABASE,
 });
 
-//Set up nodemailer connection
-//this email is not final
-//-------------------------  add email user and pass to env file once finalized -----------------------------------
-const transporter = nodemailer.createTransport({
-  service: "hotmail",
-  auth: {
-    user: "BeeRescuePostmaster@outlook.com",
-    pass: "CSC191testpass",
-  },
-});
+process.env.PATH = process.env.PATH + ':/usr/sbin';
+console.log(process.env.PATH);
 
 function generateConfirmationCode() {
   return crypto.randomBytes(20).toString("hex");
@@ -42,17 +34,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/mailtest", (req, res) => {
   const mailoptionstest = {
-    from: "BeeRescuePostmaster@outlook.com",
-    to: "BeeRescuePostmaster@outlook.com",
+    from: 'BeeRescue Updates <updates@BeeRescue.net>',
+    to: 'matsmt@tuta.io',
     subject: "Sending email with nodemailer",
     text: "Hello world",
   };
-  transporter.sendMail(mailoptionstest, function (err, info) {
+  sendmail(mailoptionstest, function (err, reply) {
     if (err) {
       console.log(err);
       return;
     }
-    console.log("Sent: " + info.response);
+    console.log("Sent: " + reply);
     return res.status(200).send("Action Successful");
   });
 });
@@ -125,9 +117,8 @@ app.post("/insert", async (req, res) => {
 
 function sendConfirmationEmail(email, fname, conf_code) {
   //send confirmation email
-  //################################# Change this link later! #########################################
   const confirmationLink =
-    "http://45.33.38.54:3001/confirm-email?code=" + conf_code;
+    "https://beerescue.net:3001/confirm-email?code=" + conf_code;
   const messagebody =
     "Hi " +
     fname +
@@ -135,13 +126,13 @@ function sendConfirmationEmail(email, fname, conf_code) {
     "Thank you for submitting your report. We will notify the beekeepers in your area, and you will receive a follow-up email when an available beekeeper claims your report.\n\n Important! Please click this link to confirm your report:\n" +
     confirmationLink;
   const confirmReportOptions = {
-    from: "BeeRescuePostmaster@outlook.com",
+    from: "BeeRescue Updates <updates@BeeRescue.net>",
     to: email,
     subject: "Bee Rescue - Please Confirm Your Report",
     text: messagebody,
   };
 
-  transporter.sendMail(confirmReportOptions, function (err, info) {
+  sendmail(confirmReportOptions, function (err, info) {
     if (err) {
       console.log(err);
     } else {
@@ -235,13 +226,13 @@ app.post("/sendCode", (req, res) => {
   const messagebody =
     "Here is a one time use code to reset your password: " + code;
   const messageHeader = {
-    from: "BeeRescuePostmaster@outlook.com",
+    from: "BeeRescue Reset <updates@BeeRescue.net>",
     to: email,
     subject: "Bee Rescue - Password Reset Code",
     text: messagebody,
   };
 
-  transporter.sendMail(messageHeader, function (err, info) {
+  sendmail(messageHeader, function (err, info) {
     if (err) {
       console.log(err);
       return;
@@ -404,13 +395,13 @@ app.post("/complete_report", (req, res) => {
       details.address +
       " as complete.\n\n Thank you for supporting our local beekeepers and ecosystem by using Bee Rescue. If you enjoyed your experience using Bee Rescue, please recommend us to your friends.";
     const messageHeader = {
-      from: "BeeRescuePostmaster@outlook.com",
+      from: "BeeRescue Updates <updates@BeeRescue.net>",
       to: details.email,
       subject: "Bee Rescue - Your Report Has Been Completed",
       text: messagebody,
     };
 
-    transporter.sendMail(messageHeader, function (err, info) {
+    sendmail(messageHeader, function (err, info) {
       if (err) {
         console.log(err);
         return;
@@ -509,13 +500,13 @@ app.use("/claim_report", (req, res) => {
       details.address +
       ".\n\n Expect them to arrive soon!";
     const messageHeader = {
-      from: "BeeRescuePostmaster@outlook.com",
+      from: "BeeRescue Updates <updates@BeeRescue.net>",
       to: details.email,
       subject: "Bee Rescue - Your Report Has Been Claimed",
       text: messagebody,
     };
 
-    transporter.sendMail(messageHeader, function (err, info) {
+    sendmail(messageHeader, function (err, info) {
       if (err) {
         console.log(err);
         return;
