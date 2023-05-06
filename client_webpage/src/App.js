@@ -7,6 +7,7 @@ import MobileMenu from './components/MobileMenu';
 import Home from './Pages/Home';
 import About from './Pages/About';
 import Confirm from './Pages/Confirm';
+import ConfirmEmail from './Pages/ConfirmEmail';
 import Legal from './Pages/Legal';
 
 
@@ -82,7 +83,9 @@ function App(){
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/confirm' element={<Confirm/>} />
+        <Route path='confirm-email' element={<ConfirmEmail/>} />
         <Route path='/legal' element={<Legal/>} />
+        
       </Routes>
     </Pane>
   );

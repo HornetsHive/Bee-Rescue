@@ -220,7 +220,7 @@ app.get("/confirm-email", (req, res) => {
           console.log(err);
           return res.status(500).send("Internal Server Error");
         }
-        return res.status(200).send("Email confirmed");
+        return res.redirect('https://beerescue.net/confirm-email');
       }
     );
   });
