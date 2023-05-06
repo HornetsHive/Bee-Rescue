@@ -15,15 +15,17 @@
 **Website Screenshot**:
 
 ![Screenshot 2023-05-05 220622](https://user-images.githubusercontent.com/31836580/236601123-2efa34a4-d842-4efd-bbb3-1975b36aab6e.png)
-![Screenshot_20230505-225738](https://user-images.githubusercontent.com/31836580/236603391-92786eb5-f58d-47af-bc1b-d7652b5a5c9e.png)
-![Screenshot_20230505-225745](https://user-images.githubusercontent.com/31836580/236603393-6e88e7b4-9678-4fbc-9cf3-82ff5cbd50d3.png)
+<p align="center"> <img width="300" src="https://user-images.githubusercontent.com/31836580/236603391-92786eb5-f58d-47af-bc1b-d7652b5a5c9e.png">
+<img width="300" src="https://user-images.githubusercontent.com/31836580/236603393-6e88e7b4-9678-4fbc-9cf3-82ff5cbd50d3.png"></p>
 
 **Application Screenshots**: </br>
-<img width="300" src="https://user-images.githubusercontent.com/31836580/236602930-261be2f2-4d41-4cc7-9e0b-8158baed9f51.png">
+<p align="center">
+  <img width="300" src="https://user-images.githubusercontent.com/31836580/236602930-261be2f2-4d41-4cc7-9e0b-8158baed9f51.png">
 <img width="300" src="https://user-images.githubusercontent.com/31836580/236602945-fe6c8103-a660-40ab-b72e-b5baee1db3bd.png">
 <img width="300" src="https://user-images.githubusercontent.com/31836580/236602923-1fc04ae2-9585-49b3-b669-56df92b25bce.png">
 <img width="300" src="https://user-images.githubusercontent.com/31836580/236602924-1e1474c2-f522-4b6f-a9ba-a2e73ae02e6e.png">
 <img width="300" src="https://user-images.githubusercontent.com/31836580/236602925-65532255-e64d-4404-960d-7e7f9e0a28fc.png">
+  </p>
 
 ## Dependencies
 **Dependencies**:
