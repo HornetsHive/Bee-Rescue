@@ -16,11 +16,13 @@ app/*.mobileprovision
 app/*.orig.*
 app/web-build/
 app/.DS_Store
+app/env
 
 # dependencies
 client_webpage/node_modules
 client_webpage/.pnp
 client_webpage/.pnp.js
+client_webpage/env
 
 # testing
 client_webpage/coverage
