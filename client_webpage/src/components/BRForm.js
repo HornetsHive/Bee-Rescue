@@ -81,7 +81,8 @@ export default function BRForm({mobile}) {
       location: form.location,
       height: form.height,
       size: form.size,
-      image: form.image
+      image: form.image,
+      key: process.env.REACT_APP_KEY
     }).then(() =>{
       toaster.success("Your form has been submitted!");
       navigate('/confirm');

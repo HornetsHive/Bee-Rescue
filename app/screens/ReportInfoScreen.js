@@ -30,6 +30,7 @@ export default function ReportInfoScreen({ route, navigation }) {
     Axios.post("https://beerescue.net:3001/claim_report", {
       r_id: reportID,
       bk_id: userID,
+      key: process.env.REACT_APP_KEY
     })
       .then(function (response) {
         console.log(response.data);
@@ -130,6 +131,7 @@ export default function ReportInfoScreen({ route, navigation }) {
     Axios.get("https://beerescue.net:3001/report_data", {
       params: {
         r_id: reportID,
+        key: process.env.REACT_APP_KEY
       },
     })
       .then((response) => {

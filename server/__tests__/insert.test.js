@@ -1,4 +1,5 @@
 const request = require('supertest');
+require('dotenv').config();
 
 const server = request('http://localhost:3001');
 
@@ -19,6 +20,7 @@ describe('POST /insert', () => {
             p_type: "res_detached",
             phone_no: "0000000000",
             weight: null,
+            key: process.env.KEY
         };
         const response = await server
             .post('/insert')

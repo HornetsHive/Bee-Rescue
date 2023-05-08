@@ -81,7 +81,7 @@ export default function LoginScreen({ navigation }) {
 
       //grab the user info from db, password is checked server side and then whole row is sent back, else null
       const res = await Axios.get("https://beerescue.net:3001/bk_get", {
-        params: { email: enteredEmail, pass: enteredPass },
+        params: { email: enteredEmail, pass: enteredPass, key: process.env.REACT_APP_KEY },
       })
         .then((res) => {
           var id = res.data[0].bk_id;

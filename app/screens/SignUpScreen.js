@@ -79,7 +79,7 @@ export default function SignUpScreen({ navigation }) {
 
   async function getUser() {
     await Axios.get("https://beerescue.net:3001/bk_user", {
-      params: { email: email },
+      params: { email: email, key: process.env.REACT_APP_KEY },
     })
       .then((res) => {
         var data = res.data;

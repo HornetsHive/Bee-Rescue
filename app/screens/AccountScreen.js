@@ -73,7 +73,7 @@ export default function AccountScreen({ route, navigation }) {
 
   async function getUser() {
     const res = await Axios.get("https://beerescue.net:3001/bk_getUser", {
-      params: { bk_id: userID },
+      params: { bk_id: userID, key: process.env.REACT_APP_KEY },
     })
       .then((res) => {
         var id = res.data[0].bk_id;
@@ -161,6 +161,7 @@ export default function AccountScreen({ route, navigation }) {
         city: city,
         zip: zip,
         bk_id: userID,
+        key: process.env.REACT_APP_KEY
       }),
         Alert.alert("", "Changes Saved", [{ text: "OK" }]);
     } catch (error) {

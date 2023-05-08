@@ -1,4 +1,5 @@
 const request = require('supertest');
+require('dotenv').config();
 
 const server = request('http://localhost:3001');
 
@@ -12,6 +13,7 @@ describe("POST /bk_update", () => {
             city: "Sacramento",
             zip: "95600",
             bk_id: 1,
+            key: process.env.KEY
         };
         const response = await server
             .post('/bk_update')

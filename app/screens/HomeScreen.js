@@ -55,7 +55,7 @@ export default function HomeScreen({ route, navigation }) {
     } else {
       console.log("Home coordinates not found in storage, getting from server");
       try {
-        const res = await Axios.get("https://beerescue.net:3001/bk_getUser", { params: { bk_id: userID } });
+        const res = await Axios.get("https://beerescue.net:3001/bk_getUser", { params: { bk_id: userID, key: process.env.REACT_APP_KEY } });
         console.log(res.data);
         const address = res.data[0].address;
         const city = res.data[0].city;
@@ -95,7 +95,7 @@ export default function HomeScreen({ route, navigation }) {
   //fetching reports from database to display
   const fetchReports = async () => {
     try {
-      const res = await Axios.get("https://beerescue.net:3001/bk_appReports")
+      const res = await Axios.get("https://beerescue.net:3001/bk_appReports", { key: process.env.REACT_APP_KEY })
       .catch((error) => {
         console.log(error);
         //leaving this one commented because it will spam the user with alerts if no connection
