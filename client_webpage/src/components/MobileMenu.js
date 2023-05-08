@@ -25,7 +25,13 @@ export default function MobileMenu({ isShown, setIsShown }) {
         backgroundColor="#FFFFFF"
         borderRadius="1em"
       >
-        <Link to="/#form" onClick={() => setIsShown(false)} color="#FFFFFF">Report a Swarm</Link>
+        <a 
+        href="/#form"
+        onClick={() => setIsShown(false)}
+        style={{textDecoration: "none", color: "#000000"}}
+        >
+          Report a Swarm
+        </a>
       </Card>
 
       <Card
@@ -36,7 +42,13 @@ export default function MobileMenu({ isShown, setIsShown }) {
         backgroundColor="#FFFFFF"
         borderRadius="1em"
       >
-        <Link to="https://sacbeekeepers.org/" onClick={() => setIsShown(false)}>Sacramento Area Beekeepers Association</Link>
+        <Link 
+          to="https://sacbeekeepers.org/" 
+          onClick={() => setIsShown(false)} 
+          style={{textDecoration: "none", color: "#000000"}}
+          >
+            Sacramento Area Beekeepers Association
+        </Link>
       </Card>
 
       <Card
@@ -47,7 +59,13 @@ export default function MobileMenu({ isShown, setIsShown }) {
         backgroundColor="#FFFFFF"
         borderRadius="1em"
       >
-        <Link to="/about" onClick={() => setIsShown(false)}>About us</Link>
+        <Link 
+        to="/about"
+        onClick={() => setIsShown(false)}
+        style={{textDecoration: "none", color: "#000000"}}
+        >
+          About us
+        </Link>
       </Card>
     </Pane>
   );

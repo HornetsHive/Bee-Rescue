@@ -83,7 +83,7 @@ function App(){
         <Route path='/' element={<Home />} />
         <Route path='/about' element={<About />} />
         <Route path='/confirm' element={<Confirm/>} />
-        <Route path='confirm-email' element={<ConfirmEmail/>} />
+        <Route path='/confirm-email' element={<ConfirmEmail/>} />
         <Route path='/legal' element={<Legal/>} />
         
       </Routes>

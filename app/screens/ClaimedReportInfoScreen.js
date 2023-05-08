@@ -317,6 +317,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
             </TouchableOpacity>
           </View>
 
+          {reportData.phone_no ?
           <View style={styles.row}>
             <TouchableOpacity
               onPress={() => 
@@ -331,6 +332,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
               </View>
             </TouchableOpacity>
           </View>
+          : null}
 
           <View style={styles.row}>
             <View style={styles.nameContainer}>

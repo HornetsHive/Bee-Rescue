@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Pane, Heading, majorScale, Button, toaster, Paragraph} from 'evergreen-ui'
+import { Pane, Text, Heading, majorScale, Button, toaster, Paragraph} from 'evergreen-ui'
 import { useNavigate, Link } from "react-router-dom";
 import Axios from 'axios';
 
@@ -143,10 +143,7 @@ export default function BRForm({mobile}) {
     if(!form.email){
       newErrors.email = "This field is required"
     }
-    if(!form.phone_no){
-      newErrors.phone_no = "This field is required"
-    }
-    if(form.phone_no.length < 14){
+    if(form.phone_no && form.phone_no.length < 14){
       newErrors.phone_no = "Please enter a valid phone number"
     }
     if(!form.propertyType){
@@ -241,7 +238,8 @@ export default function BRForm({mobile}) {
 
   return(
     <Pane
-      className="form"
+      id="form"
+      backgroundColor="white"
       elevation={1}
       borderRadius='1em'
       height="fit-content"
@@ -309,7 +307,7 @@ export default function BRForm({mobile}) {
 
           {/*phone*/}
           <FormTextEntry
-            required={true}
+            required={false}
             form={form}
             setForm={setForm}
             errors={errors}
@@ -318,6 +316,17 @@ export default function BRForm({mobile}) {
             name="phone_no"
             phone={true}
           />
+          <Text
+            fontFamily="Louis-George-Cafe"
+            color="muted"
+            size="300"
+            align="left"
+            width="70%"
+            marginLeft="20px"
+          >
+            Add phone number for calls/texts from Beekeeper
+          </Text>
+
         </Pane>
 
         {/*------------ ADDRESS ------------*/}
