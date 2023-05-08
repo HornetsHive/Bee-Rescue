@@ -23,6 +23,7 @@ import {
 
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
+import {KEY} from '@env';
 
 export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -73,7 +74,7 @@ export default function AccountScreen({ route, navigation }) {
 
   async function getUser() {
     const res = await Axios.get("https://beerescue.net:3001/bk_getUser", {
-      params: { bk_id: userID, key: process.env.REACT_APP_KEY },
+      params: { bk_id: userID, key: KEY },
     })
       .then((res) => {
         var id = res.data[0].bk_id;
@@ -161,7 +162,7 @@ export default function AccountScreen({ route, navigation }) {
         city: city,
         zip: zip,
         bk_id: userID,
-        key: process.env.REACT_APP_KEY
+        key: KEY
       }),
         Alert.alert("", "Changes Saved", [{ text: "OK" }]);
     } catch (error) {

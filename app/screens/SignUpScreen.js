@@ -15,6 +15,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
+import {KEY} from '@env';
 
 function isValidEmail(email) {
   var regex =
@@ -78,8 +79,9 @@ export default function SignUpScreen({ navigation }) {
   }
 
   async function getUser() {
+    console.log(KEY);
     await Axios.get("https://beerescue.net:3001/bk_user", {
-      params: { email: email, key: process.env.REACT_APP_KEY },
+      params: { email: email, key: KEY },
     })
       .then((res) => {
         var data = res.data;

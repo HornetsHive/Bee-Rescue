@@ -17,6 +17,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { proc } from "react-native-reanimated";
+import {KEY} from '@env';
 
 //set the format for the phone number text entry
 function formatPhoneNumber(value) {
@@ -124,7 +125,7 @@ export default function PreferencesScreen({ route, navigation }) {
           address: address,
           city: city,
           zip: zip,
-          key: process.env.REACT_APP_KEY
+          key: KEY
         });
   
         console.log("User created!");
@@ -171,7 +172,7 @@ export default function PreferencesScreen({ route, navigation }) {
   async function navigateHome() {
     // Get the beekeeper id that matches entered email and pass to verify login
     const res = await Axios.get("https://beerescue.net:3001/bk_get", {
-      params: { email: userEmail, pass: userPass, key: process.env.REACT_APP_KEY },
+      params: { email: userEmail, pass: userPass, key: KEY },
     }).catch(function (error) {
       console.log(error);
       Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);

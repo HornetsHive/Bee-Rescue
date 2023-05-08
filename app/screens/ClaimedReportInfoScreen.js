@@ -16,6 +16,7 @@ import {
   Alert,
   Linking
 } from "react-native";
+import {KEY} from '@env';
 
 export default function ClaimedReportInfoScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -28,7 +29,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
     console.log("Completing report.");
     Axios.post("https://beerescue.net:3001/complete_report", {
       r_id: reportID,
-      key: process.env.REACT_APP_KEY
+      key: KEY
     })
       .then(function (response) {
         console.log(response.data);
@@ -48,7 +49,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
     console.log("Abandoning report.");
     Axios.post("https://beerescue.net:3001/abandon_report", {
       r_id: reportID,
-      key: process.env.REACT_APP_KEY
+      key: KEY
     })
       .then(function (response) {
         console.log(response.data);
@@ -211,7 +212,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
     Axios.get("https://beerescue.net:3001/report_data", {
       params: {
         r_id: reportID,
-        key: process.env.REACT_APP_KEY
+        key: KEY
       },
     })
       .then((response) => {

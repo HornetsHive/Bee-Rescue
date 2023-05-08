@@ -17,6 +17,7 @@ import {
 
 import MyReportRibbon from "../components/MyReportRibbon";
 import HomeButtonFooter from "../components/HomeButtonFooter";
+import {KEY} from '@env';
 
 export default function MyReportsHomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -24,7 +25,7 @@ export default function MyReportsHomeScreen({ route, navigation }) {
 
   const getClaimedReports = async () => {
     await Axios.get("https://beerescue.net:3001/bk_claimedReports", {
-      params: { bk_id: userID, key: process.env.REACT_APP_KEY },
+      params: { bk_id: userID, key: KEY },
     })
       .then((res) => {
         if (Array.isArray(res.data) && res.data.length > 0) {

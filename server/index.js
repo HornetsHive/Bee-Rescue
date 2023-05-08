@@ -29,7 +29,13 @@ function generateConfirmationCode() {
 }
 
 function isSigned(key) {
-  if (key == process.env.ACCESS_KEY) return 1;
+  console.log("Client key: " + key);
+  console.log("Host key: " + process.env.ACCESS_KEY);
+  if (key == process.env.ACCESS_KEY) {
+    console.log("Key match!");
+    return 1;
+  } 
+  console.log("Key mismatch!");
   return 0;
 }
 
@@ -539,7 +545,7 @@ app.use("/claim_report", (req, res) => {
 // Fetches a user email and bk_id from the Beekeepers table
 app.get("/bk_user", (req, res) => {
   const email = req.query.email;
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSigned(req.query.key)) return res.status(400).send("Bad key.");
 
   const sqlQuery = "SELECT email, bk_id FROM beekeepers WHERE email = ?;";
   db.query(sqlQuery, [email], (err, result) => {
@@ -552,7 +558,7 @@ app.get("/bk_user", (req, res) => {
 //not being used as of now
 app.get("/bk_pass", (req, res) => {
   const bk_id = req.query.bk_id;
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSigned(req.query.key)) return res.status(400).send("Bad key.");
 
   const sqlQuery = "SELECT email, pass FROM beekeepers WHERE bk_id = ?";
   db.query(sqlQuery, [bk_id], (err, result) => {
@@ -571,7 +577,7 @@ app.get("/bk_get", (req, res) => {
   //MUST use query when making a get request to the database!
   const email = req.query.email;
   const pass = req.query.pass;
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSigned(req.query.key)) return res.status(400).send("Bad key.");
 
   //select the bk using the email then check the hashed password
   const sqlQuery = "SELECT * FROM beekeepers WHERE email = ?";
@@ -596,7 +602,7 @@ app.get("/bk_get", (req, res) => {
 
 app.get("/bk_getUser", (req, res) => {
   const bk_id = req.query.bk_id;
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSigned(req.query.key)) return res.status(400).send("Bad key.");
   const sqlQuery = "SELECT * FROM beekeepers WHERE bk_id = ?;";
   db.query(sqlQuery, [bk_id], (err, result) => {
     if (err) return res.status(500).send(err.message);
@@ -606,7 +612,7 @@ app.get("/bk_getUser", (req, res) => {
 
 // Fetch bee reports to display on the app
 app.get("/bk_appReports", (req, res) => {
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSigned(req.query.key)) return res.status(400).send("Bad key.");
   const sqlQuery =
     "SELECT * FROM reports WHERE active = false AND confirmed = true;";
   db.query(sqlQuery, (err, result) => {
@@ -618,7 +624,7 @@ app.get("/bk_appReports", (req, res) => {
 // Fetches reports a beekeeper has claimed for MyReports for a report to show here active must be true
 app.get("/bk_claimedReports", (req, res) => {
   const bk_id = req.query.bk_id;
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSigned(req.query.key)) return res.status(400).send("Bad key.");
 
   const sqlQuery =
     "SELECT * FROM reports JOIN active_reports ON reports.r_id = active_reports.r_id WHERE reports.active = true AND active_reports.bk_id = ?;";
@@ -632,7 +638,7 @@ app.get("/bk_claimedReports", (req, res) => {
 // Fetches reports a beekeeper has completed for MyReports
 app.get("/bk_completedReports", (req, res) => {
   const bk_id = req.query.bk_id;
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSigned(req.query.key)) return res.status(400).send("Bad key.");
 
   const sqlQuery = "SELECT * FROM report_archive WHERE bk_id = ?";
   db.query(sqlQuery, [bk_id], (err, result) => {
@@ -670,7 +676,7 @@ app.get("/debug-report", (req, res) => {
 //fetches all info for a specifc report
 app.get("/report_data", (req, res) => {
   const r_id = req.query.r_id;
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSigned(req.query.key)) return res.status(400).send("Bad key.");
 
   const sqlQuery = "SELECT * FROM reports WHERE r_id = ?;";
   db.query(sqlQuery, [r_id], (err, result) => {
@@ -681,7 +687,7 @@ app.get("/report_data", (req, res) => {
 
 app.get("/bk_getFull", (req, res) => {
   const bk_id = req.query.bk_id;
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSigned(req.query.key)) return res.status(400).send("Bad key.");
 
   const sqlQuery =
     "select * from beekeepers NATURAL JOIN qualifications WHERE bk_id = ?;";

@@ -17,6 +17,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
+import {KEY} from '@env';
 
 export default function LoginScreen({ navigation }) {
   const [userID, setUserID] = useState("");
@@ -53,6 +54,7 @@ export default function LoginScreen({ navigation }) {
   // Get the beekeeper id that matches entered email and pass to verify login
   async function attemptLogin() {
     console.log("attempting login");
+    console.log("Key: " + KEY);
     //reset errors
     resetErrors();
 
@@ -78,10 +80,10 @@ export default function LoginScreen({ navigation }) {
         }
         return;
       }
-
+      
       //grab the user info from db, password is checked server side and then whole row is sent back, else null
       const res = await Axios.get("https://beerescue.net:3001/bk_get", {
-        params: { email: enteredEmail, pass: enteredPass, key: process.env.REACT_APP_KEY },
+        params: { email: enteredEmail, pass: enteredPass, key: KEY },
       })
         .then((res) => {
           var id = res.data[0].bk_id;

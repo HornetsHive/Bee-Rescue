@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { proc } from "react-native-reanimated";
+import {KEY} from '@env';
 
 function isValidPassword(pass) {
   var strongRegex =
@@ -89,7 +90,7 @@ export default function ForgotPassScreen({ navigation }) {
 
     // check if the email entered is in the database
     await Axios.get("https://beerescue.net:3001/bk_user", {
-      params: { email: enteredEmail, key: process.env.REACT_APP_KEY },
+      params: { email: enteredEmail, key: KEY },
     })
       .then((res) => {
         if (res != null && res != undefined) {
@@ -130,7 +131,7 @@ export default function ForgotPassScreen({ navigation }) {
     Axios.post("https://beerescue.net:3001/sendCode", {
       email: enteredEmail,
       code: code,
-      key: process.env.REACT_APP_KEY
+      key: KEY
     }).then(() => {
       console.log("email sent");
     });
@@ -179,7 +180,7 @@ export default function ForgotPassScreen({ navigation }) {
     Axios.post("https://beerescue.net:3001/bk_pass_update", {
       pass: pass,
       bk_id: userID,
-      key: process.env.REACT_APP_KEY
+      key: KEY
     }).then(() => {
       console.log("password updated");
     });
