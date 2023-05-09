@@ -119,7 +119,7 @@ export default function HomeScreen({ route, navigation }) {
       var formattedLocation = report.address + ", " + report.city;
       var rawDate = report.rdate;
       var formattedDate = makeReadableDate(rawDate);
-      var formattedArea = report.city + ": (" + report.zip + ")";
+      var formattedArea = report.city + ": (" + report.zip.slice(0,5) + ")";
 
       var toPush = new formattedReport(
         report.r_id,
