@@ -28,28 +28,6 @@ const sendmail = require('sendmail-tls')({
   smtpHost: '45.33.38.54' // Default: -1 - extra smtp host after resolveMX
 })
 
-/*
-let transporter = nodemailer.createTransport({
-  host: '45.33.38.54',
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  auth: {
-    user: process.env.POSTFIX_USER, 
-    pass: process.env.POSTFIX_PASS, 
-  },
-  dkim: {
-    domainName: "BeeRescue.net",
-    privateKey: fs.readFileSync('/app/dkim/default.private', 'utf8'),
-    keySelector: 'default'
-  },
-  tls: {
-    // do not fail on invalid certs
-    rejectUnauthorized: false,
-  },
-});
-*/
-
 //hardcode these values if you are running the server locally
 const gmapsAPIKey = process.env.GMAPS_API_KEY;
 //SQL server connection
@@ -78,6 +56,17 @@ function isSigned(key) {
   return 0;
 }
 
+function isSignedWeb(key) {
+  console.log("Client key: " + key);
+  console.log("Host key: " + process.env.ACCESS_KEY_WEB);
+  if (key == process.env.ACCESS_KEY_WEB) {
+    console.log("Key match!");
+    return 1;
+  } 
+  console.log("Key mismatch!");
+  return 0;
+}
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -96,7 +85,7 @@ app.get("/mailtest", (req, res) => {
 //reports database insert
 app.post("/insert", async (req, res) => {
   const conf_code = generateConfirmationCode();
-  if (!isSigned(req.body.key)) return res.status(400).send("Bad key.");
+  if (!isSignedWeb(req.body.key)) return res.status(400).send("Bad key.");
 
   try {
     const coords = await getCoordinates(
