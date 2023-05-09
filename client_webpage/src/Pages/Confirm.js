@@ -11,7 +11,7 @@ export default function Confirm(){
           heading = "Thank you for submitting your report!"
           text ={
           <>
-            Your Bee Rescue report has been submitted.<br/><br/> You will receieve an email receipt shortly to confirm your submission.
+            Your Bee Rescue report has been submitted.<br/><br/> You will receieve an email receipt shortly to confirm your submission.<br/><br/> <b>Please check your spam folder</b>
           </>
           }
         />
