@@ -20,7 +20,7 @@
     "install": "^0.13.0",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.21",
-    "sendmail": "^1.6.1",
+    "sendmail-tls": "^1.6.1",
     "supertest": "^6.3.3"
   },
   "devDependencies": {

@@ -1,5 +1,4 @@
 const express = require("express");
-const sendmail = require('sendmail')();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
@@ -10,6 +9,58 @@ const axios = require("axios");
 const https = require("https");
 const http = require("http");
 const fs = require("fs");
+
+const sendmail = require('sendmail-tls')({
+  logger: {
+    debug: console.log,
+    info: console.info,
+    warn: console.warn,
+    error: console.error
+  },
+  silent: false,
+  dkim: { // Default: False
+    privateKey: fs.readFileSync('/app/dkim/default.private', 'utf8'),
+    keySelector: 'default'
+  },
+  devPort: false, // Default: False
+  devHost: 'localhost', // Default: localhost
+  smtpPort: 25, // Default: 25
+  smtpHost: '45.33.38.54' // Default: -1 - extra smtp host after resolveMX
+})
+
+/*
+let transporter = nodemailer.createTransport({
+  host: '45.33.38.54',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: process.env.POSTFIX_USER, 
+    pass: process.env.POSTFIX_PASS, 
+  },
+  dkim: {
+    domainName: "BeeRescue.net",
+    privateKey: fs.readFileSync('/app/dkim/default.private', 'utf8'),
+    keySelector: 'default'
+  },
+  tls: {
+    // do not fail on invalid certs
+    rejectUnauthorized: false,
+  },
+});
+*/
+
+sendmail({
+  from: 'updates@BeeRescue.net',
+  to: 'fisher4562@gmail.com',
+  envelope: {
+    from: 'BeeRescue Updates <updates@BeeRescue.net>', // used as MAIL FROM: address for SMTP
+    to: 'fisher4562@gmail.com' // used as RCPT TO: address for SMTP
+  }
+}, (err, info) => {
+  if(err){console.log(err);}
+  console.log(info);
+});
 
 //hardcode these values if you are running the server locally
 const gmapsAPIKey = process.env.GMAPS_API_KEY;
@@ -50,14 +101,6 @@ app.get("/mailtest", (req, res) => {
     subject: "Sending email with nodemailer",
     text: "Hello world",
   };
-  sendmail(mailoptionstest, function (err, reply) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    console.log("Sent: " + reply);
-    return res.status(200).send("Action Successful");
-  });
 });
 
 //SERVER POSTS//
@@ -135,7 +178,7 @@ function sendConfirmationEmail(email, fname, conf_code) {
     "Hi " +
     fname +
     ",\n" +
-    "Thank you for submitting your report. We will notify the beekeepers in your area, and you will receive a follow-up email when an available beekeeper claims your report.\n\n Important! Please click this link to confirm your report:\n" +
+    "Thank you for submitting your report. We will notify the beekeepers in your area, and you will receive a follow-up email when an available beekeeper claims your report.\n\n Please follow the link below to confirm your report:\n" +
     confirmationLink;
   const confirmReportOptions = {
     from: "BeeRescue Updates <updates@BeeRescue.net>",
@@ -149,7 +192,6 @@ function sendConfirmationEmail(email, fname, conf_code) {
       console.log(err);
     } else {
       console.log("Sent: " + info.response);
-      return res.send(200).send("Action Successful");
     }
   });
 }
