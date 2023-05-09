@@ -65,6 +65,26 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       });
   };
 
+  const removeReport = () => {
+    console.log("Removing report.");
+    Axios.post("https://beerescue.net:3001/remove_report", {
+      r_id: reportID,
+      key: KEY
+    })
+      .then(function (response) {
+        console.log(response.data);
+        navigation.navigate("MyReportsHomeScreen", {
+          screen: "MyReportsHomeScreen",
+          bk_id: userID,
+        });
+      })
+      .catch(function (error) {
+        // If error, print the error
+        console.log(error);
+        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+      });
+  }
+
   // Shows an alert asking the user confirmation for completing the report
   const confirmComplete = () => {
     Alert.alert("Confirm", "Are you sure you want to complete this report?", [
@@ -103,22 +123,17 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
   const reasonForAbandon = () => {
     Alert.alert(
       "Abandoning report",
-      "Is there a specific reason for abandoning this report?",
+      "Is there an issue which prevents this report from being completed?",
       [
         {
-          // No/other reason
-          text: "Other",
-          onPress: () => abandonReport(),
-          style: "cancel",
-        },
-        {
           // Exterminator
-          text: "Needs exterminator",
-          onPress: () => abandonReport(),
+          text: "Yes, remove from app",
+          onPress: () => removeReport(),
+          style: "cancel"
         },
         {
-          // No bees
-          text: "No bee swarm",
+          // No/other reason
+          text: "No",
           onPress: () => abandonReport(),
         },
       ]
