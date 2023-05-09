@@ -3,9 +3,10 @@ import * as React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
-import { useState, useEffect, useRef } from "react";
-import { Platform } from "react-native";
-import * as Device from "expo-device";
+//import { useState, useEffect, useRef } from "react";
+//import { Platform } from "react-native";
+//import * as Device from "expo-device";
+
 
 import AccountScreen from "./screens/AccountScreen";
 import ClaimedReportInfoScreen from "./screens/ClaimedReportInfoScreen";
@@ -28,6 +29,7 @@ Notifications.setNotificationHandler({
   }),
 });
 
+/*
 // Can use this function below OR use Expo's Push Notification Tool from: https://expo.dev/notifications
 async function sendPushNotification(expoPushToken) {
   const message = {
@@ -79,9 +81,11 @@ async function registerForPushNotificationsAsync() {
 
   return token;
 }
+*/
 
 // --------------------- Start of App ---------------------
 export default function App() {
+  /*
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
@@ -108,6 +112,7 @@ export default function App() {
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+  */
 
   return (
     <NavigationContainer>
