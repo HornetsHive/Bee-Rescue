@@ -353,7 +353,6 @@ export default function BRForm({mobile}) {
           />
 
           <FormTextEntry
-            required={false}
             form={form}
             setForm={setForm}
             errors={errors}
