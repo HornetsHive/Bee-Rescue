@@ -50,18 +50,6 @@ let transporter = nodemailer.createTransport({
 });
 */
 
-sendmail({
-  from: 'updates@BeeRescue.net',
-  to: 'fisher4562@gmail.com',
-  envelope: {
-    from: 'BeeRescue Updates <updates@BeeRescue.net>', // used as MAIL FROM: address for SMTP
-    to: 'fisher4562@gmail.com' // used as RCPT TO: address for SMTP
-  }
-}, (err, info) => {
-  if(err){console.log(err);}
-  console.log(info);
-});
-
 //hardcode these values if you are running the server locally
 const gmapsAPIKey = process.env.GMAPS_API_KEY;
 //SQL server connection
