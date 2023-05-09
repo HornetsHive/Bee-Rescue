@@ -181,7 +181,7 @@ export default function ReportInfoScreen({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
-        <View style={{ height: 57, top: 10, bottom: 100 }}>
+        <View style={{ height: 57, top: 10, bottom: 100, marginBottom: 10 }}>
           <TouchableOpacity
             style={{
               padding: 8,
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   header: {
-    flex: 1,
+    flex: 0.6,
     flexDirection: "row",
     backgroundColor: "white",
     borderColor: "darkgray",

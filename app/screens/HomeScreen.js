@@ -29,6 +29,7 @@ export default function HomeScreen({ route, navigation }) {
   });
   const [formattedReportArray, updateReportArray] = useState([]);
   const [reportCoordinates, updateReportCoordinates] = useState([]);
+  const [reverseOrder, setReverseOrder] = useState(false);
   const isFocused = useIsFocused();
 
   const [loaded] = useFonts({
@@ -143,10 +144,13 @@ export default function HomeScreen({ route, navigation }) {
     });
   }
 
-  const reverseReportOrder = () => {
-    //reversing the array does not reverse the placement of reports on the screen
-    //updateReportArray(formattedReportArray.reverse());
+  const toggleReverseOrder = () => {
+    setReverseOrder(!reverseOrder);
   };
+
+  const reports = reverseOrder
+    ? formattedReportArray.slice().reverse()
+    : formattedReportArray;
 
   function makeReadableDate(dateString) {
     // Create a Date object from the dateString (in local time)
@@ -278,7 +282,7 @@ export default function HomeScreen({ route, navigation }) {
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-evenly",
+            justifyContent: "space-around",
             alignItems: "center",
             borderBottomWidth: 1,
             borderTopWidth: 1,
@@ -287,7 +291,7 @@ export default function HomeScreen({ route, navigation }) {
         >
           <TouchableOpacity
             onPress={() => {
-              reverseReportOrder();
+              toggleReverseOrder();
             }}
           >
             <Image
@@ -295,7 +299,6 @@ export default function HomeScreen({ route, navigation }) {
               style={styles.iconButton}
             ></Image>
           </TouchableOpacity>
-
           <TouchableOpacity
             style={styles.textContainer}
             onPress={() => {
@@ -340,9 +343,9 @@ export default function HomeScreen({ route, navigation }) {
         )}
         <ScrollView>
           {/*---------------Start of scroll---------------*/}
-          {formattedReportArray.map((report, key) => (
+          {reports.map((report, index) => (
             <ReportRibbon
-              key={key}
+              key={index}
               id={report.reportID}
               bk_id={userID}
               location={report.formattedLocation}

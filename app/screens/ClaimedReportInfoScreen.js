@@ -261,11 +261,11 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
-        <View style={{ height: 57, top: 10, bottom: 100 }}>
+        <View style={{ height: 57, top: 10, bottom: 100, width:"80%", alignSelf:"center"}}>
           <TouchableOpacity
             style={{
               padding: 8,
-              margin: 10,
+              margin: 8,
               borderRadius: 10,
               backgroundColor: "#d3e954",
             }}
@@ -276,11 +276,11 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{ height: 57, top: 10, bottom: 100 }}>
+        <View style={{ height: 57, top: 10, bottom: 100, width:"80%", alignSelf:"center", marginBottom: 10 }}>
           <TouchableOpacity
             style={{
               padding: 8,
-              margin: 10,
+              margin: 8,
               borderRadius: 10,
               backgroundColor: "#d3e954",
             }}
@@ -437,7 +437,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   header: {
-    flex: 1,
+    flex: 0.6,
     flexDirection: "row",
     backgroundColor: "white",
     borderColor: "darkgray",

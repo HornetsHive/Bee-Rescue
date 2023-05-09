@@ -321,10 +321,12 @@ export default function AccountScreen({ route, navigation }) {
               }}
             ></TextInput>
           </View>
+          {/*
           <Text style={styles.smallText}>
             Note that the swarm notifications you receive are determined by this
             location entered.
           </Text>
+          */}
           {edited1 ? (
             <View style={{ flex: 1, flexDirection: "row", marginTop: 20 }}>
               <View style={styles.saveButton}>
