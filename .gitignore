@@ -49,7 +49,3 @@ git-update.sh
 restart.sh
 up.sh
 attach.sh
-
-# db stuff
-SQLsetup.txt
-SQLdrop.txt
