@@ -48,8 +48,8 @@ export default function HomeScreen({ route, navigation }) {
   }
 
   async function getuserHomeCoordinates() {
-    const lat = JSON.parse(await AsyncStorage.getItem("homeLat"));
-    const lng = JSON.parse(await AsyncStorage.getItem("homeLng"));
+    const lat = parseFloat(JSON.parse(await AsyncStorage.getItem("homeLat")));
+    const lng = parseFloat(JSON.parse(await AsyncStorage.getItem("homeLng")));
     console.log("getuserHomeCoordinates: " + lat + ", " + lng);
     if (lat != null && lng != null) {
       console.log("Home coordinates loaded from storage");

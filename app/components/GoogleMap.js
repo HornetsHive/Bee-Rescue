@@ -28,7 +28,7 @@ export default function GoogleMap({ reportCoordinates, homeCoordinates, bk_id}) 
         {reportCoordinates.map((coord) => (
           <Marker
             key={coord.id}
-            coordinate={{ latitude: coord.latitude, longitude: coord.longitude }}
+            coordinate={{ latitude: parseFloat(coord.latitude), longitude: parseFloat(coord.longitude) }}
           >
             <Callout
               onPress={() => handleMarkerPress(coord.id)}
