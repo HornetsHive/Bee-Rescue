@@ -2,11 +2,12 @@ import React from 'react';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
+import {MAPS_API_KEY} from '@env';
 
 export default function GoogleMap({ reportCoordinates, homeCoordinates, bk_id}) {
   const region = {
-    latitude: homeCoordinates.latitude,
-    longitude: homeCoordinates.longitude,
+    latitude: parseFloat(homeCoordinates.latitude),
+    longitude: parseFloat(homeCoordinates.longitude),
     latitudeDelta: 0.175,
     longitudeDelta: 0.175,
   };
@@ -24,7 +25,7 @@ export default function GoogleMap({ reportCoordinates, homeCoordinates, bk_id}) 
 
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} region={region}>
+      <MapView style={styles.map} region={region} key={MAPS_API_KEY}>
         {reportCoordinates.map((coord) => (
           <Marker
             key={coord.id}

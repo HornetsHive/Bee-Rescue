@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import {MAPS_API_KEY} from '@env';
 
 export default function SinglePinGoogleMap({reportLat, reportLong}) {
   const lat = parseFloat(reportLat);
@@ -14,7 +15,7 @@ export default function SinglePinGoogleMap({reportLat, reportLong}) {
 
   return (
     <View style={styles.container}>
-      <MapView style={styles.map} region={region} scrollEnabled={false}>
+      <MapView style={styles.map} region={region} scrollEnabled={false} key={MAPS_API_KEY}>
           <Marker
             coordinate={{ latitude: lat, longitude: long }}
           >
