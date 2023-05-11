@@ -21,6 +21,7 @@ import SignUpScreen from "./screens/SignUpScreen";
 import PrivacyScreen from "./screens/PrivacyScreen";
 
 const Stack = createNativeStackNavigator();
+/*
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -29,7 +30,6 @@ Notifications.setNotificationHandler({
   }),
 });
 
-/*
 // Can use this function below OR use Expo's Push Notification Tool from: https://expo.dev/notifications
 async function sendPushNotification(expoPushToken) {
   const message = {
