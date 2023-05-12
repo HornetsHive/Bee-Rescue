@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Bee Rescue",
+    "slug": "BeeRescue",
+    "version": "1.0.0",
+    "sdkVersion": "48.0.0",
+    "platforms": [],
+    "android": {
+      "package": "com.HornetsHive.BeeRescue"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c63dfde6-0619-4e08-a572-e4c20f50bdd8"
+      }
+    }
+  },
+  "android": {
+    "package": "com.HornetsHive.BeeRescue",
+    "versionCode": 1,
+    "adaptiveIcon": {
+      "foregroundImage": "./app/assets/iconApp.png",
+      "backgroundColor": "#FFFFFF"
+    }
+  }
+}
