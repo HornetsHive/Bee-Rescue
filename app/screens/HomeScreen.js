@@ -51,7 +51,8 @@ export default function HomeScreen({ route, navigation }) {
     const lat = parseFloat(JSON.parse(await AsyncStorage.getItem("homeLat")));
     const lng = parseFloat(JSON.parse(await AsyncStorage.getItem("homeLng")));
     console.log("getuserHomeCoordinates: " + lat + ", " + lng);
-    if (lat != null && lng != null) {
+    // if the coords aren't there they return as NaN, not null
+    if (!isNaN(lat) && !isNaN(lng)) {
       console.log("Home coordinates loaded from storage");
       setHomeCoords({ latitude: lat, longitude: lng });
     } else {

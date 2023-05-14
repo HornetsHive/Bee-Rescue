@@ -209,9 +209,11 @@ export default function AccountScreen({ route, navigation }) {
   }
 
   async function logOut() {
-    AsyncStorage.setItem("stayLoggedIn", "");
-    AsyncStorage.setItem("storedEmail", "");
-    AsyncStorage.setItem("bk_id", "");
+    await AsyncStorage.setItem("stayLoggedIn", "");
+    await AsyncStorage.setItem("storedEmail", "");
+    await AsyncStorage.setItem("bk_id", "");
+    await AsyncStorage.removeItem("homeLat");
+    await AsyncStorage.removeItem("homeLng");
     console.log("logging out");
 
     navigation.navigate("LoginScreen", {

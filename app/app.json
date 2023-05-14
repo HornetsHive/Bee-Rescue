@@ -33,11 +33,6 @@
         ],
         "googleServicesFile": "./google-services.json",
         "versionCode": 1
-      },
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyB2UXCGw1CCXq9GJVsyu-j6W75q2PGd5R8"
-        }
       }
     },
     "web": {}
