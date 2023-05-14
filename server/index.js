@@ -31,11 +31,38 @@ const sendmail = require('sendmail-tls')({
 //hardcode these values if you are running the server locally
 const gmapsAPIKey = process.env.GMAPS_API_KEY;
 //SQL server connection
-const db = mysql.createConnection({
+db = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
+});
+
+function handleDisconnect() {
+  db.destroy(); // Close the current connection 
+
+  // Create a new connection
+  const newdb = mysql.createConnection({
+    host: process.env.MYSQL_HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
+  });
+
+  // Assign the new connection to the global connection variable
+  db = newdb
+
+  console.log('Reconnected to MySQL server');
+}
+
+db.on('error', (err) => {
+  console.error('MySQL connection error:', err);
+  if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+    // Re-establish connection if the connection is lost
+    handleDisconnect();
+  } else {
+    throw err;
+  }
 });
 
 process.env.PATH = process.env.PATH + ':/usr/sbin';
@@ -46,13 +73,13 @@ function generateConfirmationCode() {
 }
 
 function isSigned(key) {
-  console.log("Client key: " + key);
-  console.log("Host key: " + process.env.ACCESS_KEY);
+  //console.log("Client key: " + key);
+  //console.log("Host key: " + process.env.ACCESS_KEY);
   if (key == process.env.ACCESS_KEY) {
-    console.log("Key match!");
+    //console.log("Key match!");
     return 1;
   } 
-  console.log("Key mismatch!");
+  console.log("Key mismatch from client connection");
   return 0;
 }
 
@@ -70,15 +97,6 @@ function isSignedWeb(key) {
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get("/mailtest", (req, res) => {
-  const mailoptionstest = {
-    from: 'BeeRescue Updates <updates@BeeRescue.net>',
-    to: 'matsmt@tuta.io',
-    subject: "Sending email with nodemailer",
-    text: "Hello world",
-  };
-});
 
 //SERVER POSTS//
 
