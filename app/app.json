@@ -33,6 +33,9 @@
         "googleServicesFile": "./google-services.json",
         "versionCode": 2
       },
+      "defaultConfig": {
+        "versionCode": 2
+      },
       "package": "com.HornetsHive.BeeRescue"
     },
     "web": {},
