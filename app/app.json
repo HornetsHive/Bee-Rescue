@@ -2,13 +2,12 @@
   "expo": {
     "name": "BeeRescue",
     "slug": "BeeRescue",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "default",
     "packagerOpts": {
       "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"],
       "config": "metro.config.js"
     },
-
     "userInterfaceStyle": "light",
     "splash": {
       "resizeMode": "contain",
@@ -25,16 +24,22 @@
       "adaptiveIcon": {
         "backgroundColor": "#FFFFFF",
         "useNextNotificationsApi": true,
-        "package": "com.SABA.BeeRescue",
+        "package": "com.HornetsHive.BeeRescue",
         "permissions": [
           "READ_EXTERNAL_STORAGE",
           "WRITE_EXTERNAL_STORAGE",
           "NOTIFICATIONS"
         ],
         "googleServicesFile": "./google-services.json",
-        "versionCode": 1
-      }
+        "versionCode": 1.1
+      },
+      "package": "com.HornetsHive.BeeRescue"
     },
-    "web": {}
+    "web": {},
+    "extra": {
+      "eas": {
+        "projectId": "c63dfde6-0619-4e08-a572-e4c20f50bdd8"
+      }
+    }
   }
 }

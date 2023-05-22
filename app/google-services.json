@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:329770443097:android:8c1283526de7e18d546c48",
         "android_client_info": {
-          "package_name": "com.SABA.BeeRescue"
+          "package_name": "com.HornetsHive.BeeRescue"
         }
       },
       "oauth_client": [
@@ -30,5 +30,5 @@
       }
     }
   ],
-  "configuration_version": "1"
+  "configuration_version": "1.1"
 }
