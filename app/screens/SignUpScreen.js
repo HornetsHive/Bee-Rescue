@@ -8,6 +8,7 @@ import Axios from "axios";
 import {
   Text,
   View,
+  Alert,
   Image,
   Button,
   TextInput,
@@ -15,7 +16,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import {KEY} from '@env';
+import { KEY } from "@env";
 
 function isValidEmail(email) {
   var regex =
@@ -95,7 +96,11 @@ export default function SignUpScreen({ navigation }) {
       })
       .catch(function (error) {
         if (error) console.log(error);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
   }
 

@@ -23,7 +23,7 @@ import {
 
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
-import {KEY} from '@env';
+import { KEY } from "@env";
 
 export default function AccountScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -91,7 +91,11 @@ export default function AccountScreen({ route, navigation }) {
       })
       .catch(function (error) {
         if (error) console.log(error);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
     return res;
   }
@@ -144,11 +148,17 @@ export default function AccountScreen({ route, navigation }) {
     } catch (error) {
       console.log(error);
       if (error.response.data === "Failed to get coordinates") {
-        Alert.alert("Invalid Address", "Please enter a valid address", [{ text: "OK" }] );
+        Alert.alert("Invalid Address", "Please enter a valid address", [
+          { text: "OK" },
+        ]);
         console.log("user", initialData);
         mapUserData(initialData);
       } else {
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }] );
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
         mapUserData(initialData);
       }
     }
@@ -162,12 +172,16 @@ export default function AccountScreen({ route, navigation }) {
         city: city,
         zip: zip,
         bk_id: userID,
-        key: KEY
+        key: KEY,
       }),
         Alert.alert("", "Changes Saved", [{ text: "OK" }]);
     } catch (error) {
       console.error("Error in updateNewUser: " + error.response.data);
-      Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+      Alert.alert(
+        error.message,
+        "Something went wrong processing your request",
+        [{ text: "OK" }]
+      );
       mapUserData(initialData);
     }
   };
@@ -193,7 +207,14 @@ export default function AccountScreen({ route, navigation }) {
   }
 
   function editEmail() {
-    Alert.alert("", "Cannot edit email", [{text: "Ok", onPress: () => {return;}}]);
+    Alert.alert("", "Cannot edit email", [
+      {
+        text: "Ok",
+        onPress: () => {
+          return;
+        },
+      },
+    ]);
   }
 
   async function attemptLogOut() {
@@ -201,7 +222,13 @@ export default function AccountScreen({ route, navigation }) {
       "",
       "Do you want to log out?",
       [
-        { text: "No", onPress: () => {return;}, style: "cancel" },
+        {
+          text: "No",
+          onPress: () => {
+            return;
+          },
+          style: "cancel",
+        },
         { text: "Yes", onPress: () => logOut() },
       ],
       { cancelable: false }
@@ -239,7 +266,6 @@ export default function AccountScreen({ route, navigation }) {
       {/* Body */}
       <View style={styles.body}>
         <ScrollView style={styles.middle} ref={scroller}>
-
           {/* Profile picture UI and upload.
           <Image
             source={
@@ -258,11 +284,11 @@ export default function AccountScreen({ route, navigation }) {
           </TouchableOpacity>
           */}
 
-      <View style={styles.logoutContainer}>
-        <TouchableOpacity onPress={attemptLogOut}>
-          <Text style={styles.smallText}>Log Out</Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.logoutContainer}>
+            <TouchableOpacity onPress={attemptLogOut}>
+              <Text style={styles.smallText}>Log Out</Text>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.aligned}>
             <Text style={styles.inputLabel}>First Name</Text>

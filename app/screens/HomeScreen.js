@@ -11,6 +11,7 @@ import Axios from "axios";
 import {
   Text,
   View,
+  Alert,
   Image,
   StatusBar,
   ScrollView,
@@ -18,7 +19,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
-import {KEY} from '@env';
+import { KEY } from "@env";
 
 export default function HomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -38,9 +39,11 @@ export default function HomeScreen({ route, navigation }) {
   });
 
   async function getUserCity() {
-    const extractTextBetweenQuotes = str => str.match(/"(.*?)"/)?.[1] || "";
+    const extractTextBetweenQuotes = (str) => str.match(/"(.*?)"/)?.[1] || "";
 
-    const city = extractTextBetweenQuotes(await AsyncStorage.getItem("storedCity"));
+    const city = extractTextBetweenQuotes(
+      await AsyncStorage.getItem("storedCity")
+    );
     console.log(city);
     if (city) {
       setCity(city);
@@ -58,7 +61,9 @@ export default function HomeScreen({ route, navigation }) {
     } else {
       console.log("Home coordinates not found in storage, getting from server");
       try {
-        const res = await Axios.get("https://beerescue.net:3001/bk_getUser", { params: { bk_id: userID, key: KEY } });
+        const res = await Axios.get("https://beerescue.net:3001/bk_getUser", {
+          params: { bk_id: userID, key: KEY },
+        });
         console.log(res.data);
         const address = res.data[0].address;
         const city = res.data[0].city;
@@ -69,12 +74,18 @@ export default function HomeScreen({ route, navigation }) {
         });
         console.log(res2.data);
 
-        await AsyncStorage.setItem("homeLat", JSON.stringify(res2.data.latitude));
-        await AsyncStorage.setItem("homeLng", JSON.stringify(res2.data.longitude));
+        await AsyncStorage.setItem(
+          "homeLat",
+          JSON.stringify(res2.data.latitude)
+        );
+        await AsyncStorage.setItem(
+          "homeLng",
+          JSON.stringify(res2.data.longitude)
+        );
         await AsyncStorage.setItem("storedAddress", JSON.stringify(address));
         await AsyncStorage.setItem("storedCity", JSON.stringify(city));
         await AsyncStorage.setItem("storedZip", JSON.stringify(zip));
-        console.log("Home coordinates saved to storage")
+        console.log("Home coordinates saved to storage");
 
         navigation.replace("HomeScreen", {
           screen: "HomeScreen",
@@ -82,11 +93,14 @@ export default function HomeScreen({ route, navigation }) {
         });
       } catch (err) {
         console.log(err.response.data);
-        Alert.alert(err.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          err.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       }
     }
   }
-
 
   function formattedReport(id, location, date, area) {
     this.reportID = id;
@@ -100,8 +114,7 @@ export default function HomeScreen({ route, navigation }) {
     try {
       const res = await Axios.get("https://beerescue.net:3001/bk_appReports", {
         params: { key: KEY },
-      })
-      .catch((error) => {
+      }).catch((error) => {
         console.log(error);
         //leaving this one commented because it will spam the user with alerts if no connection
         //Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
@@ -121,7 +134,7 @@ export default function HomeScreen({ route, navigation }) {
       var formattedLocation = report.address + ", " + report.city;
       var rawDate = report.rdate;
       var formattedDate = makeReadableDate(rawDate);
-      var formattedArea = report.city + ": (" + report.zip.slice(0,5) + ")";
+      var formattedArea = report.city + ": (" + report.zip.slice(0, 5) + ")";
 
       var toPush = new formattedReport(
         report.r_id,

@@ -7,6 +7,7 @@ import Axios from "axios";
 import {
   Text,
   View,
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -17,7 +18,7 @@ import {
 
 import MyReportRibbon from "../components/MyReportRibbon";
 import HomeButtonFooter from "../components/HomeButtonFooter";
-import {KEY} from '@env';
+import { KEY } from "@env";
 
 export default function MyReportsHomeScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -33,8 +34,14 @@ export default function MyReportsHomeScreen({ route, navigation }) {
         }
       })
       .catch(function (error) {
-        if (error.response) { console.log("Error: ", error.message); }
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        if (error.response) {
+          console.log("Error: ", error.message);
+        }
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
   };
 

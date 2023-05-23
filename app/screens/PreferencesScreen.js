@@ -17,7 +17,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { proc } from "react-native-reanimated";
-import {KEY} from '@env';
+import { KEY } from "@env";
 
 //set the format for the phone number text entry
 function formatPhoneNumber(value) {
@@ -107,14 +107,14 @@ export default function PreferencesScreen({ route, navigation }) {
         //scrollToTop();
         return;
       }
-  
+
       try {
         await saveAddressCoordsInStorage(address, city, zip);
       } catch (error) {
         console.log("Error in saveAddressCoordsInStorage: " + error);
         return;
       }
-  
+
       try {
         await Axios.post("https://beerescue.net:3001/bk_insert", {
           email: userEmail,
@@ -125,27 +125,35 @@ export default function PreferencesScreen({ route, navigation }) {
           address: address,
           city: city,
           zip: zip,
-          key: KEY
+          key: KEY,
         });
-  
+
         console.log("User created!");
         navigateHome();
       } catch (error) {
         console.log(error);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       }
     } catch (error) {
       console.error("Error in createUser: " + error);
-      Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+      Alert.alert(
+        error.message,
+        "Something went wrong processing your request",
+        [{ text: "OK" }]
+      );
     }
   };
-  
+
   const saveAddressCoordsInStorage = async (address, city, zip) => {
     try {
       const res = await Axios.get("https://beerescue.net:3001/get_coords", {
         params: { address: address, city: city, zip: zip },
       });
-  
+
       console.log("Home coordinates received: ", res.data);
       const lat = res.data.latitude;
       const lng = res.data.longitude;
@@ -159,15 +167,20 @@ export default function PreferencesScreen({ route, navigation }) {
     } catch (error) {
       console.log(error);
       if (error.response.data === "Failed to get coordinates") {
-        Alert.alert("Unknown Address", "Please enter a different address", [{ text: "OK" }]);
+        Alert.alert("Unknown Address", "Please enter a different address", [
+          { text: "OK" },
+        ]);
         throw new Error("Failed to get coordinates");
       } else {
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
         throw new Error("Failed to get coordinates");
       }
     }
   };
-  
 
   async function navigateHome() {
     // Get the beekeeper id that matches entered email and pass to verify login
@@ -175,7 +188,11 @@ export default function PreferencesScreen({ route, navigation }) {
       params: { email: userEmail, pass: userPass, key: KEY },
     }).catch(function (error) {
       console.log(error);
-      Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+      Alert.alert(
+        error.message,
+        "Something went wrong processing your request",
+        [{ text: "OK" }]
+      );
       return null;
     });
 

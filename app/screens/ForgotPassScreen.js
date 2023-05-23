@@ -8,6 +8,7 @@ import Axios from "axios";
 import {
   Text,
   View,
+  Alert,
   Image,
   Button,
   TextInput,
@@ -16,7 +17,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { proc } from "react-native-reanimated";
-import {KEY} from '@env';
+import { KEY } from "@env";
 
 function isValidPassword(pass) {
   var strongRegex =
@@ -71,7 +72,7 @@ export default function ForgotPassScreen({ navigation }) {
     styles.input
   );
 
-  var code;
+  var code, DBemail;
 
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
@@ -89,7 +90,7 @@ export default function ForgotPassScreen({ navigation }) {
     }
 
     // check if the email entered is in the database
-    await Axios.get("https://beerescue.net:3001/bk_user", {
+    const res = await Axios.get("https://beerescue.net:3001/bk_user", {
       params: { email: enteredEmail, key: KEY },
     })
       .then((res) => {
@@ -97,8 +98,8 @@ export default function ForgotPassScreen({ navigation }) {
           //map email and id from database if found
           mapUserData(res.data);
 
-          if (email == enteredEmail) {
-            //sendEmail();
+          if (DBemail == enteredEmail) {
+            sendEmail();
             setValidEmail(true);
             setShouldShow2(!shouldShow2);
             setShouldShow(!shouldShow);
@@ -112,15 +113,27 @@ export default function ForgotPassScreen({ navigation }) {
       })
       .catch(function (error) {
         if (error) console.log(error);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
+    return res;
   }
 
-  async function mapUserData(userData) {
+  function mapUserData(userData) {
     userData.map((user) => {
+      DBemail = user.email;
       setUserEmail(user.email);
       setID(user.bk_id);
     });
+
+    if (DBemail == null || DBemail == undefined || DBemail == "") {
+      console.log("not a registered email");
+      setValidEmail(false);
+      setInputStyleEmail(styles.inputError);
+    }
   }
 
   //send email to user with unique code
@@ -131,7 +144,7 @@ export default function ForgotPassScreen({ navigation }) {
     Axios.post("https://beerescue.net:3001/sendCode", {
       email: enteredEmail,
       code: code,
-      key: KEY
+      key: KEY,
     }).then(() => {
       console.log("email sent");
     });
@@ -180,7 +193,7 @@ export default function ForgotPassScreen({ navigation }) {
     Axios.post("https://beerescue.net:3001/bk_pass_update", {
       pass: pass,
       bk_id: userID,
-      key: KEY
+      key: KEY,
     }).then(() => {
       console.log("password updated");
     });

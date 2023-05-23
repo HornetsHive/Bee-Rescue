@@ -17,7 +17,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from "react-native";
-import {KEY} from '@env';
+import { KEY } from "@env";
 
 export default function LoginScreen({ navigation }) {
   const [userID, setUserID] = useState("");
@@ -32,6 +32,7 @@ export default function LoginScreen({ navigation }) {
   const [validCredentials, setValidCredentials] = useState(true);
   const [inputStylePass, setInputStylePass] = useState(styles.input);
   const [inputStyleEmail, setInputStyleEmail] = useState(styles.input);
+  var bkID = "";
 
   const [loaded] = useFonts({
     Comfortaa: require("../assets/fonts/Comfortaa-Regular.ttf"),
@@ -80,7 +81,7 @@ export default function LoginScreen({ navigation }) {
         }
         return;
       }
-      
+
       //grab the user info from db, password is checked server side and then whole row is sent back, else null
       const res = await Axios.get("https://beerescue.net:3001/bk_get", {
         params: { email: enteredEmail, pass: enteredPass, key: KEY },
@@ -96,6 +97,7 @@ export default function LoginScreen({ navigation }) {
             AsyncStorage.setItem("storedEmail", JSON.stringify(enteredEmail));
             AsyncStorage.setItem("bk_id", JSON.stringify(id));
             setUserID(id);
+            bkID = id;
 
             navigation.replace("HomeScreen", {
               screen: "HomeScreen",
@@ -107,7 +109,11 @@ export default function LoginScreen({ navigation }) {
         })
         .catch(function (error) {
           if (error) console.log(error);
-          Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+          Alert.alert(
+            error.message,
+            "Something went wrong processing your request",
+            [{ text: "OK" }]
+          );
         });
       return res;
     }
@@ -135,8 +141,8 @@ export default function LoginScreen({ navigation }) {
     }
   }
 
-  async function checkID() {
-    if (userID === "" && enteredEmail != "" && enteredPass != "") {
+  function checkID() {
+    if (bkID == "" && enteredEmail != "" && enteredPass != "") {
       console.log("wrong email or password");
       setInputStyleEmail(styles.inputError);
       setInputStylePass(styles.inputError);
@@ -146,20 +152,20 @@ export default function LoginScreen({ navigation }) {
 
   useEffect(() => {
     setLogin();
-      if (isLoggedIn) {
-        //navigate if already logged in
-        navigation.replace("HomeScreen", {
-          screen: "HomeScreen",
-          bk_id: userID,
-        });
-      } 
+    if (isLoggedIn) {
+      //navigate if already logged in
+      navigation.replace("HomeScreen", {
+        screen: "HomeScreen",
+        bk_id: userID,
+      });
+    }
   });
 
   if (!loaded) {
     return null;
   }
 
-  if(checkingIfLoggedIn){
+  if (checkingIfLoggedIn) {
     return null;
   }
 
@@ -288,6 +294,8 @@ export default function LoginScreen({ navigation }) {
                   title="Login"
                   onPress={() => {
                     attemptLogin();
+                    setInputStyleEmail(styles.input);
+                    setInputStylePass(styles.input);
                     checkID();
                   }}
                 />
@@ -325,7 +333,13 @@ export default function LoginScreen({ navigation }) {
               //navigation.navigate("", { screen: "" })
               //}
               >
-                <TouchableOpacity onPress={() => navigation.navigate("PrivacyScreen", { screen: "PrivacyScreen"})}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("PrivacyScreen", {
+                      screen: "PrivacyScreen",
+                    })
+                  }
+                >
                   <Text style={styles.hyperLinkText}>Privacy</Text>
                 </TouchableOpacity>
               </TouchableOpacity>

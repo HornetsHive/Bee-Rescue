@@ -14,7 +14,7 @@ import {
 import HomeButtonFooter from "../components/HomeButtonFooter";
 import AccountHeader from "../components/AccountHeader";
 import SinglePinGoogleMap from "../components/SinglePinGoogleMap";
-import {KEY} from '@env';
+import { KEY } from "@env";
 
 export default function ReportInfoScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -31,7 +31,7 @@ export default function ReportInfoScreen({ route, navigation }) {
     Axios.post("https://beerescue.net:3001/claim_report", {
       r_id: reportID,
       bk_id: userID,
-      key: KEY
+      key: KEY,
     })
       .then(function (response) {
         console.log(response.data);
@@ -43,7 +43,11 @@ export default function ReportInfoScreen({ route, navigation }) {
       })
       .catch(function (error) {
         console.log(error);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
   };
 
@@ -132,7 +136,7 @@ export default function ReportInfoScreen({ route, navigation }) {
     Axios.get("https://beerescue.net:3001/report_data", {
       params: {
         r_id: reportID,
-        key: KEY
+        key: KEY,
       },
     })
       .then((response) => {
@@ -142,7 +146,11 @@ export default function ReportInfoScreen({ route, navigation }) {
       })
       .catch((error) => {
         console.log(error.message);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
   }, []);
 
@@ -199,7 +207,7 @@ export default function ReportInfoScreen({ route, navigation }) {
 
         <View style={styles.mapContainer}>
           <SinglePinGoogleMap
-            reportLat={reportData.lat} 
+            reportLat={reportData.lat}
             reportLong={reportData.lng}
           />
         </View>

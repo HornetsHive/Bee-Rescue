@@ -9,14 +9,14 @@ import Axios from "axios";
 import {
   Text,
   View,
+  Alert,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   StatusBar,
-  Alert,
-  Linking
+  Linking,
 } from "react-native";
-import {KEY} from '@env';
+import { KEY } from "@env";
 
 export default function ClaimedReportInfoScreen({ route, navigation }) {
   const userID = route.params.bk_id;
@@ -29,7 +29,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
     console.log("Completing report.");
     Axios.post("https://beerescue.net:3001/complete_report", {
       r_id: reportID,
-      key: KEY
+      key: KEY,
     })
       .then(function (response) {
         console.log(response.data);
@@ -40,7 +40,11 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       })
       .catch(function (error) {
         console.log(error);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
   };
 
@@ -49,7 +53,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
     console.log("Abandoning report.");
     Axios.post("https://beerescue.net:3001/abandon_report", {
       r_id: reportID,
-      key: KEY
+      key: KEY,
     })
       .then(function (response) {
         console.log(response.data);
@@ -61,7 +65,11 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       .catch(function (error) {
         // If error, print the error
         console.log(error);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
   };
 
@@ -69,7 +77,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
     console.log("Removing report.");
     Axios.post("https://beerescue.net:3001/remove_report", {
       r_id: reportID,
-      key: KEY
+      key: KEY,
     })
       .then(function (response) {
         console.log(response.data);
@@ -81,9 +89,13 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       .catch(function (error) {
         // If error, print the error
         console.log(error);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
-  }
+  };
 
   // Shows an alert asking the user confirmation for completing the report
   const confirmComplete = () => {
@@ -129,7 +141,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
           // Exterminator
           text: "Yes, remove from app",
           onPress: () => removeReport(),
-          style: "cancel"
+          style: "cancel",
         },
         {
           // No/other reason
@@ -205,20 +217,24 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
   const handleMapPress = (address, city, zip) => {
     const fullAddress = `${address}, ${city}, ${zip}`;
     const encodedAddress = encodeURIComponent(fullAddress);
-    Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`);
+    Linking.openURL(
+      `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`
+    );
   };
 
   const handleEmailPress = (emailAddress) => {
-    const emailSubject = 'Follow-up on your Bee Rescue report';
-    Linking.openURL(`mailto:${emailAddress}?subject=${encodeURIComponent(emailSubject)}`);
+    const emailSubject = "Follow-up on your Bee Rescue report";
+    Linking.openURL(
+      `mailto:${emailAddress}?subject=${encodeURIComponent(emailSubject)}`
+    );
   };
 
   function handlePhonePress(phoneNumber) {
     Linking.openURL(`tel:${removePhoneNumberFormatting(phoneNumber)}`);
-  };
+  }
 
   function removePhoneNumberFormatting(phoneNumber) {
-    return phoneNumber.replace(/\D/g,'');
+    return phoneNumber.replace(/\D/g, "");
   }
 
   useEffect(() => {
@@ -227,7 +243,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
     Axios.get("https://beerescue.net:3001/report_data", {
       params: {
         r_id: reportID,
-        key: KEY
+        key: KEY,
       },
     })
       .then((response) => {
@@ -237,7 +253,11 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       })
       .catch((error) => {
         console.log(error.message);
-        Alert.alert(error.message, "Something went wrong processing your request", [{ text: "OK" }]);
+        Alert.alert(
+          error.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
       });
   }, []);
 
@@ -261,7 +281,15 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
       </View>
 
       <View style={styles.body}>
-        <View style={{ height: 57, top: 10, bottom: 100, width:"80%", alignSelf:"center"}}>
+        <View
+          style={{
+            height: 57,
+            top: 10,
+            bottom: 100,
+            width: "80%",
+            alignSelf: "center",
+          }}
+        >
           <TouchableOpacity
             style={{
               padding: 8,
@@ -276,7 +304,16 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{ height: 57, top: 10, bottom: 100, width:"80%", alignSelf:"center", marginBottom: 10 }}>
+        <View
+          style={{
+            height: 57,
+            top: 10,
+            bottom: 100,
+            width: "80%",
+            alignSelf: "center",
+            marginBottom: 10,
+          }}
+        >
           <TouchableOpacity
             style={{
               padding: 8,
@@ -294,7 +331,7 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
 
         <View style={styles.mapContainer}>
           <SinglePinGoogleMap
-            reportLat={reportData.lat} 
+            reportLat={reportData.lat}
             reportLong={reportData.lng}
           />
         </View>
@@ -302,52 +339,52 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
         <ScrollView>
           <View style={styles.row}>
             <TouchableOpacity
-              onPress={() => 
-                handleMapPress(reportData.address, reportData.city, reportData.zip)
-              }
-            >
-            <View style={styles.nameContainer}>
-              <Text style={styles.nameTxt}>Address</Text>
-            </View>
-            <View>
-              <Text style={styles.textLink}>
-                {reportData.address}, {reportData.city} {reportData.zip}
-              </Text>
-            </View>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => 
-                handleEmailPress(reportData.email)
-              }
-            >
-            <View style={styles.nameContainer}>
-              <Text style={styles.nameTxt}>Reporter Email</Text>
-            </View>
-            <View>
-              <Text style={styles.textLink}>{reportData.email}</Text>
-            </View>
-            </TouchableOpacity>
-          </View>
-
-          {reportData.phone_no ?
-          <View style={styles.row}>
-            <TouchableOpacity
-              onPress={() => 
-                handlePhonePress(reportData.phone_no)
+              onPress={() =>
+                handleMapPress(
+                  reportData.address,
+                  reportData.city,
+                  reportData.zip
+                )
               }
             >
               <View style={styles.nameContainer}>
-                <Text style={styles.nameTxt}>Reporter Phone Number</Text>
+                <Text style={styles.nameTxt}>Address</Text>
               </View>
               <View>
-                <Text style={styles.textLink}>{reportData.phone_no}</Text>
+                <Text style={styles.textLink}>
+                  {reportData.address}, {reportData.city} {reportData.zip}
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
-          : null}
+
+          <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() => handleEmailPress(reportData.email)}
+            >
+              <View style={styles.nameContainer}>
+                <Text style={styles.nameTxt}>Reporter Email</Text>
+              </View>
+              <View>
+                <Text style={styles.textLink}>{reportData.email}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          {reportData.phone_no ? (
+            <View style={styles.row}>
+              <TouchableOpacity
+                onPress={() => handlePhonePress(reportData.phone_no)}
+              >
+                <View style={styles.nameContainer}>
+                  <Text style={styles.nameTxt}>Reporter Phone Number</Text>
+                </View>
+                <View>
+                  <Text style={styles.textLink}>{reportData.phone_no}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ) : null}
 
           <View style={styles.row}>
             <View style={styles.nameContainer}>
@@ -402,7 +439,6 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
             </View>
           </View>
 
-
           <View style={styles.row}>
             <View style={styles.nameContainer}>
               <Text style={styles.nameTxt}>Time present</Text>
@@ -411,7 +447,6 @@ export default function ClaimedReportInfoScreen({ route, navigation }) {
               <Text style={styles.text}>{reportData.duration} days</Text>
             </View>
           </View>
-
         </ScrollView>
       </View>
 
