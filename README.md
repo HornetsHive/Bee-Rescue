@@ -6,11 +6,11 @@
 **Description**:  Bee Rescue has two components, a mobile application and a website. The website is for the general public to be able to quickly report swarms of bees on their property by submiting a short form. The application is for beekeepers to be notified about swarms that are nearby so that they can collect them. The combined application is designed to expedite the process of property owners finding beekeepers to remove hives from their property. Redundant phone calls and wasted time are minimized, as only beekeepers who have specified they they are available at that time and area are notified. The app is being developed for the Sacramento Area Beekeepers Association (SABA).
 
  **Technology stack**: Standalone application and website
-  - **Frontend**: Javascript/HTML/CSS, Visual Studio (IDE), React Native and React Native add ons (SDK)
+  - **Frontend**: Javascript/HTML/CSS, React Native and React Native add ons (SDK)
   - **Backend**: MySQL - relational, NodeJS
   - **API**: Google Maps interactive map
-  - **Server**: Testing: Local/Linode, Official product: AWS *(not finalized)*
-  - **Status**: Almost deployed
+  - **Server**: Akamai Linode
+  - **Status**: Deployed
 
 **Website Screenshot**:
 
@@ -31,7 +31,7 @@
 **Dependencies**:
 To check package dependencies, type `npm list` in the `app`, `client_webpage`, or `server` directories.
 
-## Installation
+## Installation - Local Testing
 > *once app is launched, download it from app the google paay store or apple store*
 
 1. install nodejs libraries https://nodejs.org/en/download/
@@ -64,7 +64,7 @@ To check package dependencies, type `npm list` in the `app`, `client_webpage`, o
    `cd server`  
    `npm install`  
 
-## Usage
+## Usage - Local Testing
 start webpage  
    1. navigate terminal to `client_webpage`
    2. run `npm run start`
@@ -88,7 +88,7 @@ WIP, To be updated
 WIP, To be updated
 
 ## Developer Instructions
-WIP, To be updated
+For any future development contracted through SABA, contact them for the maintentance and user manuals.
 
 ## Timeline
 September 2022 - December 2022
