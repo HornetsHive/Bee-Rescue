@@ -9,7 +9,7 @@
       "config": "metro.config.js"
     },
     "userInterfaceStyle": "light",
-    "icon": ".assets/iconApp.png",
+    "icon": "./assets/iconApp.png",
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
@@ -23,16 +23,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": ".assets/iconApp.png",
+        "foregroundImage": "./assets/iconApp.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.HornetsHive.BeeRescue",
-      "permissions": [
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "NOTIFICATIONS"
-      ],
-      "googleServicesFile": "./google-services.json",
       "versionCode": 3
     },
     "web": {},
