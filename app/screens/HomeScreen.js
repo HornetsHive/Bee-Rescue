@@ -205,7 +205,6 @@ export default function HomeScreen({ route, navigation }) {
     // Call the function once before the interval starts to immediately fetch reports
     fetchAndRefreshReports();
     console.log("beekeeper ID: " + userID);
-    console.log("Num of reports: " + formattedReportArray.length);
 
     // Clear the interval timer when the component unmount
     return () => clearInterval(interval);
