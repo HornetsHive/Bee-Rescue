@@ -41,12 +41,37 @@ export default function HomeScreen({ route, navigation }) {
   async function getUserCity() {
     const extractTextBetweenQuotes = (str) => str.match(/"(.*?)"/)?.[1] || "";
 
-    const city = extractTextBetweenQuotes(
+    const storageCity = extractTextBetweenQuotes(
       await AsyncStorage.getItem("storedCity")
     );
-    console.log(city);
-    if (city) {
-      setCity(city);
+    console.log("city from storage " + storageCity);
+
+    if (storageCity) {
+      const city = await AsyncStorage.getItem("storedCity");
+      setCity(extractTextBetweenQuotes(city));
+    } else {
+      console.log("City not found in storage, getting from server");
+      try {
+        const res = await Axios.get("https://beerescue.net:3001/bk_getUser", {
+          params: { bk_id: userID, key: KEY },
+        });
+        console.log("city from server: " + res.data[0].city);
+        const city = res.data[0].city;
+
+        await AsyncStorage.setItem("storedCity", JSON.stringify(city));
+        console.log(
+          "string after extraction: " + extractTextBetweenQuotes(city)
+        );
+        setCity(city);
+        console.log("City saved to storage");
+      } catch (err) {
+        console.log(err.response.data);
+        Alert.alert(
+          err.message,
+          "Something went wrong processing your request",
+          [{ text: "OK" }]
+        );
+      }
     }
   }
 
