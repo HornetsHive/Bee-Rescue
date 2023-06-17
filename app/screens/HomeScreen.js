@@ -39,7 +39,7 @@ export default function HomeScreen({ route, navigation }) {
   });
 
   async function getUserCity() {
-    const extractTextBetweenQuotes = (str) => str.match(/"(.*?)"/)?.[1] || "";
+    const extractTextBetweenQuotes = (str) => str.match(/"(.*?)"/)?.[1] || str;
 
     const storageCity = await AsyncStorage.getItem("storedCity");
 
