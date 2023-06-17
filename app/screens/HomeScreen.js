@@ -41,14 +41,12 @@ export default function HomeScreen({ route, navigation }) {
   async function getUserCity() {
     const extractTextBetweenQuotes = (str) => str.match(/"(.*?)"/)?.[1] || "";
 
-    const storageCity = extractTextBetweenQuotes(
-      await AsyncStorage.getItem("storedCity")
-    );
-    console.log("city from storage " + storageCity);
+    const storageCity = await AsyncStorage.getItem("storedCity");
 
-    if (storageCity) {
-      const city = await AsyncStorage.getItem("storedCity");
-      setCity(extractTextBetweenQuotes(city));
+    if (!isNaN(storageCity) && storageCity != null) {
+      const city = extractTextBetweenQuotes(storageCity);
+      console.log("city from storage: " + city);
+      setCity(city);
     } else {
       console.log("City not found in storage, getting from server");
       try {
@@ -56,13 +54,15 @@ export default function HomeScreen({ route, navigation }) {
           params: { bk_id: userID, key: KEY },
         });
         console.log("city from server: " + res.data[0].city);
+        console.log(res.data);
         const city = res.data[0].city;
+        console.log("city from server: " + city);
 
         await AsyncStorage.setItem("storedCity", JSON.stringify(city));
         console.log(
           "string after extraction: " + extractTextBetweenQuotes(city)
         );
-        setCity(city);
+        setCity(extractTextBetweenQuotes(city));
         console.log("City saved to storage");
       } catch (err) {
         console.log(err.response.data);
