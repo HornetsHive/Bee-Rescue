@@ -43,7 +43,8 @@ export default function HomeScreen({ route, navigation }) {
 
     const storageCity = await AsyncStorage.getItem("storedCity");
 
-    if (!isNaN(storageCity) && storageCity != null) {
+    console.log("value of storage city " + storageCity);
+    if (storageCity != null) {
       const city = extractTextBetweenQuotes(storageCity);
       console.log("city from storage: " + city);
       setCity(city);
