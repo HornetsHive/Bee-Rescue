@@ -2,14 +2,14 @@
   "expo": {
     "name": "BeeRescue",
     "slug": "BeeRescue",
-    "version": "1.6.0",
+    "version": "1.8.0",
     "orientation": "default",
     "packagerOpts": {
       "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"],
       "config": "metro.config.js"
     },
     "userInterfaceStyle": "light",
-    "icon": "./assets/iconApp_small.png",
+    "icon": "./assets/iconApp.png",
     "splash": {
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
@@ -23,11 +23,11 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/iconApp_small.png",
+        "foregroundImage": "./assets/iconApp.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.HornetsHive.BeeRescue",
-      "versionCode": 6
+      "versionCode": 8
     },
     "web": {},
     "extra": {
