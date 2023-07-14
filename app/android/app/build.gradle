@@ -1,6 +1,6 @@
 apply plugin: "com.android.application"
 
-import com.android.build.OutputFile
+//import com.android.build.OutputFile
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -145,8 +145,8 @@ android {
         applicationId 'com.HornetsHive.BeeRescue'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1.8.0"
+        versionCode 9
+        versionName "1.9.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {
