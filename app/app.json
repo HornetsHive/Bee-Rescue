@@ -2,7 +2,7 @@
   "expo": {
     "name": "BeeRescue",
     "slug": "BeeRescue",
-    "version": "1.9.0",
+    "version": "2.0.0",
     "orientation": "default",
     "packagerOpts": {
       "sourceExts": ["js", "json", "ts", "tsx", "jsx", "vue"],
@@ -27,7 +27,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.HornetsHive.BeeRescue",
-      "versionCode": 9
+      "versionCode": 10
     },
     "web": {},
     "extra": {
