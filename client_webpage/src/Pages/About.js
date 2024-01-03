@@ -57,7 +57,7 @@ export default function About() {
           text={
             <>
               <UnorderedList>
-                <ListItem>Kiana Brunberg testing!</ListItem>
+                <ListItem>Kiana Brunberg</ListItem>
                 <ListItem>Jarod Cavagnaro</ListItem>
                 <ListItem>Sean Hackett</ListItem>
                 <ListItem>Dane Leineke</ListItem>
