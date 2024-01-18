@@ -49,3 +49,4 @@ git-update.sh
 restart.sh
 up.sh
 attach.sh
+renew.sh
